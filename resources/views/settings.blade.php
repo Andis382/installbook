@@ -2,53 +2,62 @@
 @section('title', __('ui.settings.title'))
 
 @section('content')
-<h1>{{ __('ui.settings.title') }}</h1>
+<div class="page-head">
+    <span class="micro">{{ __('ui.app_name') }}</span>
+    <h1>{{ __('ui.settings.title') }}</h1>
+</div>
 
 <form method="post" action="{{ route('settings.update') }}" enctype="multipart/form-data">
     @csrf @method('PUT')
 
     <fieldset>
         <legend>{{ __('ui.settings.you') }}</legend>
-        <label>{{ __('ui.settings.name') }}<input type="text" name="name" value="{{ old('name', $user->name) }}" required></label>
-        <label>{{ __('ui.settings.business_name') }}<input type="text" name="business_name" value="{{ old('business_name', $user->business_name) }}"></label>
-        <p class="field-hint">{{ __('ui.settings.business_hint') }}</p>
-        <div class="grid2">
-            <label>{{ __('ui.settings.phone') }}<input type="tel" name="phone" value="{{ old('phone', $user->phone) }}"></label>
-            <label>{{ __('ui.settings.city') }}<input type="text" name="city" value="{{ old('city', $user->city) }}"></label>
+        <div class="panel">
+            <x-field name="name" :label="__('ui.settings.name')" :value="$user->name" required autocomplete="name" />
+            <x-field name="business_name" :label="__('ui.settings.business_name')" :value="$user->business_name"
+                     :hint="__('ui.settings.business_hint')" />
+            <div class="cols2">
+                <x-field name="phone" type="tel" :label="__('ui.settings.phone')" :value="$user->phone" inputmode="tel" />
+                <x-field name="city" :label="__('ui.settings.city')" :value="$user->city" />
+            </div>
+            <x-field name="registration_number" :label="__('ui.settings.registration_number')"
+                     :value="$user->registration_number" :hint="__('ui.settings.registration_hint')" />
+            <x-field name="locale" control="select" :label="__('ui.settings.language')"
+                     :options="config('installbook.locales')" :selected="$user->locale" />
+            <x-field name="logo" type="file" :label="__('ui.settings.logo')" accept="image/*" />
+            @if ($user->logo_path)
+                <img class="shot small" src="{{ \App\Support\Uploads::url($user->logo_path) }}" alt="">
+            @endif
+            <x-field name="card_footer" control="textarea" :label="__('ui.settings.card_footer')" :value="$user->card_footer" />
         </div>
-        <label>{{ __('ui.settings.registration_number') }}<input type="text" name="registration_number" value="{{ old('registration_number', $user->registration_number) }}"></label>
-        <p class="field-hint">{{ __('ui.settings.registration_hint') }}</p>
-        <label>{{ __('ui.settings.language') }}
-            <select name="locale">
-                @foreach (config('installbook.locales') as $code => $label)
-                    <option value="{{ $code }}" @selected(old('locale', $user->locale) === $code)>{{ $label }}</option>
-                @endforeach
-            </select>
-        </label>
-        <label>{{ __('ui.settings.logo') }}<input type="file" name="logo" accept="image/*"></label>
-        @if ($user->logo_path)<img class="thumb small" src="{{ \App\Support\Uploads::url($user->logo_path) }}" alt="">@endif
-        <label>{{ __('ui.settings.card_footer') }}<textarea name="card_footer">{{ old('card_footer', $user->card_footer) }}</textarea></label>
     </fieldset>
 
     <fieldset>
         <legend>{{ __('ui.settings.reminders') }}</legend>
-        <label>{{ __('ui.settings.lead_days') }}<input type="number" name="reminder_lead_days" min="7" max="84" value="{{ old('reminder_lead_days', $user->reminder_lead_days) }}" required></label>
-        <label>{{ __('ui.settings.registration_window') }}<input type="number" name="registration_window_days" min="0" max="180" value="{{ old('registration_window_days', $user->registration_window_days) }}" required></label>
-        <p class="field-hint">{{ __('ui.settings.registration_window_hint') }}</p>
+        <div class="panel">
+            <x-field name="reminder_lead_days" type="number" :label="__('ui.settings.lead_days')"
+                     :value="$user->reminder_lead_days" min="7" max="84" inputmode="numeric" required />
+            <x-field name="registration_window_days" type="number" :label="__('ui.settings.registration_window')"
+                     :value="$user->registration_window_days" min="0" max="180" inputmode="numeric" required
+                     :hint="__('ui.settings.registration_window_hint')" />
+        </div>
     </fieldset>
 
-    <button class="btn block">{{ __('ui.settings.save') }}</button>
+    <button class="btn block big"><x-icon name="check" size="20" />{{ __('ui.settings.save') }}</button>
 </form>
 
 <h2>{{ __('ui.settings.channels') }}</h2>
-<div class="card">
+<div class="panel">
     <p>{{ __('ui.settings.driver_'.$driver) }}</p>
     <p class="small muted">{{ $ocr === 'none' ? __('ui.settings.ocr_off') : __('ui.settings.ocr_on') }}</p>
-    <p class="field-hint mono">INSTALLBOOK_MESSAGING_DRIVER={{ $driver }} · INSTALLBOOK_OCR_DRIVER={{ $ocr }}</p>
+    <dl class="spec" style="margin-top:var(--s-3)">
+        <div><dt>Messaging</dt><dd class="mono">{{ $driver }}</dd></div>
+        <div><dt>Plate reading</dt><dd class="mono">{{ $ocr }}</dd></div>
+    </dl>
 </div>
 
-<form method="post" action="{{ route('logout') }}">
+<form method="post" action="{{ route('logout') }}" style="margin-top:var(--s-6)">
     @csrf
-    <button class="btn ghost block">{{ __('ui.nav.logout') }}</button>
+    <button class="btn ghost block"><x-icon name="logout" size="18" />{{ __('ui.nav.logout') }}</button>
 </form>
 @endsection

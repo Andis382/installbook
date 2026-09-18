@@ -4,6 +4,16 @@ return [
     'app_name' => 'InstallBook',
     'tagline' => 'Çdo pajisje që montoni, e mbajtur mend.',
 
+    // Tekst që ekziston për tastierën dhe lexuesin e ekranit. Nuk është
+    // dekorim: për dikë, kjo rresht është e vetmja gjë që merr.
+    'a11y' => [
+        'skip' => 'Kalo te përmbajtja kryesore',
+        'main_nav' => 'Kryesore',
+        'errors' => 'Ka një problem në këtë formular|Ka :count probleme në këtë formular',
+        'outbox_waiting' => 'një mesazh pret të dërgohet|:count mesazhe presin të dërgohen',
+        'unit_type' => 'Lloji i pajisjes',
+    ],
+
     'nav' => [
         'dashboard' => 'Sot',
         'new_install' => 'Montim i ri',

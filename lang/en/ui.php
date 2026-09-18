@@ -4,6 +4,16 @@ return [
     'app_name' => 'InstallBook',
     'tagline' => 'Every unit you fit, remembered.',
 
+    // Text that exists for the keyboard and the screen reader. It is never
+    // decorative: each line is the only thing some people get.
+    'a11y' => [
+        'skip' => 'Skip to the main content',
+        'main_nav' => 'Main',
+        'errors' => 'There is one problem with this form|There are :count problems with this form',
+        'outbox_waiting' => 'one message waiting to send|:count messages waiting to send',
+        'unit_type' => 'Type of unit',
+    ],
+
     'nav' => [
         'dashboard' => 'Today',
         'new_install' => 'New install',

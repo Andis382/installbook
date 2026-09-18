@@ -33,17 +33,27 @@ enum ApplianceType: string
         return __($this->labelKey());
     }
 
+    /**
+     * The name of an icon in resources/icons.php, not a character.
+     *
+     * This used to return an emoji. That was a mistake: emoji are drawn by
+     * whatever font the phone happens to carry, render at a size nobody chose,
+     * and cannot take a colour from the design tokens — so the one glyph that
+     * has to read as "gas" at arm's length could not be relied on to look like
+     * anything in particular. A vector glyph does what it is told everywhere.
+     */
     public function icon(): string
     {
         return match ($this) {
-            self::GasBoiler, self::CondensingBoiler => '🔥',
-            self::SplitAc, self::MultiSplitAc => '❄️',
-            self::HeatPump => '♨️',
-            self::WaterHeater => '🚿',
-            self::SolarThermal, self::SolarPv => '☀️',
-            self::AlarmSystem => '🔔',
-            self::Ventilation => '🌀',
-            self::Other => '🔧',
+            self::GasBoiler, self::CondensingBoiler => 'flame',
+            self::SplitAc, self::MultiSplitAc => 'snowflake',
+            self::HeatPump => 'heat-pump',
+            self::WaterHeater => 'shower',
+            self::SolarThermal => 'sun',
+            self::SolarPv => 'solar',
+            self::AlarmSystem => 'bell',
+            self::Ventilation => 'fan',
+            self::Other => 'wrench',
         };
     }
 

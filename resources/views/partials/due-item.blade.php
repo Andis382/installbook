@@ -1,17 +1,23 @@
 @php($days = $install->serviceDaysAway())
-<a class="item" href="{{ route('installations.show', $install) }}">
-    <span class="grow">
-        <span class="title">{{ $install->type()->icon() }} {{ $install->unitName() }}</span>
-        <span class="sub">
+<a class="entry" href="{{ route('installations.show', $install) }}">
+    <span class="glyph"><x-icon :name="$install->type()->icon()" size="19" /></span>
+    <span class="entry-body">
+        <span class="entry-title">{{ $install->unitName() }}</span>
+        <span class="entry-sub">
             {{ $install->customer?->displayName() }}
-            @if ($install->customer?->address) · {{ $install->customer->address }}@endif
-            @if ($install->bookingRequests->isNotEmpty()) · <strong>{{ __('ui.due.booked') }}</strong>@endif
+            @if ($install->customer?->address) · {{ $install->customer->address }} @endif
+            @if ($install->customer?->phone)
+                <br><span class="mono">{{ \App\Support\Phone::pretty($install->customer->phone) }}</span>
+            @endif
         </span>
     </span>
-    <span class="right">
-        <span class="pill {{ $days < 0 ? 'danger' : ($days <= 30 ? 'warn' : 'quiet') }}">{{ $install->next_service_due_on?->format('d/m/y') }}</span>
-        @if ($install->customer?->phone)
-            <br><a class="small" href="tel:{{ $install->customer->phone }}">📞 {{ \App\Support\Phone::pretty($install->customer->phone) }}</a>
+    <span class="entry-side">
+        <x-tag :tone="$days < 0 ? 'danger' : ($days <= 30 ? 'warn' : 'quiet')"
+               :icon="$days < 0 ? 'warning' : 'calendar'">
+            <span class="num">{{ $install->next_service_due_on?->format('d/m/Y') }}</span>
+        </x-tag>
+        @if ($install->bookingRequests->isNotEmpty())
+            <x-tag tone="info" icon="check">{{ __('ui.due.booked') }}</x-tag>
         @endif
     </span>
 </a>

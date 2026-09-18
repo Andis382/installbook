@@ -2,45 +2,66 @@
 @section('title', __('ui.bookings.title'))
 
 @section('content')
-<h1>{{ __('ui.bookings.title') }}</h1>
+<div class="page-head">
+    <span class="micro">{{ __('ui.app_name') }}</span>
+    <h1>{{ __('ui.bookings.title') }}</h1>
+</div>
 
 @forelse ($bookings as $booking)
-    <div class="card {{ $booking->status === 'new' ? 'accent' : '' }}">
-        <div class="row between">
-            <span>
-                <strong>{{ $booking->installation->unitName() }}</strong>
-                <br><span class="small muted">
-                    {{ __('ui.bookings.from', ['name' => $booking->installation->customer?->displayName() ?? '—']) }}
-                    · {{ $booking->created_at->format('d/m H:i') }}
-                </span>
-            </span>
-            <span class="pill {{ $booking->status === 'new' ? 'warn' : 'quiet' }}">{{ $booking->statusLabel() }}</span>
+    <div class="panel {{ $booking->status === 'new' ? 'lead-primary' : '' }}">
+        <div class="panel-head">
+            <span class="micro">{{ __('ui.bookings.from', ['name' => $booking->installation->customer?->displayName() ?? '—']) }}</span>
+            <x-tag :tone="$booking->status === 'new' ? 'warn' : 'quiet'"
+                   :icon="$booking->status === 'new' ? 'bell' : 'check'">
+                {{ $booking->statusLabel() }}
+            </x-tag>
         </div>
 
-        @if ($booking->windowLabel())<p>🗓 {{ $booking->windowLabel() }}</p>@endif
-        @if ($booking->note)<p class="msgbody">{{ $booking->note }}</p>@endif
+        <p><strong>{{ $booking->installation->unitName() }}</strong></p>
+        <p class="small muted num">{{ $booking->created_at->format('d/m/Y H:i') }}</p>
 
-        <div class="row tight">
+        @if ($booking->windowLabel())
+            <p class="row"><x-icon name="calendar" size="18" /> {{ $booking->windowLabel() }}</p>
+        @endif
+        @if ($booking->note)<div class="draft">{{ $booking->note }}</div>@endif
+
+        <div class="actions">
             @if ($booking->contact_phone)
-                <a class="btn ghost small" href="tel:{{ $booking->contact_phone }}">📞 {{ \App\Support\Phone::pretty($booking->contact_phone) }}</a>
+                <a class="btn ghost small" href="tel:{{ $booking->contact_phone }}">
+                    <x-icon name="phone" size="15" />
+                    <span class="mono">{{ \App\Support\Phone::pretty($booking->contact_phone) }}</span>
+                </a>
             @endif
-            <a class="btn ghost small" href="{{ route('installations.show', $booking->installation) }}">{{ __('ui.show.unit') }}</a>
+            <a class="btn ghost small" href="{{ route('installations.show', $booking->installation) }}">
+                <x-icon name="book" size="15" />{{ __('ui.show.unit') }}
+            </a>
         </div>
 
-        <form method="post" action="{{ route('bookings.update', $booking) }}" class="row tight" style="margin-top:10px">
+        <form method="post" action="{{ route('bookings.update', $booking) }}" class="panel-foot">
             @csrf
-            <select name="status" class="grow">
-                @foreach (['new', 'scheduled', 'done', 'declined'] as $s)
-                    <option value="{{ $s }}" @selected($booking->status === $s)>{{ __('booking.status.'.$s) }}</option>
-                @endforeach
-            </select>
-            <input type="date" name="scheduled_for" value="{{ $booking->scheduled_for?->toDateString() }}">
+            <div class="grow">
+                <label class="sr-only" for="status-{{ $booking->id }}">{{ __('ui.bookings.set_status') }}</label>
+                <select id="status-{{ $booking->id }}" name="status">
+                    @foreach (['new', 'scheduled', 'done', 'declined'] as $s)
+                        <option value="{{ $s }}" @selected($booking->status === $s)>{{ __('booking.status.'.$s) }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="grow">
+                <label class="sr-only" for="when-{{ $booking->id }}">{{ __('ui.bookings.scheduled_for') }}</label>
+                <input id="when-{{ $booking->id }}" type="date" name="scheduled_for" value="{{ $booking->scheduled_for?->toDateString() }}">
+            </div>
             <button class="btn small">{{ __('ui.bookings.set_status') }}</button>
         </form>
     </div>
 @empty
-    <div class="empty"><span class="big">🔔</span>{{ __('ui.bookings.none') }}</div>
+    <div class="panel">
+        <div class="empty">
+            <x-icon name="bell" size="40" />
+            <p>{{ __('ui.bookings.none') }}</p>
+        </div>
+    </div>
 @endforelse
 
-{{ $bookings->links() }}
+{{ $bookings->withQueryString()->links() }}
 @endsection

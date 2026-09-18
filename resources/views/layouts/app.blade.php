@@ -1,46 +1,65 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0d6efd">
-<title>@yield('title', __('ui.app_name'))</title>
-<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+@include('partials.head')
+<title>@yield('title', __('ui.app_name')) · {{ __('ui.app_name') }}</title>
 <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d6efd'/><text x='50' y='70' font-size='58' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>iB</text></svg>">
 </head>
 <body>
+<a class="skip" href="#main">{{ __('ui.a11y.skip') }}</a>
+
 <header class="topbar">
-    <a class="brand" href="{{ route('dashboard') }}">install<span>book</span></a>
-    <div class="who">
-        {{ auth()->user()->displayName() }}
-        <br><a href="{{ route('settings.edit') }}" class="small">{{ __('ui.nav.settings') }}</a>
+    <a class="brand" href="{{ route('dashboard') }}" aria-label="{{ __('ui.app_name') }}"><b>install</b><span>book</span></a>
+    <div class="topbar-right">
+        <span class="who">
+            <strong>{{ auth()->user()->displayName() }}</strong>
+            {{ auth()->user()->city }}
+        </span>
+        <a class="iconbtn" href="{{ route('settings.edit') }}" aria-label="{{ __('ui.nav.settings') }}"
+           @if (request()->routeIs('settings.*')) aria-current="page" @endif>
+            <x-icon name="settings" size="22" />
+        </a>
     </div>
 </header>
 
-<main class="wrap @yield('wrapclass')">
+<main class="page @yield('pageclass')" id="main" tabindex="-1">
     @include('partials.flash')
     @yield('content')
 </main>
 
 @php($pending = auth()->user()->messages()->where('status', 'queued')->count())
-@php($newBookings = auth()->user()->bookingRequests()->where('status', 'new')->count())
 
-<nav class="tabbar">
-    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'on' : '' }}">
-        <span class="ico">🏠</span>{{ __('ui.nav.dashboard') }}
+{{--
+    Five destinations, which is the limit before a bottom bar stops being
+    navigation and starts being a menu. Each one carries an icon and the word
+    for it: an icon on its own teaches nobody what is behind it.
+--}}
+<nav class="tabbar" aria-label="{{ __('ui.a11y.main_nav') }}">
+    <a href="{{ route('dashboard') }}" @if (request()->routeIs('dashboard')) aria-current="page" @endif>
+        <x-icon name="home" size="22" />
+        <span class="label">{{ __('ui.nav.dashboard') }}</span>
     </a>
-    <a href="{{ route('due') }}" class="{{ request()->routeIs('due') ? 'on' : '' }}">
-        <span class="ico">📅</span>{{ __('ui.nav.due') }}
+    <a href="{{ route('due') }}" @if (request()->routeIs('due')) aria-current="page" @endif>
+        <x-icon name="calendar" size="22" />
+        <span class="label">{{ __('ui.nav.due') }}</span>
     </a>
-    <a href="{{ route('installations.create') }}" class="{{ request()->routeIs('installations.create') ? 'on' : '' }}">
-        <span class="ico">➕</span>{{ __('ui.nav.new_install') }}
+    <a href="{{ route('installations.create') }}" @if (request()->routeIs('installations.create')) aria-current="page" @endif>
+        <x-icon name="plus" size="22" />
+        <span class="label">{{ __('ui.nav.new_install') }}</span>
     </a>
-    <a href="{{ route('outbox.index') }}" class="{{ request()->routeIs('outbox.*') ? 'on' : '' }}">
-        <span class="ico">📤</span>{{ __('ui.nav.outbox') }}@if($pending)<span class="badge">{{ $pending }}</span>@endif
+    <a href="{{ route('outbox.index') }}" @if (request()->routeIs('outbox.*')) aria-current="page" @endif>
+        <x-icon name="outbox" size="22" />
+        <span class="label">{{ __('ui.nav.outbox') }}</span>
+        @if ($pending)
+            {{-- Announced as a sentence. A screen reader saying "nine" on its own means nothing. --}}
+            <span class="count" aria-hidden="true">{{ $pending }}</span>
+            <span class="sr-only">, {{ trans_choice('ui.a11y.outbox_waiting', $pending, ['count' => $pending]) }}</span>
+        @endif
     </a>
-    <a href="{{ route('installations.index') }}" class="{{ request()->routeIs('installations.index') || request()->routeIs('customers.*') ? 'on' : '' }}">
-        <span class="ico">📖</span>{{ __('ui.nav.installs') }}
+    <a href="{{ route('installations.index') }}"
+       @if (request()->routeIs('installations.index') || request()->routeIs('customers.*')) aria-current="page" @endif>
+        <x-icon name="book" size="22" />
+        <span class="label">{{ __('ui.nav.installs') }}</span>
     </a>
 </nav>
 

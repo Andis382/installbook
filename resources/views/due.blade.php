@@ -2,27 +2,38 @@
 @section('title', __('ui.due.title'))
 
 @section('content')
-<h1>{{ __('ui.due.title') }}</h1>
+<div class="page-head">
+    <span class="micro">{{ __('ui.app_name') }}</span>
+    <h1>{{ __('ui.due.title') }}</h1>
+</div>
 
-<div class="chips">
+<div class="filters">
     @foreach ([30, 60, 90, 365] as $days)
-        <a class="chip {{ $horizon === $days ? 'on' : '' }}" href="{{ route('due', ['days' => $days]) }}">{{ __('ui.due.horizon', ['days' => $days]) }}</a>
+        <a class="filter" href="{{ route('due', ['days' => $days]) }}"
+           @if ($horizon === $days) aria-current="true" @endif>{{ __('ui.due.horizon', ['days' => $days]) }}</a>
     @endforeach
 </div>
 
 @if ($overdue->isNotEmpty())
-    <h2>{{ __('ui.due.overdue') }} ({{ $overdue->count() }})</h2>
-    <div class="card tight list">
-        @each('partials.due-item', $overdue, 'install')
+    <h2>{{ __('ui.due.overdue') }} <span class="num muted">{{ $overdue->count() }}</span></h2>
+    <div class="panel flush lead-danger">
+        <div class="rows">
+            @each('partials.due-item', $overdue, 'install')
+        </div>
     </div>
 @endif
 
-<h2>{{ __('ui.due.upcoming') }} ({{ $upcoming->count() }})</h2>
-<div class="card tight list">
-    @forelse ($upcoming as $install)
-        @include('partials.due-item', ['install' => $install])
-    @empty
-        <div class="empty"><span class="big">✅</span>{{ __('ui.due.none') }}</div>
-    @endforelse
+<h2>{{ __('ui.due.upcoming') }} <span class="num muted">{{ $upcoming->count() }}</span></h2>
+<div class="panel flush">
+    <div class="rows">
+        @forelse ($upcoming as $install)
+            @include('partials.due-item', ['install' => $install])
+        @empty
+            <div class="empty">
+                <x-icon name="check-circle" size="40" />
+                <p>{{ __('ui.due.none') }}</p>
+            </div>
+        @endforelse
+    </div>
 </div>
 @endsection

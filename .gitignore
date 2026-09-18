@@ -27,3 +27,6 @@ Thumbs.db
 /database/*.sqlite*
 /storage/app/public/*
 !/storage/app/public/.gitignore
+
+# The UI/UX Pro Max skill bundle is local tooling, not part of the app.
+/.claude

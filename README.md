@@ -47,6 +47,36 @@ Honest wording is also the cheap wording: a notice about one specific machine is
 
 ---
 
+## What it looks like, and why
+
+It is set like a printed form: hairline rules, square corners, no shadows,
+navy and one working green, Inter for text and JetBrains Mono for every serial,
+date and count. That is not decoration taste. This is a logbook of machines, and
+the thing that matters is whether a part number and a date are legible at arm's
+length in bad light. Tabular figures mean a column of dates lines up and a badge
+that goes from 9 to 10 does not shove the page sideways.
+
+The system is written down in [`design-system/installbook/MASTER.md`](design-system/installbook/MASTER.md):
+every token, the type scale, the spacing rhythm, and the reason behind each
+choice — including the two generated palettes that were rejected and why.
+
+Three rules are enforced by `tests/Unit/InterfaceDisciplineTest.php` rather than
+remembered, because all three were broken by the first version of this app:
+
+- **No emoji as icons.** They are drawn by whatever font the phone carries,
+  render at a size nobody chose, differ between Android and iOS, and cannot take
+  a colour from a token. Icons are Phosphor's regular weight (MIT), copied as
+  path data into `resources/icons.php` so nothing has to be installed or built.
+- **Colour is never the only signal.** Every status tag carries an icon and a
+  word, so it still reads printed in black and white.
+- **48px tap targets, visible focus, and `prefers-reduced-motion` honoured.**
+
+Forms follow from the same idea: a visible label on every field, the error under
+the field it belongs to and tied to it, *and* a focusable summary at the top that
+links to each bad one.
+
+---
+
 ## Running it
 
 Needs PHP 8.2+ and Composer. No Node, no build step, no npm install: the CSS is hand-written.
@@ -85,7 +115,7 @@ php artisan installbook:send-reminders --date=2027-03-01
 php artisan test
 ```
 
-59 tests. If your PHP has no `pdo_sqlite`, point the suite at a real database instead: `DB_CONNECTION=pgsql DB_DATABASE=installbook_test php artisan test`.
+65 tests. If your PHP has no `pdo_sqlite`, point the suite at a real database instead: `DB_CONNECTION=pgsql DB_DATABASE=installbook_test php artisan test`.
 
 ---
 
@@ -124,9 +154,12 @@ app/
   Support/Serial.php             folds O/0, I/1, S/5, B/8 so a mistyped serial still finds its unit
   Http/Controllers/              installer pages, the public card, a small admin surface
 resources/views/                 Blade, mobile first
+resources/views/components/      icon, field, tag — the three pieces every screen is built from
+resources/icons.php              the Phosphor glyphs this app uses, as path data
+design-system/installbook/       the design system: tokens, type scale, the rules and why
 public/css/app.css               hand written, no build step
 lang/{sq,en}/                    the interface, and every word a customer receives
-tests/                           59 tests: dates, tenancy, the engine, the card, message tone
+tests/                           65 tests: dates, tenancy, the engine, the card, message tone, interface discipline
 ```
 
 ---

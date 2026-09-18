@@ -2,32 +2,29 @@
 @section('title', __('card.book_title'))
 
 @section('content')
-<div class="cardhead">
+<div class="sheet-head">
     <div class="biz">{{ $installer->displayName() }}</div>
-    <div class="sub">{{ __('card.book_title') }}</div>
+    <span class="micro">{{ __('card.book_title') }}</span>
 </div>
 
 <p>{{ __('card.book_intro', ['installer' => $installer->displayName()]) }}</p>
-<p class="small muted">{{ $install->unitName() }}
-    @if ($install->next_service_due_on) · {{ __('card.next_service') }}: {{ $install->next_service_due_on->format('d/m/Y') }}@endif
+<p class="small muted">
+    {{ $install->unitName() }}
+    @if ($install->next_service_due_on)
+        · {{ __('card.next_service') }}: <span class="num">{{ $install->next_service_due_on->format('d/m/Y') }}</span>
+    @endif
 </p>
 
-<form method="post" action="{{ route('card.book.store', $install->public_token) }}" class="card">
+<form method="post" action="{{ route('card.book.store', $install->public_token) }}" class="panel">
     @csrf
-    <label>{{ __('card.when_suits') }}
-        <select name="preferred_window">
-            <option value="">—</option>
-            @foreach ($windows as $window)
-                <option value="{{ $window }}">{{ __('card.window.'.$window) }}</option>
-            @endforeach
-        </select>
-    </label>
-    <label>{{ __('card.your_phone') }}
-        <input type="tel" name="contact_phone" value="{{ $customer?->phone }}" inputmode="tel">
-    </label>
-    <label>{{ __('card.note') }}<textarea name="note" maxlength="500"></textarea></label>
+    <x-field name="preferred_window" control="select" :label="__('card.when_suits')"
+             :options="['' => '—'] + collect($windows)->mapWithKeys(fn ($w) => [$w => __('card.window.'.$w)])->all()" />
+    <x-field name="contact_phone" type="tel" :label="__('card.your_phone')" :value="$customer?->phone" inputmode="tel" autocomplete="tel" />
+    <x-field name="note" control="textarea" :label="__('card.note')" maxlength="500" />
     <button class="btn block big">{{ __('card.send_request') }}</button>
 </form>
 
-<p class="center"><a href="{{ route('card.show', $install->public_token) }}">{{ __('ui.common.back') }}</a></p>
+<p class="center small">
+    <a href="{{ route('card.show', $install->public_token) }}">{{ __('ui.common.back') }}</a>
+</p>
 @endsection
