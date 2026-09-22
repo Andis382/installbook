@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="96" fill="#0d6efd"/>
-  <rect x="112" y="128" width="288" height="256" rx="20" fill="#ffffff"/>
-  <rect x="144" y="176" width="224" height="20" rx="10" fill="#0d6efd" opacity="0.35"/>
-  <rect x="144" y="224" width="160" height="20" rx="10" fill="#0d6efd" opacity="0.35"/>
-  <rect x="144" y="280" width="224" height="56" rx="12" fill="#16191d"/>
-  <text x="256" y="320" font-family="ui-monospace, monospace" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">SN 4821</text>
-</svg>
