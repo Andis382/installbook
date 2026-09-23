@@ -2,7 +2,13 @@
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { PhCalendarCheck, PhCheckCircle, PhPhoneCall, PhWhatsappLogo, PhXCircle } from '@phosphor-icons/vue'
+import {
+  PhCalendarCheck,
+  PhCheckCircle,
+  PhPhoneCall,
+  PhWhatsappLogo,
+  PhXCircle,
+} from '@phosphor-icons/vue'
 import AppPage from '@/components/layout/AppPage.vue'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiCard from '@/components/ui/UiCard.vue'
@@ -16,10 +22,21 @@ import DeclineDialog from '@/components/bookings/DeclineDialog.vue'
 import VisitDialog from '@/components/units/VisitDialog.vue'
 import { api, query } from '@/lib/api'
 import { unitName } from '@/lib/units'
-import type { Booking, BookingAction, BookingList, BookingStatus, InstallerSettings } from '@/lib/types'
+import type {
+  Booking,
+  BookingAction,
+  BookingList,
+  BookingStatus,
+  InstallerSettings,
+} from '@/lib/types'
 
 const STATUSES: BookingStatus[] = ['NEW', 'SCHEDULED', 'DONE', 'DECLINED']
-const ICONS = { NEW: PhPhoneCall, SCHEDULED: PhCalendarCheck, DONE: PhCheckCircle, DECLINED: PhXCircle }
+const ICONS = {
+  NEW: PhPhoneCall,
+  SCHEDULED: PhCalendarCheck,
+  DONE: PhCheckCircle,
+  DECLINED: PhXCircle,
+}
 
 const { t } = useI18n()
 const route = useRoute()
@@ -36,7 +53,12 @@ const shareUrl = ref<string | null>(null)
 const price = ref<number | null>(null)
 
 const tabs = computed(() =>
-  STATUSES.map((s) => ({ value: s, label: t(`bookings.tabs.${s}`), icon: ICONS[s], count: list.value ? list.value.counts[s] : null })),
+  STATUSES.map((s) => ({
+    value: s,
+    label: t(`bookings.tabs.${s}`),
+    icon: ICONS[s],
+    count: list.value ? list.value.counts[s] : null,
+  })),
 )
 
 async function load() {
@@ -53,7 +75,9 @@ watch(
   { immediate: true },
 )
 
-api.get<InstallerSettings>('/settings/installer').then((s) => (price.value = s.typicalServicePriceCents))
+api
+  .get<InstallerSettings>('/settings/installer')
+  .then((s) => (price.value = s.typicalServicePriceCents))
 
 function open(kind: 'schedule' | 'decline' | 'done', b: Booking) {
   selected.value = b
@@ -74,7 +98,9 @@ function scheduled(result: BookingAction) {
     <UiNotice v-if="shareUrl" tone="info" :icon="PhWhatsappLogo">
       {{ $t('bookings.scheduledShare') }}
       <template #actions>
-        <UiButton size="sm" :href="shareUrl" target="_blank" :icon="PhWhatsappLogo">{{ $t('installDone.sendWhatsApp') }}</UiButton>
+        <UiButton size="sm" :href="shareUrl" target="_blank" :icon="PhWhatsappLogo">{{
+          $t('installDone.sendWhatsApp')
+        }}</UiButton>
       </template>
     </UiNotice>
 
@@ -83,8 +109,18 @@ function scheduled(result: BookingAction) {
         <UiTabs v-model="tab" :tabs="tabs" :label="$t('bookings.title')" />
       </div>
       <div class="list">
-        <UiSkeleton v-if="!list || (!list.items.length && list.counts[tab] > 0)" :lines="5" height="22px" />
-        <UiEmpty v-else-if="!list.items.length" :icon="ICONS[tab]" :title="$t(`bookings.empty.${tab}`)" :text="$t(`bookings.emptyText.${tab}`)" compact />
+        <UiSkeleton
+          v-if="!list || (!list.items.length && list.counts[tab] > 0)"
+          :lines="5"
+          height="22px"
+        />
+        <UiEmpty
+          v-else-if="!list.items.length"
+          :icon="ICONS[tab]"
+          :title="$t(`bookings.empty.${tab}`)"
+          :text="$t(`bookings.emptyText.${tab}`)"
+          compact
+        />
         <template v-else>
           <BookingItem
             v-for="b in list.items"

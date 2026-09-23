@@ -6,7 +6,11 @@ import UiButton from '@/components/ui/UiButton.vue'
 
 <template>
   <div class="nf">
-    <UiEmpty :icon="PhCompass" :title="$t('errors.notFoundTitle')" :text="$t('errors.notFoundText')">
+    <UiEmpty
+      :icon="PhCompass"
+      :title="$t('errors.notFoundTitle')"
+      :text="$t('errors.notFoundText')"
+    >
       <UiButton to="/">{{ $t('errors.goHome') }}</UiButton>
     </UiEmpty>
   </div>

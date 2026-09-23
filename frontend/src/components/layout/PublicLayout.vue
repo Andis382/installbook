@@ -3,7 +3,10 @@ import LanguageSwitch from './LanguageSwitch.vue'
 import BrandMark from './BrandMark.vue'
 
 /** Pages customers open from a WhatsApp link: no login, the business's name first. */
-withDefaults(defineProps<{ business?: string | null; subtitle?: string | null }>(), { business: null, subtitle: null })
+withDefaults(defineProps<{ business?: string | null; subtitle?: string | null }>(), {
+  business: null,
+  subtitle: null,
+})
 </script>
 
 <template>

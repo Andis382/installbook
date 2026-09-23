@@ -23,7 +23,13 @@ async function copy() {
 
 <template>
   <div class="copy">
-    <input class="copy__value" :value="value" readonly :aria-label="label ?? value" @focus="($event.target as HTMLInputElement).select()" />
+    <input
+      class="copy__value"
+      :value="value"
+      readonly
+      :aria-label="label ?? value"
+      @focus="($event.target as HTMLInputElement).select()"
+    />
     <button type="button" class="copy__btn" :class="{ 'is-done': copied }" @click="copy">
       <component :is="copied ? PhCheck : PhCopy" :size="16" weight="bold" aria-hidden="true" />
       <span>{{ copied ? $t('common.copied') : $t('common.copy') }}</span>

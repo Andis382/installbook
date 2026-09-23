@@ -14,10 +14,21 @@ const open = computed({
 </script>
 
 <template>
-  <UiDialog v-if="confirm.current" v-model:open="open" :title="confirm.current.title" :description="confirm.current.text" size="sm">
+  <UiDialog
+    v-if="confirm.current"
+    v-model:open="open"
+    :title="confirm.current.title"
+    :description="confirm.current.text"
+    size="sm"
+  >
     <template #footer>
-      <UiButton variant="secondary" @click="confirm.answer(false)">{{ confirm.current.cancelLabel ?? $t('common.cancel') }}</UiButton>
-      <UiButton :variant="confirm.current.danger ? 'danger' : 'primary'" @click="confirm.answer(true)">
+      <UiButton variant="secondary" @click="confirm.answer(false)">{{
+        confirm.current.cancelLabel ?? $t('common.cancel')
+      }}</UiButton>
+      <UiButton
+        :variant="confirm.current.danger ? 'danger' : 'primary'"
+        @click="confirm.answer(true)"
+      >
         {{ confirm.current.confirmLabel ?? $t('common.confirm') }}
       </UiButton>
     </template>

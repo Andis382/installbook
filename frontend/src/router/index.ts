@@ -18,8 +18,18 @@ declare module 'vue-router' {
 }
 
 const routes: RouteRecordRaw[] = [
-  { path: '/login', name: 'login', component: () => import('@/views/auth/LoginView.vue'), meta: { guest: true } },
-  { path: '/register', name: 'register', component: () => import('@/views/auth/RegisterView.vue'), meta: { guest: true } },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/auth/LoginView.vue'),
+    meta: { guest: true },
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/views/auth/RegisterView.vue'),
+    meta: { guest: true },
+  },
   { path: '/join/:token', name: 'join', component: () => import('@/views/auth/JoinView.vue') },
   { path: '/c/:token', name: 'card', component: () => import('@/views/PublicCardView.vue') },
   {
@@ -29,19 +39,47 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', name: 'home', component: () => import('@/views/TodayView.vue') },
       { path: 'install', name: 'install', component: () => import('@/views/InstallView.vue') },
-      { path: 'install/:id/done', name: 'install-done', component: () => import('@/views/InstallDoneView.vue'), meta: { nav: 'install' } },
+      {
+        path: 'install/:id/done',
+        name: 'install-done',
+        component: () => import('@/views/InstallDoneView.vue'),
+        meta: { nav: 'install' },
+      },
       { path: 'units', name: 'units', component: () => import('@/views/UnitsView.vue') },
-      { path: 'units/:id', name: 'unit', component: () => import('@/views/UnitDetailView.vue'), meta: { nav: 'units' } },
-      { path: 'units/:id/edit', name: 'unit-edit', component: () => import('@/views/UnitEditView.vue'), meta: { nav: 'units' } },
+      {
+        path: 'units/:id',
+        name: 'unit',
+        component: () => import('@/views/UnitDetailView.vue'),
+        meta: { nav: 'units' },
+      },
+      {
+        path: 'units/:id/edit',
+        name: 'unit-edit',
+        component: () => import('@/views/UnitEditView.vue'),
+        meta: { nav: 'units' },
+      },
       { path: 'due', name: 'due', component: () => import('@/views/DueView.vue') },
       { path: 'bookings', name: 'bookings', component: () => import('@/views/BookingsView.vue') },
-      { path: 'customers', name: 'customers', component: () => import('@/views/CustomersView.vue') },
-      { path: 'customers/:id', name: 'customer', component: () => import('@/views/CustomerDetailView.vue'), meta: { nav: 'customers' } },
+      {
+        path: 'customers',
+        name: 'customers',
+        component: () => import('@/views/CustomersView.vue'),
+      },
+      {
+        path: 'customers/:id',
+        name: 'customer',
+        component: () => import('@/views/CustomerDetailView.vue'),
+        meta: { nav: 'customers' },
+      },
       { path: 'messages', name: 'messages', component: () => import('@/views/MessagesView.vue') },
       { path: 'settings', name: 'settings', component: () => import('@/views/SettingsView.vue') },
     ],
   },
-  { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/NotFoundView.vue') },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/views/NotFoundView.vue'),
+  },
 ]
 
 const router = createRouter({

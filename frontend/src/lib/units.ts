@@ -1,5 +1,13 @@
 import type { Component } from 'vue'
-import { PhFan, PhFlame, PhShieldCheck, PhShower, PhSnowflake, PhSolarPanel, PhWrench } from '@phosphor-icons/vue'
+import {
+  PhFan,
+  PhFlame,
+  PhShieldCheck,
+  PhShower,
+  PhSnowflake,
+  PhSolarPanel,
+  PhWrench,
+} from '@phosphor-icons/vue'
 import type { ReminderState, ServiceState, UnitType } from './types'
 
 type Tone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'accent'
@@ -48,12 +56,19 @@ export function unitName(unit: { brand: string; model: string | null }): string 
 
 /** The town at the end of an address ("Rruga Myslym Shyri 42, Tiranë" -> "Tiranë"). */
 export function town(address: string): string {
-  const parts = address.split(',').map((p) => p.trim()).filter(Boolean)
+  const parts = address
+    .split(',')
+    .map((p) => p.trim())
+    .filter(Boolean)
   return parts[parts.length - 1] ?? address
 }
 
 /** Where to look at a unit's location: the saved pin, else a search for the address. */
-export function mapUrl(unit: { latitude: number | null; longitude: number | null; address: string }): string {
+export function mapUrl(unit: {
+  latitude: number | null
+  longitude: number | null
+  address: string
+}): string {
   if (unit.latitude !== null && unit.longitude !== null) {
     const lat = unit.latitude.toFixed(5)
     const lng = unit.longitude.toFixed(5)

@@ -19,7 +19,9 @@ const points = [
     <h2 class="aside__title">{{ $t('aside.title') }}</h2>
     <ul class="aside__points">
       <li v-for="p in points" :key="p.key">
-        <span class="aside__icon"><component :is="p.icon" :size="18" weight="bold" aria-hidden="true" /></span>
+        <span class="aside__icon"
+          ><component :is="p.icon" :size="18" weight="bold" aria-hidden="true"
+        /></span>
         <span>{{ $t(`aside.points.${p.key}`) }}</span>
       </li>
     </ul>

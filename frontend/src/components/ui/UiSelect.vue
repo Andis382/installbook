@@ -28,7 +28,9 @@ withDefaults(
       :aria-describedby="describedby"
     >
       <option v-if="placeholder" :value="null" disabled>{{ placeholder }}</option>
-      <option v-for="o in options" :key="String(o.value)" :value="o.value" :disabled="o.disabled">{{ o.label }}</option>
+      <option v-for="o in options" :key="String(o.value)" :value="o.value" :disabled="o.disabled">
+        {{ o.label }}
+      </option>
     </select>
     <PhCaretDown class="select__caret" :size="16" weight="bold" aria-hidden="true" />
   </div>

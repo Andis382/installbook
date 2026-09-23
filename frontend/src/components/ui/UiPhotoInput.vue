@@ -57,7 +57,11 @@ async function onPick(e: Event) {
 
 <template>
   <div class="photo">
-    <div class="photo__frame" :style="{ aspectRatio: aspect }" :class="{ 'photo__frame--empty': !shown }">
+    <div
+      class="photo__frame"
+      :style="{ aspectRatio: aspect }"
+      :class="{ 'photo__frame--empty': !shown }"
+    >
       <img v-if="shown" :src="shown" alt="" class="photo__img" />
       <button v-else type="button" class="photo__placeholder" @click="camera?.click()">
         <span class="photo__cam"><PhCamera :size="30" weight="duotone" aria-hidden="true" /></span>
@@ -68,17 +72,39 @@ async function onPick(e: Event) {
     </div>
     <div class="photo__actions">
       <button type="button" class="photo__action" @click="camera?.click()">
-        <PhCamera :size="18" weight="bold" aria-hidden="true" /> {{ shown ? $t('common.changePhoto') : $t('common.takePhoto') }}
+        <PhCamera :size="18" weight="bold" aria-hidden="true" />
+        {{ shown ? $t('common.changePhoto') : $t('common.takePhoto') }}
       </button>
       <button type="button" class="photo__action" @click="library?.click()">
         <PhImage :size="18" weight="bold" aria-hidden="true" /> {{ $t('common.choosePhoto') }}
       </button>
-      <button v-if="model" type="button" class="photo__action photo__action--danger" @click="model = null">
+      <button
+        v-if="model"
+        type="button"
+        class="photo__action photo__action--danger"
+        @click="model = null"
+      >
         <PhTrash :size="18" weight="bold" aria-hidden="true" /> {{ $t('common.removePhoto') }}
       </button>
     </div>
-    <input :id="id" ref="camera" type="file" accept="image/*" capture="environment" class="visually-hidden" tabindex="-1" @change="onPick" />
-    <input ref="library" type="file" accept="image/*" class="visually-hidden" tabindex="-1" @change="onPick" />
+    <input
+      :id="id"
+      ref="camera"
+      type="file"
+      accept="image/*"
+      capture="environment"
+      class="visually-hidden"
+      tabindex="-1"
+      @change="onPick"
+    />
+    <input
+      ref="library"
+      type="file"
+      accept="image/*"
+      class="visually-hidden"
+      tabindex="-1"
+      @change="onPick"
+    />
   </div>
 </template>
 
@@ -100,8 +126,7 @@ async function onPick(e: Event) {
 .photo__frame--empty {
   border: 1.5px dashed var(--border-strong);
   background:
-    radial-gradient(circle at 50% 38%, var(--primary-soft), transparent 62%),
-    var(--surface-muted);
+    radial-gradient(circle at 50% 38%, var(--primary-soft), transparent 62%), var(--surface-muted);
 }
 .photo__img {
   width: 100%;

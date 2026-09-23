@@ -46,14 +46,23 @@ function jump(field: string) {
 </script>
 
 <template>
-  <div v-if="Object.keys(errors).length || message" ref="el" class="summary" role="alert" tabindex="-1">
+  <div
+    v-if="Object.keys(errors).length || message"
+    ref="el"
+    class="summary"
+    role="alert"
+    tabindex="-1"
+  >
     <PhWarningOctagon class="summary__icon" :size="22" weight="fill" aria-hidden="true" />
     <div>
-      <p class="summary__title">{{ Object.keys(errors).length ? $t('errors.summaryTitle') : message }}</p>
+      <p class="summary__title">
+        {{ Object.keys(errors).length ? $t('errors.summaryTitle') : message }}
+      </p>
       <ul v-if="Object.keys(errors).length" class="summary__list">
         <li v-for="(msgs, field) in errors" :key="field">
           <a :href="`#${idFor(String(field))}`" @click.prevent="jump(String(field))">
-            <strong v-if="labelFor(String(field))">{{ labelFor(String(field)) }}:</strong> {{ msgs[0] }}
+            <strong v-if="labelFor(String(field))">{{ labelFor(String(field)) }}:</strong>
+            {{ msgs[0] }}
           </a>
         </li>
       </ul>

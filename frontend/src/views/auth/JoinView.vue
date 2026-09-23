@@ -57,26 +57,64 @@ function roleLabel(role: string) {
     <div v-else class="stack stack-lg">
       <div class="stack stack-sm">
         <h1>{{ $t('auth.joinTitle', { org: invitation.organizationName }) }}</h1>
-        <p class="muted">{{ $t('auth.joinAs', { role: roleLabel(invitation.role) }) }} {{ $t('auth.joinSubtitle') }}</p>
+        <p class="muted">
+          {{ $t('auth.joinAs', { role: roleLabel(invitation.role) }) }}
+          {{ $t('auth.joinSubtitle') }}
+        </p>
       </div>
       <form class="stack" novalidate @submit.prevent="submit">
-        <UiFormErrors :errors="form.errors.value" :message="form.message.value" :trigger="form.submitted.value" />
+        <UiFormErrors
+          :errors="form.errors.value"
+          :message="form.message.value"
+          :trigger="form.submitted.value"
+        />
         <UiField id="f-name" :label="$t('auth.yourName')" :error="form.error('name')" required>
           <template #default="{ id, describedby, invalid: bad }">
-            <UiInput :id="id" v-model="form.data.name" autocomplete="name" :icon="PhUser" :invalid="bad" :describedby="describedby" />
+            <UiInput
+              :id="id"
+              v-model="form.data.name"
+              autocomplete="name"
+              :icon="PhUser"
+              :invalid="bad"
+              :describedby="describedby"
+            />
           </template>
         </UiField>
         <UiField id="f-email" :label="$t('auth.email')" :error="form.error('email')" required>
           <template #default="{ id, describedby, invalid: bad }">
-            <UiInput :id="id" v-model="form.data.email" type="email" autocomplete="email" :icon="PhEnvelopeSimple" :invalid="bad" :describedby="describedby" />
+            <UiInput
+              :id="id"
+              v-model="form.data.email"
+              type="email"
+              autocomplete="email"
+              :icon="PhEnvelopeSimple"
+              :invalid="bad"
+              :describedby="describedby"
+            />
           </template>
         </UiField>
-        <UiField id="f-password" :label="$t('auth.password')" :hint="$t('auth.passwordHint')" :error="form.error('password')" required>
+        <UiField
+          id="f-password"
+          :label="$t('auth.password')"
+          :hint="$t('auth.passwordHint')"
+          :error="form.error('password')"
+          required
+        >
           <template #default="{ id, describedby, invalid: bad }">
-            <UiInput :id="id" v-model="form.data.password" type="password" autocomplete="new-password" :icon="PhLockSimple" :invalid="bad" :describedby="describedby" />
+            <UiInput
+              :id="id"
+              v-model="form.data.password"
+              type="password"
+              autocomplete="new-password"
+              :icon="PhLockSimple"
+              :invalid="bad"
+              :describedby="describedby"
+            />
           </template>
         </UiField>
-        <UiButton type="submit" size="lg" block :loading="form.processing.value">{{ $t('auth.join') }}</UiButton>
+        <UiButton type="submit" size="lg" block :loading="form.processing.value">{{
+          $t('auth.join')
+        }}</UiButton>
       </form>
     </div>
   </AuthLayout>

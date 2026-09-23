@@ -111,8 +111,10 @@ const sq: MessageSchema = {
   aside: {
     title: 'Çdo pajisje që montoni, e regjistruar.',
     points: {
-      plate: 'Fotografoni etiketën me numrin serial. Klienti merr në WhatsApp kartën e garancisë, që nuk humbet dot.',
-      reminder: 'Në muajin e njëmbëdhjetë kujtesa për servisin del vetë, me rezervim me një prekje.',
+      plate:
+        'Fotografoni etiketën me numrin serial. Klienti merr në WhatsApp kartën e garancisë, që nuk humbet dot.',
+      reminder:
+        'Në muajin e njëmbëdhjetë kujtesa për servisin del vetë, me rezervim me një prekje.',
       due: 'Një listë e vetme se kujt i vjen radha këtë muaj. Puna juaj më fitimprurëse nuk harrohet më.',
     },
   },
@@ -186,7 +188,8 @@ const sq: MessageSchema = {
     callTitle: 'Telefononi këta klientë',
     callSubtitle: 'Kanë kërkuar vizitë servisi dhe presin t’u thoni orarin.',
     callEmpty: 'Askush nuk pret telefonatë.',
-    callEmptyText: 'Klientët kërkojnë vizitë nga karta e garancisë, ose duke iu përgjigjur kujtesës me 1.',
+    callEmptyText:
+      'Klientët kërkojnë vizitë nga karta e garancisë, ose duke iu përgjigjur kujtesës me 1.',
     dueNextTitle: 'Në afat dy javët e ardhshme',
     dueNextEmpty: 'Asgjë në afat për dy javët e ardhshme.',
     openDue: 'Hap listën e afateve',
@@ -206,7 +209,8 @@ const sq: MessageSchema = {
     reading: 'Po lexohet etiketa…',
     aiFilledTitle: 'Kontrollojini me etiketën',
     aiFilled: 'U plotësua nga fotoja. Krahasoni çdo shenjë të numrit serial para se të ruani.',
-    aiOff: 'Fotoja u ruajt. Leximi automatik nuk është aktiv këtu, ndaj shkruani të dhënat nga etiketa.',
+    aiOff:
+      'Fotoja u ruajt. Leximi automatik nuk është aktiv këtu, ndaj shkruani të dhënat nga etiketa.',
     aiNothing: 'Etiketa nuk u lexua qartë. Shkruani të dhënat, ose bëni një foto më të qartë.',
     type: 'Lloji',
     brand: 'Marka',
@@ -230,7 +234,8 @@ const sq: MessageSchema = {
     locationNoAddress: 'Vendndodhja u ruajt. Shkruani rrugën.',
     locationFailed: 'Vendndodhja nuk është e disponueshme. Shkruani adresën.',
     consent: 'Pranon të marrë kartën e garancisë dhe kujtesat e servisit në WhatsApp',
-    consentHint: 'Pyeteni. Pa një “po” nuk dërgohet asgjë, dhe kartën mund ta ndani nga telefoni juaj. Mund ta ndalojë kur të dojë duke shkruar NDALO.',
+    consentHint:
+      'Pyeteni. Pa një “po” nuk dërgohet asgjë, dhe kartën mund ta ndani nga telefoni juaj. Mund ta ndalojë kur të dojë duke shkruar NDALO.',
     consentGiven: 'Pranoi mesazhet në WhatsApp më {date}.',
     termsStep: 'Garancia dhe servisi',
     installedOn: 'Data e instalimit',
@@ -252,9 +257,11 @@ const sq: MessageSchema = {
     sentTitle: 'Karta e garancisë u dërgua në WhatsApp',
     sentText: 'U dërgua te {phone}. E gjeni edhe te Mesazhet.',
     outboxTitle: 'Karta e garancisë është gati te mesazhet në pritje',
-    outboxText: 'Ende nuk është lidhur asnjë llogari WhatsApp, ndaj dërgojeni nga telefoni juaj. Teksti dhe lidhja janë gati.',
+    outboxText:
+      'Ende nuk është lidhur asnjë llogari WhatsApp, ndaj dërgojeni nga telefoni juaj. Teksti dhe lidhja janë gati.',
     notSentTitle: 'Nuk u dërgua: pa pëlqim për WhatsApp',
-    notSentText: '{name} nuk pranoi mesazhe. Ndajeni kartën nga WhatsApp-i juaj, ose tregojini lidhjen.',
+    notSentText:
+      '{name} nuk pranoi mesazhe. Ndajeni kartën nga WhatsApp-i juaj, ose tregojini lidhjen.',
     failedTitle: 'Karta e garancisë nuk u dërgua',
     failedText: 'Ofruesi i WhatsApp e refuzoi. Dërgojeni nga telefoni juaj.',
     sendWhatsApp: 'Dërgo me WhatsApp',
@@ -382,7 +389,8 @@ const sq: MessageSchema = {
     parts: 'Pjesë dhe punë',
     partsPlaceholder: 'p.sh. u ndërrua elektroda e ndezjes, u pastrua shkëmbyesi',
     notes: 'Shënime',
-    cycleHint: 'Servisi vjetor ose kontrolli e shtyn përpara datën e servisit tjetër. Riparimet dhe ndërhyrjet me garanci jo.',
+    cycleHint:
+      'Servisi vjetor ose kontrolli e shtyn përpara datën e servisit tjetër. Riparimet dhe ndërhyrjet me garanci jo.',
     save: 'Ruaj vizitën',
     saved: 'Vizita u regjistrua',
   },
@@ -391,7 +399,8 @@ const sq: MessageSchema = {
     subtitle: 'Korrigjoni atë që u regjistrua në instalim.',
     photo: 'Foto e etiketës',
     saved: 'Ndryshimet u ruajtën',
-    termsHint: 'Ndryshimi i datave ose i kushteve rillogarit fundin e garancisë dhe servisin e radhës.',
+    termsHint:
+      'Ndryshimi i datave ose i kushteve rillogarit fundin e garancisë dhe servisin e radhës.',
   },
   due: {
     title: 'Afatet',
@@ -460,7 +469,8 @@ const sq: MessageSchema = {
     day: 'Dita',
     time: 'Ora',
     notify: 'Dërgoji orën {name} në WhatsApp',
-    notifyNoConsent: '{name} nuk ka pranuar mesazhe në WhatsApp. Telefonojeni për ta konfirmuar orën.',
+    notifyNoConsent:
+      '{name} nuk ka pranuar mesazhe në WhatsApp. Telefonojeni për ta konfirmuar orën.',
     scheduled: 'Vizita u caktua',
     scheduledShare: 'U caktua. Dërgojeni orën nga telefoni juaj.',
     declineTitle: 'Ta refuzojmë këtë kërkesë?',
@@ -502,7 +512,8 @@ const sq: MessageSchema = {
     consentOff: 'Nuk ka pranuar',
     consentStopped: 'I ndaloi më {date}',
     consentAskTitle: 'A pranoi {name}?',
-    consentAskText: 'Aktivizojeni vetëm nëse tha “po” për kartën e garancisë dhe kujtesat e servisit në WhatsApp.',
+    consentAskText:
+      'Aktivizojeni vetëm nëse tha “po” për kartën e garancisë dhe kujtesat e servisit në WhatsApp.',
     consentAskConfirm: 'Po, pranoi',
     consentSaved: 'Pëlqimi u përditësua',
     edit: 'Ndrysho kontaktin',
@@ -579,7 +590,8 @@ const sq: MessageSchema = {
     defaultInterval: 'Servis çdo',
     leadDays: 'Kujtoji klientët',
     leadDaysUnit: 'ditë përpara',
-    leadDaysHint: 'Kujtesat dalin në orën 08:00 sipas orës suaj, një herë për çdo servis të çdo pajisjeje.',
+    leadDaysHint:
+      'Kujtesat dalin në orën 08:00 sipas orës suaj, një herë për çdo servis të çdo pajisjeje.',
     price: 'Çmimi tipik i servisit',
     priceHint: 'Përdoret për të vlerësuar punën në afat. Klientët nuk e shohin kurrë.',
     publicPhone: 'Telefoni që shohin klientët',
@@ -606,7 +618,8 @@ const sq: MessageSchema = {
     simulatedHint:
       'Nuk është lidhur asnjë llogari WhatsApp, ndaj mesazhet mbeten këtu. Me “Hap në WhatsApp” mund t’i dërgoni nga telefoni juaj.',
     simulator: 'Simulues përgjigjesh klienti',
-    simulatorHint: 'Vetëm për demo: përgjigjuni si një klient që mori kujtesën. Provoni 1 ose PO për të kërkuar vizitë, ose NDALO.',
+    simulatorHint:
+      'Vetëm për demo: përgjigjuni si një klient që mori kujtesën. Provoni 1 ose PO për të kërkuar vizitë, ose NDALO.',
     from: 'Nga (telefoni)',
     body: 'Mesazhi',
     simulate: 'Dërgo si klient',

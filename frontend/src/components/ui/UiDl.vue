@@ -1,13 +1,20 @@
 <script setup lang="ts">
 /** Label/value pairs for detail screens: <UiDl :items="[{ label: 'Serial', value: 'X1' }]" /> */
-defineProps<{ items: { label: string; value: string | number | null | undefined; mono?: boolean }[]; columns?: 1 | 2 }>()
+defineProps<{
+  items: { label: string; value: string | number | null | undefined; mono?: boolean }[]
+  columns?: 1 | 2
+}>()
 </script>
 
 <template>
   <dl class="dl" :class="{ 'dl--2': columns === 2 }">
     <div v-for="item in items" :key="item.label" class="dl__row">
       <dt>{{ item.label }}</dt>
-      <dd :class="{ mono: item.mono }">{{ item.value === null || item.value === undefined || item.value === '' ? '—' : item.value }}</dd>
+      <dd :class="{ mono: item.mono }">
+        {{
+          item.value === null || item.value === undefined || item.value === '' ? '—' : item.value
+        }}
+      </dd>
     </div>
   </dl>
 </template>

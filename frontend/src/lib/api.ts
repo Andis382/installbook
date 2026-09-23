@@ -57,7 +57,13 @@ export function refreshCsrf(): Promise<void> {
   return csrfPromise
 }
 
-async function request<T>(method: string, url: string, body?: unknown, options: Options = {}, retried = false): Promise<T> {
+async function request<T>(
+  method: string,
+  url: string,
+  body?: unknown,
+  options: Options = {},
+  retried = false,
+): Promise<T> {
   const unsafe = method !== 'GET' && method !== 'HEAD'
   if (unsafe && !readCookie('XSRF-TOKEN')) {
     await refreshCsrf()
@@ -113,16 +119,25 @@ async function request<T>(method: string, url: string, body?: unknown, options: 
 
 export const api = {
   get: <T>(url: string, options?: Options) => request<T>('GET', url, undefined, options),
-  post: <T>(url: string, body?: unknown, options?: Options) => request<T>('POST', url, body ?? {}, options),
-  put: <T>(url: string, body?: unknown, options?: Options) => request<T>('PUT', url, body ?? {}, options),
-  patch: <T>(url: string, body?: unknown, options?: Options) => request<T>('PATCH', url, body ?? {}, options),
-  delete: <T = void>(url: string, options?: Options) => request<T>('DELETE', url, undefined, options),
-  upload: <T>(url: string, form: FormData, options?: Options) => request<T>('POST', url, form, options),
+  post: <T>(url: string, body?: unknown, options?: Options) =>
+    request<T>('POST', url, body ?? {}, options),
+  put: <T>(url: string, body?: unknown, options?: Options) =>
+    request<T>('PUT', url, body ?? {}, options),
+  patch: <T>(url: string, body?: unknown, options?: Options) =>
+    request<T>('PATCH', url, body ?? {}, options),
+  delete: <T = void>(url: string, options?: Options) =>
+    request<T>('DELETE', url, undefined, options),
+  upload: <T>(url: string, form: FormData, options?: Options) =>
+    request<T>('POST', url, form, options),
 }
 
 /** Builds a query string, skipping empty values. */
-export function query(params: Record<string, string | number | boolean | null | undefined>): string {
-  const entries = Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== '')
+export function query(
+  params: Record<string, string | number | boolean | null | undefined>,
+): string {
+  const entries = Object.entries(params).filter(
+    ([, v]) => v !== undefined && v !== null && v !== '',
+  )
   if (!entries.length) return ''
   return '?' + new URLSearchParams(entries.map(([k, v]) => [k, String(v)])).toString()
 }

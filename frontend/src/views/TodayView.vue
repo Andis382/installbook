@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { PhCalendarCheck, PhChartBar, PhCurrencyEur, PhPhoneCall, PhPlus, PhTrendUp, PhWrench } from '@phosphor-icons/vue'
+import {
+  PhCalendarCheck,
+  PhChartBar,
+  PhCurrencyEur,
+  PhPhoneCall,
+  PhPlus,
+  PhTrendUp,
+  PhWrench,
+} from '@phosphor-icons/vue'
 import AppPage from '@/components/layout/AppPage.vue'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiCard from '@/components/ui/UiCard.vue'
@@ -14,7 +22,13 @@ import ScheduleDialog from '@/components/bookings/ScheduleDialog.vue'
 import DeclineDialog from '@/components/bookings/DeclineDialog.vue'
 import UnitLine from '@/components/units/UnitLine.vue'
 import { api } from '@/lib/api'
-import { formatDate, formatMoney, formatMonthShort, formatNumber, formatPercent } from '@/lib/format'
+import {
+  formatDate,
+  formatMoney,
+  formatMonthShort,
+  formatNumber,
+  formatPercent,
+} from '@/lib/format'
 import { monthStart } from '@/lib/dates'
 import type { Booking, Dashboard } from '@/lib/types'
 import { useAuth } from '@/stores/auth'
@@ -33,7 +47,11 @@ async function load() {
 
 onMounted(load)
 
-const subtitle = computed(() => [formatDate(data.value?.today ?? new Date(), 'long'), auth.organization?.name].filter(Boolean).join(' · '))
+const subtitle = computed(() =>
+  [formatDate(data.value?.today ?? new Date(), 'long'), auth.organization?.name]
+    .filter(Boolean)
+    .join(' · '),
+)
 
 const chartRows = computed(() =>
   (data.value?.installsByMonth ?? []).map((m, i, all) => ({
@@ -57,7 +75,14 @@ function decline(b: Booking) {
 <template>
   <AppPage :title="$t('today.title')" :subtitle="subtitle">
     <template #actions>
-      <UiButton class="today__cta" variant="accent" size="lg" :icon="PhPlus" :to="{ name: 'install' }">{{ $t('today.recordInstall') }}</UiButton>
+      <UiButton
+        class="today__cta"
+        variant="accent"
+        size="lg"
+        :icon="PhPlus"
+        :to="{ name: 'install' }"
+        >{{ $t('today.recordInstall') }}</UiButton
+      >
     </template>
 
     <div v-if="!data" class="stats">
@@ -70,7 +95,11 @@ function decline(b: Booking) {
         :icon="PhCalendarCheck"
         tone="warning"
         :to="{ name: 'due' }"
-        :hint="data.overdue ? $t('today.dueHint', { n: data.overdue }, data.overdue) : $t('today.dueHintNone')"
+        :hint="
+          data.overdue
+            ? $t('today.dueHint', { n: data.overdue }, data.overdue)
+            : $t('today.dueHintNone')
+        "
       />
       <UiStat
         :label="$t('today.revenue')"
@@ -78,7 +107,12 @@ function decline(b: Booking) {
         :icon="PhCurrencyEur"
         tone="success"
         :to="{ name: 'due' }"
-        :hint="$t('today.revenueHint', { count: data.dueThisMonth + data.overdue, price: formatMoney(data.typicalPriceCents) })"
+        :hint="
+          $t('today.revenueHint', {
+            count: data.dueThisMonth + data.overdue,
+            price: formatMoney(data.typicalPriceCents),
+          })
+        "
       />
       <UiStat
         :label="$t('today.conversion')"
@@ -87,7 +121,10 @@ function decline(b: Booking) {
         tone="primary"
         :hint="
           data.conversion.sent
-            ? $t('today.conversionHint', { booked: data.conversion.booked, sent: data.conversion.sent })
+            ? $t('today.conversionHint', {
+                booked: data.conversion.booked,
+                sent: data.conversion.sent,
+              })
             : $t('today.conversionNone')
         "
       />
@@ -102,21 +139,42 @@ function decline(b: Booking) {
     </div>
 
     <div class="layout">
-      <UiCard :title="$t('today.callTitle')" :subtitle="$t('today.callSubtitle')" :icon="PhPhoneCall" class="layout__main">
+      <UiCard
+        :title="$t('today.callTitle')"
+        :subtitle="$t('today.callSubtitle')"
+        :icon="PhPhoneCall"
+        class="layout__main"
+      >
         <template v-if="data?.newBookings.length" #actions>
-          <UiButton variant="ghost" size="sm" :to="{ name: 'bookings' }">{{ $t('common.viewAll') }}</UiButton>
+          <UiButton variant="ghost" size="sm" :to="{ name: 'bookings' }">{{
+            $t('common.viewAll')
+          }}</UiButton>
         </template>
         <UiSkeleton v-if="!data" :lines="4" height="20px" />
-        <UiEmpty v-else-if="!data.newBookings.length" :icon="PhPhoneCall" :title="$t('today.callEmpty')" :text="$t('today.callEmptyText')" compact />
+        <UiEmpty
+          v-else-if="!data.newBookings.length"
+          :icon="PhPhoneCall"
+          :title="$t('today.callEmpty')"
+          :text="$t('today.callEmptyText')"
+          compact
+        />
         <div v-else class="bookings">
-          <BookingItem v-for="b in data.newBookings" :key="b.id" :booking="b" @schedule="schedule" @decline="decline" />
+          <BookingItem
+            v-for="b in data.newBookings"
+            :key="b.id"
+            :booking="b"
+            @schedule="schedule"
+            @decline="decline"
+          />
         </div>
       </UiCard>
 
       <div class="layout__side">
         <UiCard :title="$t('today.dueNextTitle')" :icon="PhCalendarCheck">
           <template #actions>
-            <UiButton variant="ghost" size="sm" :to="{ name: 'due' }">{{ $t('today.openDue') }}</UiButton>
+            <UiButton variant="ghost" size="sm" :to="{ name: 'due' }">{{
+              $t('today.openDue')
+            }}</UiButton>
           </template>
           <UiSkeleton v-if="!data" :lines="4" height="18px" />
           <p v-else-if="!data.dueNext.length" class="muted small">{{ $t('today.dueNextEmpty') }}</p>
@@ -131,12 +189,18 @@ function decline(b: Booking) {
           </template>
         </UiCard>
 
-        <UiCard :title="$t('today.installsTitle')" :subtitle="$t('today.installsSubtitle')" :icon="PhChartBar">
+        <UiCard
+          :title="$t('today.installsTitle')"
+          :subtitle="$t('today.installsSubtitle')"
+          :icon="PhChartBar"
+        >
           <UiSkeleton v-if="!data" :lines="3" height="30px" />
           <UiBarChart
             v-else
             :title="$t('today.installsTitle')"
-            :series="[{ key: 'installs', label: t('today.installsSeries'), color: 'var(--brand-500)' }]"
+            :series="[
+              { key: 'installs', label: t('today.installsSeries'), color: 'var(--brand-500)' },
+            ]"
             :rows="chartRows"
             :height="150"
           />

@@ -41,19 +41,51 @@ async function decline() {
 </script>
 
 <template>
-  <UiDialog v-model:open="open" :title="$t('bookings.declineTitle')" :description="$t('bookings.declineText')" size="sm">
+  <UiDialog
+    v-model:open="open"
+    :title="$t('bookings.declineTitle')"
+    :description="$t('bookings.declineText')"
+    size="sm"
+  >
     <form id="decline-form" class="stack" novalidate @submit.prevent="decline">
-      <UiFormErrors :errors="form.errors.value" :message="form.message.value" :trigger="form.submitted.value" />
-      <UiCheckbox v-if="booking?.whatsappOptIn" v-model="form.data.notifyCustomer" :label="$t('bookings.declineNotify')" />
-      <UiField v-if="form.data.notifyCustomer && booking?.whatsappOptIn" id="f-reason" :label="$t('bookings.reason')" :hint="$t('bookings.reasonHint')" :error="form.error('reason')" optional>
+      <UiFormErrors
+        :errors="form.errors.value"
+        :message="form.message.value"
+        :trigger="form.submitted.value"
+      />
+      <UiCheckbox
+        v-if="booking?.whatsappOptIn"
+        v-model="form.data.notifyCustomer"
+        :label="$t('bookings.declineNotify')"
+      />
+      <UiField
+        v-if="form.data.notifyCustomer && booking?.whatsappOptIn"
+        id="f-reason"
+        :label="$t('bookings.reason')"
+        :hint="$t('bookings.reasonHint')"
+        :error="form.error('reason')"
+        optional
+      >
         <template #default="{ id, invalid, describedby }">
-          <UiInput :id="id" v-model="form.data.reason" maxlength="300" :invalid="invalid" :describedby="describedby" />
+          <UiInput
+            :id="id"
+            v-model="form.data.reason"
+            maxlength="300"
+            :invalid="invalid"
+            :describedby="describedby"
+          />
         </template>
       </UiField>
     </form>
     <template #footer>
       <UiButton variant="ghost" @click="open = false">{{ $t('common.cancel') }}</UiButton>
-      <UiButton type="submit" form="decline-form" variant="danger" :loading="form.processing.value">{{ $t('bookings.decline') }}</UiButton>
+      <UiButton
+        type="submit"
+        form="decline-form"
+        variant="danger"
+        :loading="form.processing.value"
+        >{{ $t('bookings.decline') }}</UiButton
+      >
     </template>
   </UiDialog>
 </template>

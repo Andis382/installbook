@@ -67,13 +67,16 @@ const active = computed(() => unit.value?.status === 'ACTIVE')
 const reminderText = computed(() => {
   const u = unit.value
   if (!u) return ''
-  if (u.openBooking?.status === 'SCHEDULED' && u.openBooking.scheduledAt) return t('unit.scheduledBooking', { when: formatDateTime(u.openBooking.scheduledAt) })
+  if (u.openBooking?.status === 'SCHEDULED' && u.openBooking.scheduledAt)
+    return t('unit.scheduledBooking', { when: formatDateTime(u.openBooking.scheduledAt) })
   if (u.openBooking) return t('unit.openBooking', { when: formatRelative(u.openBooking.createdAt) })
   const r = u.cycleReminder
   if (r.outcome === 'NO_CONSENT') return t('reminder.NO_CONSENT')
   if (r.outcome === 'FAILED') return t('reminder.FAILED')
   if (r.sentAt) return t('reminder.SENT', { date: formatDate(r.sentAt) })
-  return r.goesOutOn > todayIso() ? t('reminder.PLANNED', { date: formatDate(r.goesOutOn) }) : t('reminder.WAITING')
+  return r.goesOutOn > todayIso()
+    ? t('reminder.PLANNED', { date: formatDate(r.goesOutOn) })
+    : t('reminder.WAITING')
 })
 
 function delivered(m: Message | null) {
@@ -107,7 +110,12 @@ async function resendCard() {
 
 async function remove() {
   if (!unit.value) return
-  const ok = await confirm.ask({ title: t('unit.removeTitle'), text: t('unit.removeText'), confirmLabel: t('unit.remove'), danger: true })
+  const ok = await confirm.ask({
+    title: t('unit.removeTitle'),
+    text: t('unit.removeText'),
+    confirmLabel: t('unit.remove'),
+    danger: true,
+  })
   if (!ok) return
   unit.value = await api.post<UnitDetail>(`/units/${unit.value.id}/remove`)
   toasts.success(t('unit.removedToast'))
@@ -135,12 +143,20 @@ const menu = computed<MenuItem[]>(() => {
     items.push(
       optedIn.value
         ? { label: t('unit.resendCard'), icon: PhPaperPlaneTilt, action: resendCard }
-        : { label: t('unit.shareCard'), icon: PhWhatsappLogo, action: () => openUrl(u.cardShareUrl) },
+        : {
+            label: t('unit.shareCard'),
+            icon: PhWhatsappLogo,
+            action: () => openUrl(u.cardShareUrl),
+          },
     )
   }
   items.push(
     { label: t('unit.openCard'), icon: PhArrowSquareOut, action: () => openUrl(u.cardUrl) },
-    { label: t('unit.edit'), icon: PhPencilSimple, action: () => router.push({ name: 'unit-edit', params: { id: u.id } }) },
+    {
+      label: t('unit.edit'),
+      icon: PhPencilSimple,
+      action: () => router.push({ name: 'unit-edit', params: { id: u.id } }),
+    },
     active.value
       ? { label: t('unit.remove'), icon: PhPlugs, danger: true, action: remove }
       : { label: t('unit.restore'), icon: PhArrowCounterClockwise, action: restore },
@@ -150,14 +166,25 @@ const menu = computed<MenuItem[]>(() => {
 </script>
 
 <template>
-  <AppPage v-if="missing" :title="$t('errors.notFoundTitle')" :back="{ name: 'units' }" :back-label="$t('nav.units')">
-    <UiCard><UiEmpty :title="$t('errors.notFoundTitle')" :text="$t('errors.notFoundText')" /></UiCard>
+  <AppPage
+    v-if="missing"
+    :title="$t('errors.notFoundTitle')"
+    :back="{ name: 'units' }"
+    :back-label="$t('nav.units')"
+  >
+    <UiCard
+      ><UiEmpty :title="$t('errors.notFoundTitle')" :text="$t('errors.notFoundText')"
+    /></UiCard>
   </AppPage>
 
   <AppPage
     v-else
     :title="unit ? unitName(unit) : $t('common.loading')"
-    :eyebrow="unit ? $t('unit.eyebrow', { type: $t(`types.${unit.type}`), date: formatDate(unit.installedOn) }) : undefined"
+    :eyebrow="
+      unit
+        ? $t('unit.eyebrow', { type: $t(`types.${unit.type}`), date: formatDate(unit.installedOn) })
+        : undefined
+    "
     :back="{ name: 'units' }"
     :back-label="$t('nav.units')"
   >
@@ -173,9 +200,25 @@ const menu = computed<MenuItem[]>(() => {
       />
     </template>
     <template v-if="unit" #actions>
-      <UiButton v-if="active" :icon="PhWrench" @click="visitOpen = true">{{ $t('unit.recordVisit') }}</UiButton>
-      <UiButton v-if="active && optedIn" variant="inverse" :icon="PhBellRinging" :loading="sending" @click="sendReminder">{{ $t('unit.sendReminder') }}</UiButton>
-      <UiButton v-else-if="active" variant="inverse" :icon="PhWhatsappLogo" :href="unit.reminderShareUrl" target="_blank">{{ $t('unit.sendReminder') }}</UiButton>
+      <UiButton v-if="active" :icon="PhWrench" @click="visitOpen = true">{{
+        $t('unit.recordVisit')
+      }}</UiButton>
+      <UiButton
+        v-if="active && optedIn"
+        variant="inverse"
+        :icon="PhBellRinging"
+        :loading="sending"
+        @click="sendReminder"
+        >{{ $t('unit.sendReminder') }}</UiButton
+      >
+      <UiButton
+        v-else-if="active"
+        variant="inverse"
+        :icon="PhWhatsappLogo"
+        :href="unit.reminderShareUrl"
+        target="_blank"
+        >{{ $t('unit.sendReminder') }}</UiButton
+      >
       <UiMenu class="hero-menu" :items="menu" :label="$t('common.more')" />
     </template>
 
@@ -187,13 +230,21 @@ const menu = computed<MenuItem[]>(() => {
       <UiNotice v-if="!active && unit.removedOn" tone="warning" :icon="PhPlugs">
         {{ $t('unit.removedNotice', { date: formatDate(unit.removedOn) }) }}
         <template #actions>
-          <UiButton size="sm" variant="secondary" :icon="PhArrowCounterClockwise" @click="restore">{{ $t('unit.restore') }}</UiButton>
+          <UiButton
+            size="sm"
+            variant="secondary"
+            :icon="PhArrowCounterClockwise"
+            @click="restore"
+            >{{ $t('unit.restore') }}</UiButton
+          >
         </template>
       </UiNotice>
       <UiNotice v-if="unit.openBooking && active" tone="info" :icon="PhCalendarPlus">
         {{ reminderText }}
         <template #actions>
-          <UiButton size="sm" variant="secondary" :to="{ name: 'bookings' }">{{ $t('nav.bookings') }}</UiButton>
+          <UiButton size="sm" variant="secondary" :to="{ name: 'bookings' }">{{
+            $t('nav.bookings')
+          }}</UiButton>
         </template>
       </UiNotice>
 
@@ -201,19 +252,42 @@ const menu = computed<MenuItem[]>(() => {
         <div class="detail__side">
           <UiCard :title="$t('unit.customer')" :icon="PhIdentificationCard" class="order-1">
             <div class="who">
-              <RouterLink :to="{ name: 'customer', params: { id: unit.customer.id } }" class="who__name">{{ unit.customer.name }}</RouterLink>
+              <RouterLink
+                :to="{ name: 'customer', params: { id: unit.customer.id } }"
+                class="who__name"
+                >{{ unit.customer.name }}</RouterLink
+              >
               <p class="who__phone num">{{ formatPhone(unit.customer.phone) }}</p>
               <UiBadge :tone="optedIn ? 'success' : 'warning'" size="sm" :icon="PhWhatsappLogo">
-                {{ optedIn ? $t('customer.consentOn', { date: formatDate(unit.customer.whatsappOptInAt) }) : $t('customer.consentOff') }}
+                {{
+                  optedIn
+                    ? $t('customer.consentOn', { date: formatDate(unit.customer.whatsappOptInAt) })
+                    : $t('customer.consentOff')
+                }}
               </UiBadge>
               <div class="who__actions">
-                <UiButton size="sm" variant="secondary" :icon="PhPhone" :href="telLink(unit.customer.phone) ?? undefined">{{ $t('common.call') }}</UiButton>
-                <UiButton size="sm" variant="secondary" :icon="PhWhatsappLogo" :href="waLink(unit.customer.phone) ?? undefined" target="_blank">{{ $t('common.whatsapp') }}</UiButton>
+                <UiButton
+                  size="sm"
+                  variant="secondary"
+                  :icon="PhPhone"
+                  :href="telLink(unit.customer.phone) ?? undefined"
+                  >{{ $t('common.call') }}</UiButton
+                >
+                <UiButton
+                  size="sm"
+                  variant="secondary"
+                  :icon="PhWhatsappLogo"
+                  :href="waLink(unit.customer.phone) ?? undefined"
+                  target="_blank"
+                  >{{ $t('common.whatsapp') }}</UiButton
+                >
               </div>
               <div class="who__address">
                 <PhMapPin :size="18" weight="duotone" aria-hidden="true" />
                 <span>{{ unit.address }}</span>
-                <a :href="mapUrl(unit)" target="_blank" rel="noopener" class="who__map">{{ $t('unit.openMap') }}</a>
+                <a :href="mapUrl(unit)" target="_blank" rel="noopener" class="who__map">{{
+                  $t('unit.openMap')
+                }}</a>
               </div>
             </div>
           </UiCard>
@@ -222,7 +296,16 @@ const menu = computed<MenuItem[]>(() => {
             <dl class="facts">
               <div>
                 <dt>{{ $t('unit.installed') }}</dt>
-                <dd>{{ unit.installedByName ? $t('unit.installedBy', { date: formatDate(unit.installedOn), name: unit.installedByName }) : formatDate(unit.installedOn) }}</dd>
+                <dd>
+                  {{
+                    unit.installedByName
+                      ? $t('unit.installedBy', {
+                          date: formatDate(unit.installedOn),
+                          name: unit.installedByName,
+                        })
+                      : formatDate(unit.installedOn)
+                  }}
+                </dd>
               </div>
               <div>
                 <dt>{{ $t('unit.warranty') }}</dt>
@@ -237,11 +320,21 @@ const menu = computed<MenuItem[]>(() => {
               </div>
               <div>
                 <dt>{{ $t('unit.serviceEvery') }}</dt>
-                <dd>{{ $t('common.months', { n: unit.serviceIntervalMonths }, unit.serviceIntervalMonths) }}</dd>
+                <dd>
+                  {{
+                    $t(
+                      'common.months',
+                      { n: unit.serviceIntervalMonths },
+                      unit.serviceIntervalMonths,
+                    )
+                  }}
+                </dd>
               </div>
               <div>
                 <dt>{{ $t('unit.lastService') }}</dt>
-                <dd>{{ unit.lastServiceOn ? formatDate(unit.lastServiceOn) : $t('unit.never') }}</dd>
+                <dd>
+                  {{ unit.lastServiceOn ? formatDate(unit.lastServiceOn) : $t('unit.never') }}
+                </dd>
               </div>
               <div v-if="active">
                 <dt>{{ $t('unit.nextService') }}</dt>
@@ -259,10 +352,22 @@ const menu = computed<MenuItem[]>(() => {
           </UiCard>
 
           <UiCard :title="$t('unit.plate')" :icon="PhCamera" padding="sm" class="order-4">
-            <a v-if="unit.platePhotoUrl" :href="unit.platePhotoUrl" target="_blank" rel="noopener" class="plate-photo">
+            <a
+              v-if="unit.platePhotoUrl"
+              :href="unit.platePhotoUrl"
+              target="_blank"
+              rel="noopener"
+              class="plate-photo"
+            >
               <img :src="unit.platePhotoUrl" :alt="$t('unit.plate')" loading="lazy" />
             </a>
-            <UiEmpty v-else :icon="PhCamera" :title="$t('unit.noPhoto')" :text="$t('unit.noPhotoText')" compact />
+            <UiEmpty
+              v-else
+              :icon="PhCamera"
+              :title="$t('unit.noPhoto')"
+              :text="$t('unit.noPhotoText')"
+              compact
+            />
           </UiCard>
 
           <UiCard v-if="unit.otherUnits.length" :title="$t('unit.otherUnits')" class="order-5">
@@ -270,7 +375,11 @@ const menu = computed<MenuItem[]>(() => {
           </UiCard>
         </div>
 
-        <UiCard :title="$t('unit.history')" :icon="PhClockCounterClockwise" class="detail__main order-3">
+        <UiCard
+          :title="$t('unit.history')"
+          :icon="PhClockCounterClockwise"
+          class="detail__main order-3"
+        >
           <UnitTimeline :entries="unit.timeline" />
         </UiCard>
       </div>

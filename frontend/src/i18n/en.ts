@@ -109,7 +109,8 @@ const en = {
   aside: {
     title: 'Every unit you fit, on record.',
     points: {
-      plate: 'Photograph the serial plate. The customer gets a warranty card on WhatsApp they cannot lose.',
+      plate:
+        'Photograph the serial plate. The customer gets a warranty card on WhatsApp they cannot lose.',
       reminder: 'At month eleven the service reminder goes out on its own, with a one-tap booking.',
       due: 'One list of who is due this month. Your most profitable work, no longer forgotten.',
     },
@@ -191,7 +192,8 @@ const en = {
     installsTitle: 'Installs per month',
     installsSubtitle: 'The last twelve months',
     installsSeries: 'Installs',
-    upcoming: '{n} reminder goes out in the next 7 days. | {n} reminders go out in the next 7 days.',
+    upcoming:
+      '{n} reminder goes out in the next 7 days. | {n} reminders go out in the next 7 days.',
     inService: '{n} unit in service | {n} units in service',
   },
   install: {
@@ -204,7 +206,8 @@ const en = {
     reading: 'Reading the plate…',
     aiFilledTitle: 'Check these against the plate',
     aiFilled: 'Filled in from the photo. Compare every character of the serial before saving.',
-    aiOff: 'Photo saved. Automatic reading is not switched on here, so type the details from the plate.',
+    aiOff:
+      'Photo saved. Automatic reading is not switched on here, so type the details from the plate.',
     aiNothing: 'The plate could not be read clearly. Type the details, or take a sharper photo.',
     type: 'Type',
     brand: 'Brand',
@@ -228,7 +231,8 @@ const en = {
     locationNoAddress: 'Location saved. Type the street address.',
     locationFailed: 'Location is not available here. Type the address.',
     consent: 'They agree to get the warranty card and service reminders on WhatsApp',
-    consentHint: 'Ask them. Without a yes nothing is sent, and you can share the card from your own phone. They can stop any time by replying STOP.',
+    consentHint:
+      'Ask them. Without a yes nothing is sent, and you can share the card from your own phone. They can stop any time by replying STOP.',
     consentGiven: 'Agreed to WhatsApp messages on {date}.',
     termsStep: 'Warranty and service',
     installedOn: 'Install date',
@@ -250,9 +254,11 @@ const en = {
     sentTitle: 'Warranty card sent on WhatsApp',
     sentText: 'Sent to {phone}. You will find it under Messages too.',
     outboxTitle: 'The warranty card is ready in your outbox',
-    outboxText: 'No WhatsApp account is connected yet, so send it from your own phone. Text and link are filled in.',
+    outboxText:
+      'No WhatsApp account is connected yet, so send it from your own phone. Text and link are filled in.',
     notSentTitle: 'Nothing sent: no WhatsApp consent',
-    notSentText: '{name} did not agree to messages. Share the card from your own WhatsApp, or let them scan the link.',
+    notSentText:
+      '{name} did not agree to messages. Share the card from your own WhatsApp, or let them scan the link.',
     failedTitle: 'The warranty card could not be sent',
     failedText: 'The WhatsApp provider refused it. Send it from your phone instead.',
     sendWhatsApp: 'Send via WhatsApp',
@@ -380,7 +386,8 @@ const en = {
     parts: 'Parts and work',
     partsPlaceholder: 'e.g. ignition electrode replaced, heat exchanger cleaned',
     notes: 'Notes',
-    cycleHint: 'An annual service or an inspection moves the next service date on. Repairs and warranty claims do not.',
+    cycleHint:
+      'An annual service or an inspection moves the next service date on. Repairs and warranty claims do not.',
     save: 'Save visit',
     saved: 'Visit recorded',
   },
@@ -500,7 +507,8 @@ const en = {
     consentOff: 'Has not agreed',
     consentStopped: 'Stopped on {date}',
     consentAskTitle: 'Did {name} agree?',
-    consentAskText: 'Switch this on only if they said yes to warranty cards and service reminders on WhatsApp.',
+    consentAskText:
+      'Switch this on only if they said yes to warranty cards and service reminders on WhatsApp.',
     consentAskConfirm: 'Yes, they agreed',
     consentSaved: 'Consent updated',
     edit: 'Edit contact',
@@ -604,7 +612,8 @@ const en = {
     simulatedHint:
       'No WhatsApp account is connected, so messages stay here. Use "Open in WhatsApp" to send one from your phone.',
     simulator: 'Customer reply simulator',
-    simulatorHint: 'Demo only: reply as a customer who got a reminder. Try 1 or PO to ask for a visit, or STOP.',
+    simulatorHint:
+      'Demo only: reply as a customer who got a reminder. Try 1 or PO to ask for a visit, or STOP.',
     from: 'From (phone)',
     body: 'Message',
     simulate: 'Send as customer',

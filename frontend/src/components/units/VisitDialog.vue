@@ -22,14 +22,26 @@ import { useToasts } from '@/stores/toasts'
  */
 const open = defineModel<boolean>('open', { default: false })
 const props = withDefaults(
-  defineProps<{ unitId: number; bookingId?: number | null; unitLabel: string; customerName: string; priceCents?: number | null }>(),
+  defineProps<{
+    unitId: number
+    bookingId?: number | null
+    unitLabel: string
+    customerName: string
+    priceCents?: number | null
+  }>(),
   { bookingId: null, priceCents: null },
 )
 const emit = defineEmits<{ saved: [result: unknown] }>()
 
 const { t } = useI18n()
 const toasts = useToasts()
-const form = useForm({ visitedOn: todayIso(), kind: 'ANNUAL_SERVICE' as VisitKind, price: '', parts: '', notes: '' })
+const form = useForm({
+  visitedOn: todayIso(),
+  kind: 'ANNUAL_SERVICE' as VisitKind,
+  price: '',
+  parts: '',
+  notes: '',
+})
 const kinds = computed(() => VISIT_KINDS.map((k) => ({ value: k, label: t(`visitKinds.${k}`) })))
 
 watch(open, (value) => {
@@ -44,7 +56,9 @@ async function save() {
     parts: form.data.parts || null,
     notes: form.data.notes || null,
   }
-  const url = props.bookingId ? `/bookings/${props.bookingId}/done` : `/units/${props.unitId}/visits`
+  const url = props.bookingId
+    ? `/bookings/${props.bookingId}/done`
+    : `/units/${props.unitId}/visits`
   const result = await form.submit(() => api.post(url, body))
   if (result) {
     toasts.success(props.bookingId ? t('bookings.doneToast') : t('visit.saved'))
@@ -61,16 +75,34 @@ async function save() {
     :description="$t('visit.description', { unit: unitLabel, customer: customerName })"
   >
     <form id="visit-form" class="stack" novalidate @submit.prevent="save">
-      <UiFormErrors :errors="form.errors.value" :message="form.message.value" :trigger="form.submitted.value" />
+      <UiFormErrors
+        :errors="form.errors.value"
+        :message="form.message.value"
+        :trigger="form.submitted.value"
+      />
       <div class="grid-2">
         <UiField id="f-visitedOn" :label="$t('visit.date')" :error="form.error('visitedOn')">
           <template #default="{ id, invalid, describedby }">
-            <UiInput :id="id" v-model="form.data.visitedOn" type="date" :max="todayIso()" :invalid="invalid" :describedby="describedby" />
+            <UiInput
+              :id="id"
+              v-model="form.data.visitedOn"
+              type="date"
+              :max="todayIso()"
+              :invalid="invalid"
+              :describedby="describedby"
+            />
           </template>
         </UiField>
         <UiField id="f-price" :label="$t('visit.price')" :error="form.error('priceCents')" optional>
           <template #default="{ id, invalid, describedby }">
-            <UiInput :id="id" v-model="form.data.price" inputmode="decimal" prefix="€" :invalid="invalid" :describedby="describedby" />
+            <UiInput
+              :id="id"
+              v-model="form.data.price"
+              inputmode="decimal"
+              prefix="€"
+              :invalid="invalid"
+              :describedby="describedby"
+            />
           </template>
         </UiField>
       </div>
@@ -82,18 +114,32 @@ async function save() {
       <UiNotice tone="info">{{ $t('visit.cycleHint') }}</UiNotice>
       <UiField id="f-parts" :label="$t('visit.parts')" :error="form.error('parts')" optional>
         <template #default="{ id, invalid, describedby }">
-          <UiInput :id="id" v-model="form.data.parts" :placeholder="$t('visit.partsPlaceholder')" :invalid="invalid" :describedby="describedby" />
+          <UiInput
+            :id="id"
+            v-model="form.data.parts"
+            :placeholder="$t('visit.partsPlaceholder')"
+            :invalid="invalid"
+            :describedby="describedby"
+          />
         </template>
       </UiField>
       <UiField id="f-notes" :label="$t('visit.notes')" :error="form.error('notes')" optional>
         <template #default="{ id, invalid, describedby }">
-          <UiTextarea :id="id" v-model="form.data.notes" :rows="2" :invalid="invalid" :describedby="describedby" />
+          <UiTextarea
+            :id="id"
+            v-model="form.data.notes"
+            :rows="2"
+            :invalid="invalid"
+            :describedby="describedby"
+          />
         </template>
       </UiField>
     </form>
     <template #footer>
       <UiButton variant="ghost" @click="open = false">{{ $t('common.cancel') }}</UiButton>
-      <UiButton type="submit" form="visit-form" :icon="PhCheck" :loading="form.processing.value">{{ $t('visit.save') }}</UiButton>
+      <UiButton type="submit" form="visit-form" :icon="PhCheck" :loading="form.processing.value">{{
+        $t('visit.save')
+      }}</UiButton>
     </template>
   </UiDialog>
 </template>

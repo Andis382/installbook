@@ -2,7 +2,15 @@
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import { PhBarcode, PhChatsCircle, PhCheck, PhIdentificationCard, PhPencilSimple, PhPhone, PhWhatsappLogo } from '@phosphor-icons/vue'
+import {
+  PhBarcode,
+  PhChatsCircle,
+  PhCheck,
+  PhIdentificationCard,
+  PhPencilSimple,
+  PhPhone,
+  PhWhatsappLogo,
+} from '@phosphor-icons/vue'
 import AppPage from '@/components/layout/AppPage.vue'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiCard from '@/components/ui/UiCard.vue'
@@ -51,7 +59,9 @@ function edit() {
 }
 
 async function save() {
-  const saved = await form.submit(() => api.put<CustomerDetail>(`/customers/${route.params.id}`, form.data))
+  const saved = await form.submit(() =>
+    api.put<CustomerDetail>(`/customers/${route.params.id}`, form.data),
+  )
   if (saved) {
     customer.value = saved
     editing.value = false
@@ -88,7 +98,8 @@ const consentText = computed(() => {
   const c = customer.value
   if (!c) return ''
   if (c.whatsappOptIn) return t('customer.consentOn', { date: formatDate(c.whatsappOptInAt) })
-  if (c.whatsappOptOutAt) return t('customer.consentStopped', { date: formatDate(c.whatsappOptOutAt) })
+  if (c.whatsappOptOutAt)
+    return t('customer.consentStopped', { date: formatDate(c.whatsappOptOutAt) })
   return t('customer.consentOff')
 })
 </script>
@@ -96,46 +107,97 @@ const consentText = computed(() => {
 <template>
   <AppPage
     :title="customer?.name ?? $t('common.loading')"
-    :subtitle="customer ? `${formatPhone(customer.phone)} · ${$t('customer.since', { date: formatDate(customer.createdAt) })}` : undefined"
+    :subtitle="
+      customer
+        ? `${formatPhone(customer.phone)} · ${$t('customer.since', { date: formatDate(customer.createdAt) })}`
+        : undefined
+    "
     :back="{ name: 'customers' }"
     :back-label="$t('nav.customers')"
   >
     <template v-if="customer" #actions>
-      <UiButton variant="inverse" :icon="PhPhone" :href="telLink(customer.phone) ?? undefined">{{ $t('common.call') }}</UiButton>
-      <UiButton variant="inverse" :icon="PhWhatsappLogo" :href="waLink(customer.phone) ?? undefined" target="_blank">{{ $t('common.whatsapp') }}</UiButton>
+      <UiButton variant="inverse" :icon="PhPhone" :href="telLink(customer.phone) ?? undefined">{{
+        $t('common.call')
+      }}</UiButton>
+      <UiButton
+        variant="inverse"
+        :icon="PhWhatsappLogo"
+        :href="waLink(customer.phone) ?? undefined"
+        target="_blank"
+        >{{ $t('common.whatsapp') }}</UiButton
+      >
     </template>
 
-    <div v-if="!customer" class="grid-2"><UiSkeleton card :lines="5" /><UiSkeleton card :lines="7" /></div>
+    <div v-if="!customer" class="grid-2">
+      <UiSkeleton card :lines="5" /><UiSkeleton card :lines="7" />
+    </div>
 
     <div v-else class="layout">
       <div class="layout__side">
         <UiCard :title="$t('customer.contact')" :icon="PhIdentificationCard">
           <template v-if="!editing" #actions>
-            <UiButton size="sm" variant="ghost" :icon="PhPencilSimple" @click="edit">{{ $t('common.edit') }}</UiButton>
+            <UiButton size="sm" variant="ghost" :icon="PhPencilSimple" @click="edit">{{
+              $t('common.edit')
+            }}</UiButton>
           </template>
           <form v-if="editing" class="stack" novalidate @submit.prevent="save">
-            <UiFormErrors :errors="form.errors.value" :message="form.message.value" :trigger="form.submitted.value" />
+            <UiFormErrors
+              :errors="form.errors.value"
+              :message="form.message.value"
+              :trigger="form.submitted.value"
+            />
             <UiField id="f-name" :label="$t('common.name')" :error="form.error('name')" required>
               <template #default="{ id, invalid, describedby }">
-                <UiInput :id="id" v-model="form.data.name" :invalid="invalid" :describedby="describedby" />
+                <UiInput
+                  :id="id"
+                  v-model="form.data.name"
+                  :invalid="invalid"
+                  :describedby="describedby"
+                />
               </template>
             </UiField>
             <UiField id="f-phone" :label="$t('common.phone')" :error="form.error('phone')" required>
               <template #default="{ id, invalid, describedby }">
-                <UiInput :id="id" v-model="form.data.phone" type="tel" inputmode="tel" :invalid="invalid" :describedby="describedby" />
+                <UiInput
+                  :id="id"
+                  v-model="form.data.phone"
+                  type="tel"
+                  inputmode="tel"
+                  :invalid="invalid"
+                  :describedby="describedby"
+                />
               </template>
             </UiField>
             <UiField id="f-locale" :label="$t('install.language')">
-              <UiSegmented v-model="form.data.locale" :options="localeOptions" :label="$t('install.language')" />
+              <UiSegmented
+                v-model="form.data.locale"
+                :options="localeOptions"
+                :label="$t('install.language')"
+              />
             </UiField>
-            <UiField id="f-notes" :label="$t('customer.notes')" :error="form.error('notes')" optional>
+            <UiField
+              id="f-notes"
+              :label="$t('customer.notes')"
+              :error="form.error('notes')"
+              optional
+            >
               <template #default="{ id, invalid, describedby }">
-                <UiTextarea :id="id" v-model="form.data.notes" :rows="3" :invalid="invalid" :describedby="describedby" />
+                <UiTextarea
+                  :id="id"
+                  v-model="form.data.notes"
+                  :rows="3"
+                  :invalid="invalid"
+                  :describedby="describedby"
+                />
               </template>
             </UiField>
             <div class="cluster">
-              <UiButton type="submit" :icon="PhCheck" :loading="form.processing.value">{{ $t('common.save') }}</UiButton>
-              <UiButton variant="ghost" @click="editing = false">{{ $t('common.cancel') }}</UiButton>
+              <UiButton type="submit" :icon="PhCheck" :loading="form.processing.value">{{
+                $t('common.save')
+              }}</UiButton>
+              <UiButton variant="ghost" @click="editing = false">{{
+                $t('common.cancel')
+              }}</UiButton>
             </div>
           </form>
           <dl v-else class="facts">
@@ -154,7 +216,11 @@ const consentText = computed(() => {
           </dl>
         </UiCard>
 
-        <UiCard :title="$t('customer.consent')" :icon="PhWhatsappLogo" :tone="customer.whatsappOptIn ? 'default' : 'muted'">
+        <UiCard
+          :title="$t('customer.consent')"
+          :icon="PhWhatsappLogo"
+          :tone="customer.whatsappOptIn ? 'default' : 'muted'"
+        >
           <UiSwitch v-model="consent" :label="consentText" :disabled="savingConsent" />
         </UiCard>
 
@@ -165,13 +231,26 @@ const consentText = computed(() => {
       </div>
 
       <UiCard :title="$t('customer.conversation')" :icon="PhChatsCircle" class="layout__main">
-        <UiEmpty v-if="!customer.conversation.length" :icon="PhChatsCircle" :title="$t('customer.conversationEmpty')" compact />
+        <UiEmpty
+          v-if="!customer.conversation.length"
+          :icon="PhChatsCircle"
+          :title="$t('customer.conversationEmpty')"
+          compact
+        />
         <ol v-else class="chat">
-          <li v-for="(m, i) in customer.conversation" :key="i" class="chat__msg" :class="m.direction === 'OUT' ? 'chat__msg--out' : 'chat__msg--in'">
+          <li
+            v-for="(m, i) in customer.conversation"
+            :key="i"
+            class="chat__msg"
+            :class="m.direction === 'OUT' ? 'chat__msg--out' : 'chat__msg--in'"
+          >
             <p class="chat__body">{{ m.body }}</p>
             <p class="chat__meta num">
-              {{ m.direction === 'OUT' ? $t('customer.sent') : $t('customer.received') }} · {{ formatStamp(m.at) }}
-              <template v-if="m.direction === 'OUT'"> · {{ $t(`messages.status.${m.status}`) }}</template>
+              {{ m.direction === 'OUT' ? $t('customer.sent') : $t('customer.received') }} ·
+              {{ formatStamp(m.at) }}
+              <template v-if="m.direction === 'OUT'">
+                · {{ $t(`messages.status.${m.status}`) }}</template
+              >
             </p>
           </li>
         </ol>

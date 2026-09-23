@@ -3,11 +3,14 @@ defineOptions({ inheritAttrs: false })
 
 const model = defineModel<string | null | undefined>()
 
-withDefaults(defineProps<{ id?: string; invalid?: boolean; describedby?: string; rows?: number }>(), {
-  id: undefined,
-  describedby: undefined,
-  rows: 3,
-})
+withDefaults(
+  defineProps<{ id?: string; invalid?: boolean; describedby?: string; rows?: number }>(),
+  {
+    id: undefined,
+    describedby: undefined,
+    rows: 3,
+  },
+)
 </script>
 
 <template>

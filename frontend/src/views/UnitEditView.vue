@@ -72,7 +72,9 @@ function locate() {
       form.data.latitude = Number(pos.coords.latitude.toFixed(6))
       form.data.longitude = Number(pos.coords.longitude.toFixed(6))
       try {
-        const place = await api.get<{ address: string | null }>(`/geo/reverse${query({ lat: form.data.latitude, lng: form.data.longitude })}`)
+        const place = await api.get<{ address: string | null }>(
+          `/geo/reverse${query({ lat: form.data.latitude, lng: form.data.longitude })}`,
+        )
         if (place.address) form.data.address = place.address
       } finally {
         locating.value = false
@@ -90,7 +92,9 @@ async function save() {
     if (photo.value) {
       const data = new FormData()
       data.append('file', photo.value)
-      form.data.platePhotoId = (await api.upload<PlateReading>(`/units/plate${query({ read: false })}`, data)).photoId
+      form.data.platePhotoId = (
+        await api.upload<PlateReading>(`/units/plate${query({ read: false })}`, data)
+      ).photoId
     }
     return api.put<UnitDetail>(`/units/${route.params.id}`, form.data)
   })
@@ -109,67 +113,176 @@ async function save() {
   >
     <UiCard v-if="!unit"><UiSkeleton :lines="8" height="22px" /></UiCard>
     <form v-else class="edit" novalidate @submit.prevent="save">
-      <UiFormErrors class="span-all" :errors="form.errors.value" :message="form.message.value" :trigger="form.submitted.value" />
+      <UiFormErrors
+        class="span-all"
+        :errors="form.errors.value"
+        :message="form.message.value"
+        :trigger="form.submitted.value"
+      />
       <UiCard>
         <div class="stack">
           <UiField id="f-type" :label="$t('install.type')" :error="form.error('type')" required>
-            <TypePicker id="f-type" v-model="form.data.type" :label="$t('install.type')" :invalid="!!form.error('type')" />
+            <TypePicker
+              id="f-type"
+              v-model="form.data.type"
+              :label="$t('install.type')"
+              :invalid="!!form.error('type')"
+            />
           </UiField>
           <div class="grid-2">
-            <UiField id="f-brand" :label="$t('install.brand')" :error="form.error('brand')" required>
+            <UiField
+              id="f-brand"
+              :label="$t('install.brand')"
+              :error="form.error('brand')"
+              required
+            >
               <template #default="{ id, invalid, describedby }">
-                <UiInput :id="id" v-model="form.data.brand" :invalid="invalid" :describedby="describedby" />
+                <UiInput
+                  :id="id"
+                  v-model="form.data.brand"
+                  :invalid="invalid"
+                  :describedby="describedby"
+                />
               </template>
             </UiField>
-            <UiField id="f-model" :label="$t('install.model')" :error="form.error('model')" optional>
+            <UiField
+              id="f-model"
+              :label="$t('install.model')"
+              :error="form.error('model')"
+              optional
+            >
               <template #default="{ id, invalid, describedby }">
-                <UiInput :id="id" v-model="form.data.model" :invalid="invalid" :describedby="describedby" />
+                <UiInput
+                  :id="id"
+                  v-model="form.data.model"
+                  :invalid="invalid"
+                  :describedby="describedby"
+                />
               </template>
             </UiField>
           </div>
-          <UiField id="f-serialNumber" :label="$t('install.serial')" :hint="$t('install.serialHint')" :error="form.error('serialNumber')">
+          <UiField
+            id="f-serialNumber"
+            :label="$t('install.serial')"
+            :hint="$t('install.serialHint')"
+            :error="form.error('serialNumber')"
+          >
             <template #default="{ id, invalid, describedby }">
-              <UiInput :id="id" v-model="form.data.serialNumber" mono size="lg" autocomplete="off" spellcheck="false" :invalid="invalid" :describedby="describedby" />
+              <UiInput
+                :id="id"
+                v-model="form.data.serialNumber"
+                mono
+                size="lg"
+                autocomplete="off"
+                spellcheck="false"
+                :invalid="invalid"
+                :describedby="describedby"
+              />
             </template>
           </UiField>
           <UiField id="f-file" :label="$t('edit.photo')" :error="form.error('file')" optional>
-            <UiPhotoInput id="f-file" v-model="photo" aspect="16 / 10" :current-url="form.data.platePhotoId ? unit.platePhotoUrl : null" />
+            <UiPhotoInput
+              id="f-file"
+              v-model="photo"
+              aspect="16 / 10"
+              :current-url="form.data.platePhotoId ? unit.platePhotoUrl : null"
+            />
           </UiField>
         </div>
       </UiCard>
 
       <UiCard>
         <div class="stack">
-          <UiField id="f-address" :label="$t('install.address')" :error="form.error('address')" required>
+          <UiField
+            id="f-address"
+            :label="$t('install.address')"
+            :error="form.error('address')"
+            required
+          >
             <template #aside>
-              <UiButton size="sm" variant="ghost" :icon="PhCrosshairSimple" :loading="locating" @click="locate">{{ $t('install.useLocation') }}</UiButton>
+              <UiButton
+                size="sm"
+                variant="ghost"
+                :icon="PhCrosshairSimple"
+                :loading="locating"
+                @click="locate"
+                >{{ $t('install.useLocation') }}</UiButton
+              >
             </template>
             <template #default="{ id, invalid, describedby }">
-              <UiTextarea :id="id" v-model="form.data.address" :rows="2" :invalid="invalid" :describedby="describedby" />
+              <UiTextarea
+                :id="id"
+                v-model="form.data.address"
+                :rows="2"
+                :invalid="invalid"
+                :describedby="describedby"
+              />
             </template>
           </UiField>
-          <UiField id="f-installedOn" :label="$t('install.installedOn')" :error="form.error('installedOn')" required>
+          <UiField
+            id="f-installedOn"
+            :label="$t('install.installedOn')"
+            :error="form.error('installedOn')"
+            required
+          >
             <template #default="{ id, invalid, describedby }">
-              <UiInput :id="id" v-model="form.data.installedOn" type="date" :max="todayIso()" :invalid="invalid" :describedby="describedby" />
+              <UiInput
+                :id="id"
+                v-model="form.data.installedOn"
+                type="date"
+                :max="todayIso()"
+                :invalid="invalid"
+                :describedby="describedby"
+              />
             </template>
           </UiField>
           <div class="grid-2">
-            <UiField id="f-warrantyMonths" :label="$t('install.warrantyMonths')" :error="form.error('warrantyMonths')">
-              <UiStepper id="f-warrantyMonths" v-model="form.data.warrantyMonths" :label="$t('install.warrantyMonths')" :min="1" :max="120" />
+            <UiField
+              id="f-warrantyMonths"
+              :label="$t('install.warrantyMonths')"
+              :error="form.error('warrantyMonths')"
+            >
+              <UiStepper
+                id="f-warrantyMonths"
+                v-model="form.data.warrantyMonths"
+                :label="$t('install.warrantyMonths')"
+                :min="1"
+                :max="120"
+              />
             </UiField>
-            <UiField id="f-serviceIntervalMonths" :label="`${$t('install.interval')} (${$t('install.intervalUnit')})`" :error="form.error('serviceIntervalMonths')">
-              <UiStepper id="f-serviceIntervalMonths" v-model="form.data.serviceIntervalMonths" :label="$t('install.interval')" :min="1" :max="60" />
+            <UiField
+              id="f-serviceIntervalMonths"
+              :label="`${$t('install.interval')} (${$t('install.intervalUnit')})`"
+              :error="form.error('serviceIntervalMonths')"
+            >
+              <UiStepper
+                id="f-serviceIntervalMonths"
+                v-model="form.data.serviceIntervalMonths"
+                :label="$t('install.interval')"
+                :min="1"
+                :max="60"
+              />
             </UiField>
           </div>
           <UiNotice tone="info">{{ $t('edit.termsHint') }}</UiNotice>
           <UiField id="f-notes" :label="$t('install.notes')" :error="form.error('notes')" optional>
             <template #default="{ id, invalid, describedby }">
-              <UiTextarea :id="id" v-model="form.data.notes" :rows="3" :invalid="invalid" :describedby="describedby" />
+              <UiTextarea
+                :id="id"
+                v-model="form.data.notes"
+                :rows="3"
+                :invalid="invalid"
+                :describedby="describedby"
+              />
             </template>
           </UiField>
           <div class="cluster">
-            <UiButton type="submit" :icon="PhCheck" :loading="form.processing.value">{{ $t('common.save') }}</UiButton>
-            <UiButton variant="ghost" :to="{ name: 'unit', params: { id: route.params.id } }">{{ $t('common.cancel') }}</UiButton>
+            <UiButton type="submit" :icon="PhCheck" :loading="form.processing.value">{{
+              $t('common.save')
+            }}</UiButton>
+            <UiButton variant="ghost" :to="{ name: 'unit', params: { id: route.params.id } }">{{
+              $t('common.cancel')
+            }}</UiButton>
           </div>
         </div>
       </UiCard>

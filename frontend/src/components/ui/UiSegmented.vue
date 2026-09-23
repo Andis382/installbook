@@ -16,7 +16,12 @@ withDefaults(
 </script>
 
 <template>
-  <div class="seg" :class="[`seg--${size}`, { 'seg--block': block }]" role="radiogroup" :aria-label="label">
+  <div
+    class="seg"
+    :class="[`seg--${size}`, { 'seg--block': block }]"
+    role="radiogroup"
+    :aria-label="label"
+  >
     <button
       v-for="o in options"
       :key="String(o.value)"

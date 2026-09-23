@@ -27,7 +27,9 @@ const userOpen = ref(false)
 const userRoot = ref<HTMLElement | null>(null)
 
 function isActive(name: string) {
-  return route.name === name || route.meta.nav === name || route.matched.some((r) => r.name === name)
+  return (
+    route.name === name || route.meta.nav === name || route.matched.some((r) => r.name === name)
+  )
 }
 
 async function signOut() {
@@ -74,19 +76,35 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', outside))
             :class="{ 'is-active': isActive(i.name) }"
             :aria-current="isActive(i.name) ? 'page' : undefined"
           >
-            <component :is="i.icon" :size="18" :weight="isActive(i.name) ? 'fill' : 'bold'" aria-hidden="true" />
+            <component
+              :is="i.icon"
+              :size="18"
+              :weight="isActive(i.name) ? 'fill' : 'bold'"
+              aria-hidden="true"
+            />
             <span>{{ $t(i.label) }}</span>
           </RouterLink>
         </nav>
 
         <div class="band__tools">
-          <RouterLink v-if="cta" :to="{ name: cta.name }" class="band__cta" :class="{ 'is-active': isActive(cta.name) }">
+          <RouterLink
+            v-if="cta"
+            :to="{ name: cta.name }"
+            class="band__cta"
+            :class="{ 'is-active': isActive(cta.name) }"
+          >
             <component :is="cta.icon" :size="18" weight="bold" aria-hidden="true" />
             <span>{{ $t(cta.label) }}</span>
           </RouterLink>
           <LanguageSwitch inverse class="band__lang" />
           <div ref="userRoot" class="user">
-            <button type="button" class="user__btn" :aria-expanded="userOpen" aria-haspopup="menu" @click="userOpen = !userOpen">
+            <button
+              type="button"
+              class="user__btn"
+              :aria-expanded="userOpen"
+              aria-haspopup="menu"
+              @click="userOpen = !userOpen"
+            >
               <UiAvatar :name="auth.user?.name" :size="34" />
               <span class="user__who">
                 <span class="user__name">{{ auth.user?.name }}</span>
@@ -100,11 +118,24 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', outside))
                   <p class="strong">{{ auth.user?.name }}</p>
                   <p class="small muted truncate">{{ auth.user?.email }}</p>
                 </div>
-                <RouterLink v-for="i in accountLinks" :key="i.name" :to="{ name: i.name }" class="user__item" role="menuitem">
-                  <component :is="i.icon" :size="18" weight="bold" aria-hidden="true" /> {{ $t(i.label) }}
+                <RouterLink
+                  v-for="i in accountLinks"
+                  :key="i.name"
+                  :to="{ name: i.name }"
+                  class="user__item"
+                  role="menuitem"
+                >
+                  <component :is="i.icon" :size="18" weight="bold" aria-hidden="true" />
+                  {{ $t(i.label) }}
                 </RouterLink>
-                <button type="button" class="user__item user__item--danger" role="menuitem" @click="signOut">
-                  <PhSignOut :size="18" weight="bold" aria-hidden="true" /> {{ $t('common.signOut') }}
+                <button
+                  type="button"
+                  class="user__item user__item--danger"
+                  role="menuitem"
+                  @click="signOut"
+                >
+                  <PhSignOut :size="18" weight="bold" aria-hidden="true" />
+                  {{ $t('common.signOut') }}
                 </button>
               </div>
             </Transition>
@@ -127,11 +158,24 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', outside))
         :class="{ 'is-active': isActive(i.name) }"
         :aria-current="isActive(i.name) ? 'page' : undefined"
       >
-        <span class="tabbar__icon"><component :is="i.icon" :size="22" :weight="isActive(i.name) ? 'fill' : 'regular'" aria-hidden="true" /></span>
+        <span class="tabbar__icon"
+          ><component
+            :is="i.icon"
+            :size="22"
+            :weight="isActive(i.name) ? 'fill' : 'regular'"
+            aria-hidden="true"
+        /></span>
         <span class="tabbar__label">{{ $t(i.label) }}</span>
       </RouterLink>
-      <RouterLink v-if="cta" :to="{ name: cta.name }" class="tabbar__item tabbar__cta" :aria-current="isActive(cta.name) ? 'page' : undefined">
-        <span class="tabbar__fab"><component :is="cta.icon" :size="26" weight="bold" aria-hidden="true" /></span>
+      <RouterLink
+        v-if="cta"
+        :to="{ name: cta.name }"
+        class="tabbar__item tabbar__cta"
+        :aria-current="isActive(cta.name) ? 'page' : undefined"
+      >
+        <span class="tabbar__fab"
+          ><component :is="cta.icon" :size="26" weight="bold" aria-hidden="true"
+        /></span>
         <span class="tabbar__label">{{ $t(cta.shortLabel ?? cta.label) }}</span>
       </RouterLink>
       <RouterLink
@@ -142,7 +186,13 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', outside))
         :class="{ 'is-active': isActive(i.name) }"
         :aria-current="isActive(i.name) ? 'page' : undefined"
       >
-        <span class="tabbar__icon"><component :is="i.icon" :size="22" :weight="isActive(i.name) ? 'fill' : 'regular'" aria-hidden="true" /></span>
+        <span class="tabbar__icon"
+          ><component
+            :is="i.icon"
+            :size="22"
+            :weight="isActive(i.name) ? 'fill' : 'regular'"
+            aria-hidden="true"
+        /></span>
         <span class="tabbar__label">{{ $t(i.label) }}</span>
       </RouterLink>
       <button type="button" class="tabbar__item" :aria-expanded="moreOpen" @click="moreOpen = true">
@@ -151,10 +201,22 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', outside))
       </button>
     </nav>
 
-    <UiDialog v-model:open="moreOpen" :title="auth.organization?.name ?? $t('common.more')" :description="auth.user?.name">
+    <UiDialog
+      v-model:open="moreOpen"
+      :title="auth.organization?.name ?? $t('common.more')"
+      :description="auth.user?.name"
+    >
       <nav class="sheet-nav" :aria-label="$t('common.more')">
-        <RouterLink v-for="i in links" :key="i.name" :to="{ name: i.name }" class="sheet-nav__item" :class="{ 'is-active': isActive(i.name) }">
-          <span class="sheet-nav__icon"><component :is="i.icon" :size="20" weight="duotone" aria-hidden="true" /></span>
+        <RouterLink
+          v-for="i in links"
+          :key="i.name"
+          :to="{ name: i.name }"
+          class="sheet-nav__item"
+          :class="{ 'is-active': isActive(i.name) }"
+        >
+          <span class="sheet-nav__icon"
+            ><component :is="i.icon" :size="20" weight="duotone" aria-hidden="true"
+          /></span>
           {{ $t(i.label) }}
         </RouterLink>
       </nav>

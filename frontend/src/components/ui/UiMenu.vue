@@ -10,10 +10,13 @@ export type MenuItem = {
   action: () => void
 }
 
-withDefaults(defineProps<{ items: MenuItem[]; label: string; icon?: Component; align?: 'left' | 'right' }>(), {
-  icon: undefined,
-  align: 'right',
-})
+withDefaults(
+  defineProps<{ items: MenuItem[]; label: string; icon?: Component; align?: 'left' | 'right' }>(),
+  {
+    icon: undefined,
+    align: 'right',
+  },
+)
 
 const open = ref(false)
 const root = ref<HTMLElement | null>(null)
@@ -65,7 +68,15 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', outside))
 
 <template>
   <div ref="root" class="menu" @keydown="onKey">
-    <button type="button" class="menu__trigger" :aria-label="label" :title="label" aria-haspopup="menu" :aria-expanded="open" @click="toggle">
+    <button
+      type="button"
+      class="menu__trigger"
+      :aria-label="label"
+      :title="label"
+      aria-haspopup="menu"
+      :aria-expanded="open"
+      @click="toggle"
+    >
       <component :is="icon ?? PhDotsThreeVertical" :size="20" weight="bold" aria-hidden="true" />
     </button>
     <Transition name="menu">

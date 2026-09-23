@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { addDays, addMonths, daysBetween, monthStart, nextServiceDue, shiftMonth, warrantyUntil } from '../dates'
+import {
+  addDays,
+  addMonths,
+  daysBetween,
+  monthStart,
+  nextServiceDue,
+  shiftMonth,
+  warrantyUntil,
+} from '../dates'
 
 describe('calendar months', () => {
   it('lands on the last day of a shorter month', () => {

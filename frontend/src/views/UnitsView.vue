@@ -36,7 +36,10 @@ const total = ref(0)
 const page = ref(0)
 const loadingMore = ref(false)
 
-const typeOptions = computed(() => [{ value: '', label: t('units.allTypes') }, ...UNIT_TYPES.map((v) => ({ value: v as string, label: t(`types.${v}`) }))])
+const typeOptions = computed(() => [
+  { value: '', label: t('units.allTypes') },
+  ...UNIT_TYPES.map((v) => ({ value: v as string, label: t(`types.${v}`) })),
+])
 const warrantyOptions = computed(() => [
   { value: '', label: t('units.warrantyAny') },
   { value: 'ACTIVE', label: t('units.warrantyActive') },
@@ -48,7 +51,9 @@ const serviceOptions = computed(() => [
   { value: 'DUE', label: t('units.serviceDue') },
   { value: 'OK', label: t('units.serviceOk') },
 ])
-const filtered = computed(() => !!(q.value || type.value || warranty.value || service.value || removed.value))
+const filtered = computed(
+  () => !!(q.value || type.value || warranty.value || service.value || removed.value),
+)
 
 /** The filters as they appear in the address bar, so back and reload keep them. */
 function filters(): Record<string, string> {
@@ -88,16 +93,13 @@ async function more() {
 }
 
 let timer: ReturnType<typeof setTimeout> | undefined
-watch(
-  [q, type, warranty, service, removed],
-  () => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      router.replace({ query: filters() })
-      load()
-    }, 220)
-  },
-)
+watch([q, type, warranty, service, removed], () => {
+  clearTimeout(timer)
+  timer = setTimeout(() => {
+    router.replace({ query: filters() })
+    load()
+  }, 220)
+})
 onBeforeUnmount(() => clearTimeout(timer))
 load()
 
@@ -117,7 +119,12 @@ function open(u: UnitRow) {
 <template>
   <AppPage :title="$t('units.title')" :subtitle="$t('units.subtitle')">
     <UiCard padding="sm" class="filters">
-      <UiSearch v-model="q" :placeholder="$t('units.search')" :label="$t('common.search')" class="filters__search" />
+      <UiSearch
+        v-model="q"
+        :placeholder="$t('units.search')"
+        :label="$t('common.search')"
+        class="filters__search"
+      />
       <UiSelect v-model="type" :options="typeOptions" :aria-label="$t('units.type')" />
       <UiSelect v-model="warranty" :options="warrantyOptions" :aria-label="$t('units.warranty')" />
       <UiSelect v-model="service" :options="serviceOptions" :aria-label="$t('units.service')" />
@@ -126,17 +133,33 @@ function open(u: UnitRow) {
 
     <p v-if="items" class="count small muted" role="status">
       {{ $t('units.count', { n: total }, total) }}
-      <button v-if="filtered" type="button" class="count__clear" @click="clearFilters">{{ $t('units.clearFilters') }}</button>
+      <button v-if="filtered" type="button" class="count__clear" @click="clearFilters">
+        {{ $t('units.clearFilters') }}
+      </button>
     </p>
 
     <UiCard v-if="!items" padding="md"><UiSkeleton :lines="8" height="22px" /></UiCard>
 
     <UiCard v-else-if="!items.length" padding="lg">
-      <UiEmpty v-if="filtered" :icon="PhMagnifyingGlass" :title="$t('units.empty')" :text="$t('units.emptyText')">
-        <UiButton variant="secondary" @click="clearFilters">{{ $t('units.clearFilters') }}</UiButton>
+      <UiEmpty
+        v-if="filtered"
+        :icon="PhMagnifyingGlass"
+        :title="$t('units.empty')"
+        :text="$t('units.emptyText')"
+      >
+        <UiButton variant="secondary" @click="clearFilters">{{
+          $t('units.clearFilters')
+        }}</UiButton>
       </UiEmpty>
-      <UiEmpty v-else :icon="PhBarcode" :title="$t('units.emptyAll')" :text="$t('units.emptyAllText')">
-        <UiButton variant="accent" :icon="PhPlus" :to="{ name: 'install' }">{{ $t('today.recordInstall') }}</UiButton>
+      <UiEmpty
+        v-else
+        :icon="PhBarcode"
+        :title="$t('units.emptyAll')"
+        :text="$t('units.emptyAllText')"
+      >
+        <UiButton variant="accent" :icon="PhPlus" :to="{ name: 'install' }">{{
+          $t('today.recordInstall')
+        }}</UiButton>
       </UiEmpty>
     </UiCard>
 
@@ -159,7 +182,12 @@ function open(u: UnitRow) {
                   <div class="units__unit">
                     <TypeIcon :type="u.type" size="sm" />
                     <div class="units__names">
-                      <RouterLink :to="{ name: 'unit', params: { id: u.id } }" class="units__link" @click.stop>{{ unitName(u) }}</RouterLink>
+                      <RouterLink
+                        :to="{ name: 'unit', params: { id: u.id } }"
+                        class="units__link"
+                        @click.stop
+                        >{{ unitName(u) }}</RouterLink
+                      >
                       <span class="xsmall subtle">{{ $t(`types.${u.type}`) }}</span>
                     </div>
                   </div>
@@ -168,7 +196,9 @@ function open(u: UnitRow) {
                 <td>
                   <div class="units__names">
                     <span class="strong">{{ u.customerName }}</span>
-                    <span class="xsmall subtle num">{{ formatPhone(u.customerPhone) }} · {{ town(u.address) }}</span>
+                    <span class="xsmall subtle num"
+                      >{{ formatPhone(u.customerPhone) }} · {{ town(u.address) }}</span
+                    >
                   </div>
                 </td>
                 <td class="num nowrap">{{ formatDate(u.installedOn) }}</td>
@@ -215,7 +245,9 @@ function open(u: UnitRow) {
       </ul>
 
       <div v-if="items.length < total" class="more">
-        <UiButton variant="secondary" :loading="loadingMore" @click="more">{{ $t('common.showMore') }}</UiButton>
+        <UiButton variant="secondary" :loading="loadingMore" @click="more">{{
+          $t('common.showMore')
+        }}</UiButton>
       </div>
     </template>
   </AppPage>

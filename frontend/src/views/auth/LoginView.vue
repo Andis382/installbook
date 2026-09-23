@@ -21,7 +21,10 @@ async function submit() {
     return true
   })
   if (ok) {
-    const next = typeof route.query.next === 'string' && route.query.next.startsWith('/') ? route.query.next : '/'
+    const next =
+      typeof route.query.next === 'string' && route.query.next.startsWith('/')
+        ? route.query.next
+        : '/'
     await router.replace(next)
   }
 }
@@ -42,7 +45,11 @@ function useDemo() {
       </div>
 
       <form class="stack" novalidate @submit.prevent="submit">
-        <UiFormErrors :errors="form.errors.value" :message="form.message.value" :trigger="form.submitted.value" />
+        <UiFormErrors
+          :errors="form.errors.value"
+          :message="form.message.value"
+          :trigger="form.submitted.value"
+        />
         <UiField id="f-email" :label="$t('auth.email')" :error="form.error('email')">
           <template #default="{ id, describedby, invalid }">
             <UiInput
@@ -82,12 +89,20 @@ function useDemo() {
           <p class="strong">{{ $t('auth.demoTitle') }}</p>
           <p class="small muted">{{ $t('auth.demoText') }}</p>
         </div>
-        <UiButton variant="soft" :icon="PhSparkle" :disabled="form.processing.value" @click="useDemo">{{ $t('auth.useDemo') }}</UiButton>
+        <UiButton
+          variant="soft"
+          :icon="PhSparkle"
+          :disabled="form.processing.value"
+          @click="useDemo"
+          >{{ $t('auth.useDemo') }}</UiButton
+        >
       </div>
 
       <p class="small muted">
         {{ $t('auth.noAccount') }}
-        <RouterLink :to="{ name: 'register' }" class="strong">{{ $t('auth.createAccount') }}</RouterLink>
+        <RouterLink :to="{ name: 'register' }" class="strong">{{
+          $t('auth.createAccount')
+        }}</RouterLink>
       </p>
     </div>
   </AuthLayout>

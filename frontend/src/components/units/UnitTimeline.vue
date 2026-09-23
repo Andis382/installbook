@@ -20,7 +20,10 @@ defineProps<{ entries: TimelineEntry[] }>()
 const { t } = useI18n()
 const opened = ref<Set<string>>(new Set())
 
-type Look = { icon: Component; tone: 'primary' | 'accent' | 'success' | 'warning' | 'danger' | 'neutral' }
+type Look = {
+  icon: Component
+  tone: 'primary' | 'accent' | 'success' | 'warning' | 'danger' | 'neutral'
+}
 
 function look(e: TimelineEntry): Look {
   switch (e.kind) {
@@ -67,7 +70,9 @@ function title(e: TimelineEntry): string {
 }
 
 function when(e: TimelineEntry): string {
-  return e.at && e.kind !== 'VISIT' && e.kind !== 'INSTALLED' ? formatStamp(e.at) : formatDate(e.date)
+  return e.at && e.kind !== 'VISIT' && e.kind !== 'INSTALLED'
+    ? formatStamp(e.at)
+    : formatDate(e.date)
 }
 
 function key(e: TimelineEntry, i: number) {
@@ -84,15 +89,24 @@ function toggle(k: string) {
 
 <template>
   <ol class="tl">
-    <li v-for="(e, i) in entries" :key="key(e, i)" class="tl__item" :class="`tl__item--${look(e).tone}`">
-      <span class="tl__dot" aria-hidden="true"><component :is="look(e).icon" :size="16" weight="bold" /></span>
+    <li
+      v-for="(e, i) in entries"
+      :key="key(e, i)"
+      class="tl__item"
+      :class="`tl__item--${look(e).tone}`"
+    >
+      <span class="tl__dot" aria-hidden="true"
+        ><component :is="look(e).icon" :size="16" weight="bold"
+      /></span>
       <div class="tl__body">
         <div class="tl__head">
           <p class="tl__title">{{ title(e) }}</p>
           <time class="tl__when num">{{ when(e) }}</time>
         </div>
 
-        <p v-if="e.kind === 'REMINDER'" class="tl__detail">{{ $t('timeline.cycle', { date: formatDate(e.date) }) }}</p>
+        <p v-if="e.kind === 'REMINDER'" class="tl__detail">
+          {{ $t('timeline.cycle', { date: formatDate(e.date) }) }}
+        </p>
 
         <div v-if="e.kind === 'VISIT' && (e.parts || e.priceCents)" class="tl__detail">
           <span v-if="e.parts">{{ e.parts }}</span>
@@ -101,12 +115,31 @@ function toggle(k: string) {
         <p v-if="e.kind === 'VISIT' && e.notes" class="tl__detail">{{ e.notes }}</p>
 
         <div v-if="e.kind === 'BOOKING'" class="tl__detail tl__row">
-          <UiBadge size="sm" :tone="e.bookingStatus === 'DONE' ? 'success' : e.bookingStatus === 'DECLINED' ? 'neutral' : 'accent'">
+          <UiBadge
+            size="sm"
+            :tone="
+              e.bookingStatus === 'DONE'
+                ? 'success'
+                : e.bookingStatus === 'DECLINED'
+                  ? 'neutral'
+                  : 'accent'
+            "
+          >
             {{ $t(`timeline.bookingStatus.${e.bookingStatus}`) }}
           </UiBadge>
-          <span v-if="e.scheduledAt">{{ $t('unit.scheduledBooking', { when: formatDateTime(e.scheduledAt) }) }}</span>
+          <span v-if="e.scheduledAt">{{
+            $t('unit.scheduledBooking', { when: formatDateTime(e.scheduledAt) })
+          }}</span>
           <span v-else-if="e.preferredDate">
-            {{ $t('timeline.prefers', { when: formatDate(e.preferredDate, 'short') + (e.preferredPeriod && e.preferredPeriod !== 'ANY' ? ', ' + $t(`periods.${e.preferredPeriod}`).toLowerCase() : '') }) }}
+            {{
+              $t('timeline.prefers', {
+                when:
+                  formatDate(e.preferredDate, 'short') +
+                  (e.preferredPeriod && e.preferredPeriod !== 'ANY'
+                    ? ', ' + $t(`periods.${e.preferredPeriod}`).toLowerCase()
+                    : ''),
+              })
+            }}
           </span>
         </div>
         <p v-if="e.kind === 'BOOKING' && e.notes" class="tl__quote">“{{ e.notes }}”</p>
@@ -114,9 +147,16 @@ function toggle(k: string) {
         <p v-if="e.kind === 'REPLY'" class="tl__quote">“{{ e.body }}”</p>
 
         <template v-if="(e.kind === 'MESSAGE' || e.kind === 'REMINDER') && e.body">
-          <button type="button" class="tl__toggle" :aria-expanded="opened.has(key(e, i))" @click="toggle(key(e, i))">
+          <button
+            type="button"
+            class="tl__toggle"
+            :aria-expanded="opened.has(key(e, i))"
+            @click="toggle(key(e, i))"
+          >
             {{ opened.has(key(e, i)) ? $t('timeline.hideMessage') : $t('timeline.showMessage') }}
-            <span v-if="e.messageStatus" class="tl__status">· {{ $t(`messages.status.${e.messageStatus}`) }}</span>
+            <span v-if="e.messageStatus" class="tl__status"
+              >· {{ $t(`messages.status.${e.messageStatus}`) }}</span
+            >
           </button>
           <p v-if="opened.has(key(e, i))" class="tl__message">{{ e.body }}</p>
         </template>

@@ -22,7 +22,12 @@ const tag = computed(() => (props.to ? RouterLink : props.href ? 'a' : 'button')
 /** Only what the rendered element needs: an undefined href would blank RouterLink's own. */
 const bindings = computed(() => {
   if (props.to) return { to: props.to }
-  if (props.href) return { href: props.href, target: props.target, rel: props.target === '_blank' ? 'noopener' : undefined }
+  if (props.href)
+    return {
+      href: props.href,
+      target: props.target,
+      rel: props.target === '_blank' ? 'noopener' : undefined,
+    }
   return { type: 'button', disabled: props.disabled }
 })
 </script>

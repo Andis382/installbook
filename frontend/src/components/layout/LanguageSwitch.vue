@@ -11,7 +11,12 @@ function pick(code: Locale) {
 </script>
 
 <template>
-  <div class="lang" :class="{ 'lang--inverse': inverse }" role="group" :aria-label="$t('common.language')">
+  <div
+    class="lang"
+    :class="{ 'lang--inverse': inverse }"
+    role="group"
+    :aria-label="$t('common.language')"
+  >
     <button
       v-for="l in LOCALES"
       :key="l.code"

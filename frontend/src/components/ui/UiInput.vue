@@ -17,7 +17,15 @@ withDefaults(
     size?: 'md' | 'lg'
     mono?: boolean
   }>(),
-  { id: undefined, type: 'text', describedby: undefined, icon: undefined, prefix: undefined, suffix: undefined, size: 'md' },
+  {
+    id: undefined,
+    type: 'text',
+    describedby: undefined,
+    icon: undefined,
+    prefix: undefined,
+    suffix: undefined,
+    size: 'md',
+  },
 )
 
 const input = ref<HTMLInputElement | null>(null)
@@ -25,8 +33,18 @@ defineExpose({ focus: () => input.value?.focus(), select: () => input.value?.sel
 </script>
 
 <template>
-  <div class="control" :class="[`control--${size}`, { 'control--invalid': invalid, 'control--mono': mono }]">
-    <component :is="icon" v-if="icon" class="control__icon" :size="18" weight="bold" aria-hidden="true" />
+  <div
+    class="control"
+    :class="[`control--${size}`, { 'control--invalid': invalid, 'control--mono': mono }]"
+  >
+    <component
+      :is="icon"
+      v-if="icon"
+      class="control__icon"
+      :size="18"
+      weight="bold"
+      aria-hidden="true"
+    />
     <span v-if="prefix" class="control__affix">{{ prefix }}</span>
     <input
       :id="id"

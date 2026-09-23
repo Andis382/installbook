@@ -22,7 +22,9 @@ const tag = computed(() => (props.to ? RouterLink : 'div'))
   <component :is="tag" :to="to" class="stat" :class="[`stat--${tone}`, { 'stat--link': !!to }]">
     <div class="stat__top">
       <span class="stat__label">{{ label }}</span>
-      <span v-if="icon" class="stat__icon"><component :is="icon" :size="20" weight="duotone" aria-hidden="true" /></span>
+      <span v-if="icon" class="stat__icon"
+        ><component :is="icon" :size="20" weight="duotone" aria-hidden="true"
+      /></span>
     </div>
     <div class="stat__value num">{{ value }}</div>
     <div v-if="hint || $slots.hint" class="stat__hint" :class="trend ? `stat__hint--${trend}` : ''">

@@ -35,7 +35,11 @@ function sy(y: number) {
   return props.height - ((y - minY) / (maxY - minY)) * (props.height - 16) - 8
 }
 
-const path = computed(() => props.points.map((p, i) => `${i ? 'L' : 'M'}${sx(p.x).toFixed(1)},${sy(p.y).toFixed(1)}`).join(' '))
+const path = computed(() =>
+  props.points
+    .map((p, i) => `${i ? 'L' : 'M'}${sx(p.x).toFixed(1)},${sy(p.y).toFixed(1)}`)
+    .join(' '),
+)
 const area = computed(() => {
   if (!props.points.length) return ''
   const first = props.points[0]!
@@ -45,7 +49,14 @@ const area = computed(() => {
 </script>
 
 <template>
-  <svg class="spark" :viewBox="`0 0 ${W} ${height}`" preserveAspectRatio="none" role="img" :aria-label="label" :style="{ height: `${height}px` }">
+  <svg
+    class="spark"
+    :viewBox="`0 0 ${W} ${height}`"
+    preserveAspectRatio="none"
+    role="img"
+    :aria-label="label"
+    :style="{ height: `${height}px` }"
+  >
     <defs>
       <linearGradient :id="gradId" x1="0" x2="0" y1="0" y2="1">
         <stop offset="0%" :stop-color="color" stop-opacity="0.22" />
@@ -62,8 +73,27 @@ const area = computed(() => {
       opacity="0.9"
     />
     <path v-if="points.length > 1" :d="area" :fill="`url(#${gradId})`" />
-    <path v-if="points.length > 1" :d="path" fill="none" :stroke="color" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" />
-    <circle v-for="(p, i) in points" :key="i" :cx="sx(p.x)" :cy="sy(p.y)" r="3.5" :fill="color" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke" />
+    <path
+      v-if="points.length > 1"
+      :d="path"
+      fill="none"
+      :stroke="color"
+      stroke-width="2.5"
+      stroke-linejoin="round"
+      stroke-linecap="round"
+      vector-effect="non-scaling-stroke"
+    />
+    <circle
+      v-for="(p, i) in points"
+      :key="i"
+      :cx="sx(p.x)"
+      :cy="sy(p.y)"
+      r="3.5"
+      :fill="color"
+      stroke="#fff"
+      stroke-width="1.5"
+      vector-effect="non-scaling-stroke"
+    />
   </svg>
 </template>
 

@@ -85,8 +85,7 @@ import AuthAside from '@/components/AuthAside.vue'
   flex-direction: column;
   padding: 28px clamp(20px, 5vw, 64px);
   background:
-    radial-gradient(800px 400px at 100% 0%, var(--primary-soft), transparent 60%),
-    var(--bg);
+    radial-gradient(800px 400px at 100% 0%, var(--primary-soft), transparent 60%), var(--bg);
 }
 .auth__top {
   display: flex;

@@ -62,7 +62,9 @@ describe('Albanian formatting without ICU data for "sq"', () => {
   it('reads instants in the business time zone', () => {
     // 22:30 UTC on 30 Sep is already 1 Oct, 00:30 in Tirana (summer time)
     expect(formatDateTime('2026-09-30T22:30:00Z')).toBe('1 tet, 00:30')
-    expect(formatStamp('2025-09-14T17:42:00Z', new Date('2026-09-23T10:00:00Z'))).toBe('14 sht 2025, 19:42')
+    expect(formatStamp('2025-09-14T17:42:00Z', new Date('2026-09-23T10:00:00Z'))).toBe(
+      '14 sht 2025, 19:42',
+    )
   })
 
   it('says how long ago in Albanian', () => {

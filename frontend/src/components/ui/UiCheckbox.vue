@@ -15,7 +15,9 @@ withDefaults(defineProps<{ id?: string; label?: string; hint?: string; disabled?
     <input :id="id" v-model="model" type="checkbox" class="check__native" :disabled="disabled" />
     <span class="check__box" aria-hidden="true"><PhCheck :size="14" weight="bold" /></span>
     <span class="check__text">
-      <span class="check__label"><slot>{{ label }}</slot></span>
+      <span class="check__label"
+        ><slot>{{ label }}</slot></span
+      >
       <span v-if="hint" class="check__hint">{{ hint }}</span>
     </span>
   </label>
@@ -63,7 +65,9 @@ withDefaults(defineProps<{ id?: string; label?: string; hint?: string; disabled?
   color: #fff;
   background: linear-gradient(180deg, var(--brand-500), var(--brand-600));
   border-color: var(--brand-700);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2), 0 2px 6px -2px var(--focus-ring);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.2),
+    0 2px 6px -2px var(--focus-ring);
 }
 .check__native:focus-visible + .check__box {
   box-shadow: 0 0 0 4px var(--focus-ring);

@@ -3,10 +3,15 @@ import { computed } from 'vue'
 import type { UnitType } from '@/lib/types'
 import { TYPE_COLOR, TYPE_ICON } from '@/lib/units'
 
-const props = withDefaults(defineProps<{ type: UnitType; size?: 'sm' | 'md' | 'lg' }>(), { size: 'md' })
+const props = withDefaults(defineProps<{ type: UnitType; size?: 'sm' | 'md' | 'lg' }>(), {
+  size: 'md',
+})
 
 const px = computed(() => ({ sm: 16, md: 20, lg: 28 })[props.size])
-const style = computed(() => ({ '--ink': TYPE_COLOR[props.type].ink, '--tint': TYPE_COLOR[props.type].soft }))
+const style = computed(() => ({
+  '--ink': TYPE_COLOR[props.type].ink,
+  '--tint': TYPE_COLOR[props.type].soft,
+}))
 </script>
 
 <template>
@@ -26,7 +31,9 @@ const style = computed(() => ({ '--ink': TYPE_COLOR[props.type].ink, '--tint': T
   color: var(--ink);
   background: linear-gradient(180deg, var(--surface) -40%, var(--tint) 100%);
   border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
-  box-shadow: var(--highlight), 0 1px 2px rgb(16 24 40 / 0.06);
+  box-shadow:
+    var(--highlight),
+    0 1px 2px rgb(16 24 40 / 0.06);
 }
 .type--sm {
   width: 30px;

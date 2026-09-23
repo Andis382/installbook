@@ -3,10 +3,13 @@ import { ref } from 'vue'
 import { PhCheck, PhCopy } from '@phosphor-icons/vue'
 
 /** A serial number styled like the stamped metal plate it was read from. */
-const props = withDefaults(defineProps<{ serial: string | null; size?: 'sm' | 'md' | 'lg'; copyable?: boolean }>(), {
-  size: 'md',
-  copyable: false,
-})
+const props = withDefaults(
+  defineProps<{ serial: string | null; size?: 'sm' | 'md' | 'lg'; copyable?: boolean }>(),
+  {
+    size: 'md',
+    copyable: false,
+  },
+)
 
 const copied = ref(false)
 
@@ -34,10 +37,17 @@ async function copy() {
       :title="$t('unit.copySerial')"
       @click="copy"
     >
-      <component :is="copied ? PhCheck : PhCopy" :size="size === 'lg' ? 18 : 15" weight="bold" aria-hidden="true" />
+      <component
+        :is="copied ? PhCheck : PhCopy"
+        :size="size === 'lg' ? 18 : 15"
+        weight="bold"
+        aria-hidden="true"
+      />
     </button>
     <span v-else class="plate__rivet" aria-hidden="true" />
-    <span class="visually-hidden" aria-live="polite">{{ copied ? $t('unit.serialCopied') : '' }}</span>
+    <span class="visually-hidden" aria-live="polite">{{
+      copied ? $t('unit.serialCopied') : ''
+    }}</span>
   </span>
 </template>
 

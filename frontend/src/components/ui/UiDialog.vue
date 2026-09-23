@@ -39,14 +39,27 @@ function onBackdrop(e: MouseEvent) {
 </script>
 
 <template>
-  <dialog ref="el" class="dialog" :class="`dialog--${size}`" :aria-labelledby="'dlg-title'" @close="onClose" @cancel.prevent="onClose" @click="onBackdrop">
+  <dialog
+    ref="el"
+    class="dialog"
+    :class="`dialog--${size}`"
+    :aria-labelledby="'dlg-title'"
+    @close="onClose"
+    @cancel.prevent="onClose"
+    @click="onBackdrop"
+  >
     <div class="dialog__panel">
       <header class="dialog__header">
         <div>
           <h2 id="dlg-title" class="dialog__title">{{ title }}</h2>
           <p v-if="description" class="dialog__desc">{{ description }}</p>
         </div>
-        <button type="button" class="dialog__close" :aria-label="$t('common.close')" @click="onClose">
+        <button
+          type="button"
+          class="dialog__close"
+          :aria-label="$t('common.close')"
+          @click="onClose"
+        >
           <PhX :size="20" weight="bold" aria-hidden="true" />
         </button>
       </header>

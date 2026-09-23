@@ -72,7 +72,8 @@ function stateText(r: DueRow) {
 
 function whenText(r: DueRow) {
   const days = r.unit.daysUntilDue
-  if (-days > LONG_OVERDUE_DAYS) return t('due.overdueSince', { month: formatMonth(r.unit.nextServiceDue) })
+  if (-days > LONG_OVERDUE_DAYS)
+    return t('due.overdueSince', { month: formatMonth(r.unit.nextServiceDue) })
   if (days < 0) return t('due.overdueBy', { n: -days }, -days)
   return t('due.dueOn', { date: formatDay(r.unit.nextServiceDue) })
 }
@@ -115,21 +116,43 @@ async function digest() {
   }
 }
 
-const ownerMenu = computed<MenuItem[]>(() => [{ label: t('due.digest'), icon: PhEnvelopeSimple, action: digest }])
+const ownerMenu = computed<MenuItem[]>(() => [
+  { label: t('due.digest'), icon: PhEnvelopeSimple, action: digest },
+])
 </script>
 
 <template>
   <AppPage :title="$t('due.title')" :subtitle="$t('due.subtitle')">
     <template v-if="auth.hasRole('OWNER')" #actions>
-      <UiButton :icon="PhPaperPlaneTilt" :loading="running" @click="runNow">{{ $t('due.runNow') }}</UiButton>
+      <UiButton :icon="PhPaperPlaneTilt" :loading="running" @click="runNow">{{
+        $t('due.runNow')
+      }}</UiButton>
       <UiMenu class="hero-menu" :items="ownerMenu" :label="$t('common.more')" />
     </template>
 
     <div class="monthbar">
-      <UiIconButton :icon="PhCaretLeft" :label="$t('due.prevMonth')" variant="secondary" :disabled="!view || isCurrent" @click="go(-1)" />
+      <UiIconButton
+        :icon="PhCaretLeft"
+        :label="$t('due.prevMonth')"
+        variant="secondary"
+        :disabled="!view || isCurrent"
+        @click="go(-1)"
+      />
       <p class="monthbar__label">{{ view ? formatMonth(monthStart(view.month)) : '' }}</p>
-      <UiIconButton :icon="PhCaretRight" :label="$t('due.nextMonth')" variant="secondary" :disabled="!view" @click="go(1)" />
-      <UiButton v-if="view && !isCurrent" variant="ghost" size="sm" class="monthbar__back" @click="router.replace({ query: {} })">
+      <UiIconButton
+        :icon="PhCaretRight"
+        :label="$t('due.nextMonth')"
+        variant="secondary"
+        :disabled="!view"
+        @click="go(1)"
+      />
+      <UiButton
+        v-if="view && !isCurrent"
+        variant="ghost"
+        size="sm"
+        class="monthbar__back"
+        @click="router.replace({ query: {} })"
+      >
         {{ $t('due.backToThisMonth') }}
       </UiButton>
     </div>
@@ -139,50 +162,91 @@ const ownerMenu = computed<MenuItem[]>(() => [{ label: t('due.digest'), icon: Ph
     </template>
 
     <template v-else>
-    <UiCard
-      v-for="g in view.groups"
-      :key="g.group"
-      padding="none"
-      class="group"
-      :class="`group--${g.group.toLowerCase()}`"
-    >
-      <template #header>
-        <div class="group__head">
-          <h2 class="group__title">
-            <PhWarningCircle v-if="g.group === 'OVERDUE'" :size="20" weight="fill" aria-hidden="true" />
-            {{ groupTitle(g) }}
-          </h2>
-          <p v-if="g.rows.length" class="group__sum num">
-            {{ $t('due.summary', { n: g.rows.length, amount: formatMoney(g.estimatedCents) }, g.rows.length) }}
-          </p>
-        </div>
-      </template>
+      <UiCard
+        v-for="g in view.groups"
+        :key="g.group"
+        padding="none"
+        class="group"
+        :class="`group--${g.group.toLowerCase()}`"
+      >
+        <template #header>
+          <div class="group__head">
+            <h2 class="group__title">
+              <PhWarningCircle
+                v-if="g.group === 'OVERDUE'"
+                :size="20"
+                weight="fill"
+                aria-hidden="true"
+              />
+              {{ groupTitle(g) }}
+            </h2>
+            <p v-if="g.rows.length" class="group__sum num">
+              {{
+                $t(
+                  'due.summary',
+                  { n: g.rows.length, amount: formatMoney(g.estimatedCents) },
+                  g.rows.length,
+                )
+              }}
+            </p>
+          </div>
+        </template>
 
-      <p v-if="!g.rows.length" class="group__empty">
-        <PhCheckCircle :size="18" weight="fill" aria-hidden="true" />
-        {{ g.group === 'OVERDUE' ? $t('due.overdueEmpty') : $t('due.monthEmpty', { month: formatMonth(monthStart(g.month!)) }) }}
-      </p>
-      <ul v-else class="rows">
-        <li v-for="r in g.rows" :key="r.unit.id" class="row">
-          <TypeIcon :type="r.unit.type" />
-          <div class="row__who">
-            <RouterLink :to="{ name: 'unit', params: { id: r.unit.id } }" class="row__name">{{ r.unit.customerName }}</RouterLink>
-            <span class="row__unit">{{ unitName(r.unit) }} · {{ town(r.unit.address) }}</span>
-          </div>
-          <div class="row__when">
-            <span class="row__date num" :class="{ 'is-late': r.unit.daysUntilDue < 0 }">{{ whenText(r) }}</span>
-            <UiBadge size="sm" :tone="REMINDER_TONE[r.reminderState]" dot>{{ stateText(r) }}</UiBadge>
-          </div>
-          <div class="row__actions">
-            <UiIconButton :icon="PhPhone" :label="`${$t('common.call')} ${r.unit.customerName}`" size="sm" variant="secondary" :href="telLink(r.unit.customerPhone) ?? undefined" />
-            <UiIconButton :icon="PhWhatsappLogo" :label="`${$t('common.whatsapp')} ${r.unit.customerName}`" size="sm" variant="secondary" :href="r.shareUrl" target="_blank" />
-            <UiButton v-if="canRemind(r)" size="sm" variant="soft" :icon="PhBellRinging" :loading="sendingId === r.unit.id" @click="remind(r)">
-              {{ $t('due.remind') }}
-            </UiButton>
-          </div>
-        </li>
-      </ul>
-    </UiCard>
+        <p v-if="!g.rows.length" class="group__empty">
+          <PhCheckCircle :size="18" weight="fill" aria-hidden="true" />
+          {{
+            g.group === 'OVERDUE'
+              ? $t('due.overdueEmpty')
+              : $t('due.monthEmpty', { month: formatMonth(monthStart(g.month!)) })
+          }}
+        </p>
+        <ul v-else class="rows">
+          <li v-for="r in g.rows" :key="r.unit.id" class="row">
+            <TypeIcon :type="r.unit.type" />
+            <div class="row__who">
+              <RouterLink :to="{ name: 'unit', params: { id: r.unit.id } }" class="row__name">{{
+                r.unit.customerName
+              }}</RouterLink>
+              <span class="row__unit">{{ unitName(r.unit) }} · {{ town(r.unit.address) }}</span>
+            </div>
+            <div class="row__when">
+              <span class="row__date num" :class="{ 'is-late': r.unit.daysUntilDue < 0 }">{{
+                whenText(r)
+              }}</span>
+              <UiBadge size="sm" :tone="REMINDER_TONE[r.reminderState]" dot>{{
+                stateText(r)
+              }}</UiBadge>
+            </div>
+            <div class="row__actions">
+              <UiIconButton
+                :icon="PhPhone"
+                :label="`${$t('common.call')} ${r.unit.customerName}`"
+                size="sm"
+                variant="secondary"
+                :href="telLink(r.unit.customerPhone) ?? undefined"
+              />
+              <UiIconButton
+                :icon="PhWhatsappLogo"
+                :label="`${$t('common.whatsapp')} ${r.unit.customerName}`"
+                size="sm"
+                variant="secondary"
+                :href="r.shareUrl"
+                target="_blank"
+              />
+              <UiButton
+                v-if="canRemind(r)"
+                size="sm"
+                variant="soft"
+                :icon="PhBellRinging"
+                :loading="sendingId === r.unit.id"
+                @click="remind(r)"
+              >
+                {{ $t('due.remind') }}
+              </UiButton>
+            </div>
+          </li>
+        </ul>
+      </UiCard>
     </template>
   </AppPage>
 </template>

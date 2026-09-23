@@ -27,7 +27,8 @@ const form = useForm({ date: addDays(todayIso(), 1), time: '09:00', notifyCustom
 watch(open, (value) => {
   if (!value || !props.booking) return
   const b = props.booking
-  const preferred = b.preferredDate && b.preferredDate > todayIso() ? b.preferredDate : addDays(todayIso(), 1)
+  const preferred =
+    b.preferredDate && b.preferredDate > todayIso() ? b.preferredDate : addDays(todayIso(), 1)
   form.reset({
     date: preferred,
     time: b.preferredPeriod === 'AFTERNOON' ? '14:00' : '09:00',
@@ -37,7 +38,9 @@ watch(open, (value) => {
 
 async function save() {
   if (!props.booking) return
-  const result = await form.submit(() => api.post<BookingAction>(`/bookings/${props.booking!.id}/schedule`, form.data))
+  const result = await form.submit(() =>
+    api.post<BookingAction>(`/bookings/${props.booking!.id}/schedule`, form.data),
+  )
   if (!result) return
   open.value = false
   toasts.success(t('bookings.scheduled'))
@@ -46,27 +49,62 @@ async function save() {
 </script>
 
 <template>
-  <UiDialog v-model:open="open" :title="$t('bookings.scheduleTitle')" :description="booking ? `${booking.customerName} · ${booking.address}` : undefined" size="sm">
+  <UiDialog
+    v-model:open="open"
+    :title="$t('bookings.scheduleTitle')"
+    :description="booking ? `${booking.customerName} · ${booking.address}` : undefined"
+    size="sm"
+  >
     <form id="schedule-form" class="stack" novalidate @submit.prevent="save">
-      <UiFormErrors :errors="form.errors.value" :message="form.message.value" :trigger="form.submitted.value" />
+      <UiFormErrors
+        :errors="form.errors.value"
+        :message="form.message.value"
+        :trigger="form.submitted.value"
+      />
       <div class="grid-2">
         <UiField id="f-day" :label="$t('bookings.day')" :error="form.error('date')">
           <template #default="{ id, invalid, describedby }">
-            <UiInput :id="id" v-model="form.data.date" type="date" :min="todayIso()" :invalid="invalid" :describedby="describedby" />
+            <UiInput
+              :id="id"
+              v-model="form.data.date"
+              type="date"
+              :min="todayIso()"
+              :invalid="invalid"
+              :describedby="describedby"
+            />
           </template>
         </UiField>
         <UiField id="f-time" :label="$t('bookings.time')" :error="form.error('time')">
           <template #default="{ id, invalid, describedby }">
-            <UiInput :id="id" v-model="form.data.time" type="time" step="900" :invalid="invalid" :describedby="describedby" />
+            <UiInput
+              :id="id"
+              v-model="form.data.time"
+              type="time"
+              step="900"
+              :invalid="invalid"
+              :describedby="describedby"
+            />
           </template>
         </UiField>
       </div>
-      <UiCheckbox v-if="booking?.whatsappOptIn" v-model="form.data.notifyCustomer" :label="$t('bookings.notify', { name: booking.customerName })" />
-      <UiNotice v-else-if="booking" tone="warning" :icon="PhWhatsappLogo">{{ $t('bookings.notifyNoConsent', { name: booking.customerName }) }}</UiNotice>
+      <UiCheckbox
+        v-if="booking?.whatsappOptIn"
+        v-model="form.data.notifyCustomer"
+        :label="$t('bookings.notify', { name: booking.customerName })"
+      />
+      <UiNotice v-else-if="booking" tone="warning" :icon="PhWhatsappLogo">{{
+        $t('bookings.notifyNoConsent', { name: booking.customerName })
+      }}</UiNotice>
     </form>
     <template #footer>
       <UiButton variant="ghost" @click="open = false">{{ $t('common.cancel') }}</UiButton>
-      <UiButton type="submit" form="schedule-form" :icon="PhCalendarCheck" :loading="form.processing.value">{{ $t('bookings.schedule') }}</UiButton>
+      <UiButton
+        type="submit"
+        form="schedule-form"
+        :icon="PhCalendarCheck"
+        :loading="form.processing.value"
+        >{{ $t('bookings.schedule') }}</UiButton
+      >
     </template>
   </UiDialog>
 </template>

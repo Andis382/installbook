@@ -33,13 +33,30 @@ async function submit() {
         <p class="muted">{{ $t('auth.registerSubtitle') }}</p>
       </div>
       <form class="stack" novalidate @submit.prevent="submit">
-        <UiFormErrors :errors="form.errors.value" :message="form.message.value" :trigger="form.submitted.value" />
+        <UiFormErrors
+          :errors="form.errors.value"
+          :message="form.message.value"
+          :trigger="form.submitted.value"
+        />
         <UiField id="f-name" :label="$t('auth.yourName')" :error="form.error('name')" required>
           <template #default="{ id, describedby, invalid }">
-            <UiInput :id="id" v-model="form.data.name" autocomplete="name" :icon="PhUser" :invalid="invalid" :describedby="describedby" required />
+            <UiInput
+              :id="id"
+              v-model="form.data.name"
+              autocomplete="name"
+              :icon="PhUser"
+              :invalid="invalid"
+              :describedby="describedby"
+              required
+            />
           </template>
         </UiField>
-        <UiField id="f-organizationName" :label="$t('auth.organizationName')" :error="form.error('organizationName')" required>
+        <UiField
+          id="f-organizationName"
+          :label="$t('auth.organizationName')"
+          :error="form.error('organizationName')"
+          required
+        >
           <template #default="{ id, describedby, invalid }">
             <UiInput
               :id="id"
@@ -67,7 +84,13 @@ async function submit() {
             />
           </template>
         </UiField>
-        <UiField id="f-password" :label="$t('auth.password')" :hint="$t('auth.passwordHint')" :error="form.error('password')" required>
+        <UiField
+          id="f-password"
+          :label="$t('auth.password')"
+          :hint="$t('auth.passwordHint')"
+          :error="form.error('password')"
+          required
+        >
           <template #default="{ id, describedby, invalid }">
             <UiInput
               :id="id"
@@ -82,7 +105,9 @@ async function submit() {
             />
           </template>
         </UiField>
-        <UiButton type="submit" size="lg" block :loading="form.processing.value">{{ $t('auth.register') }}</UiButton>
+        <UiButton type="submit" size="lg" block :loading="form.processing.value">{{
+          $t('auth.register')
+        }}</UiButton>
       </form>
       <p class="small muted">
         {{ $t('auth.haveAccount') }}

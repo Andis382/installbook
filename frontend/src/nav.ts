@@ -30,7 +30,13 @@ export type NavItem = {
 export const NAV: NavItem[] = [
   { name: 'home', label: 'nav.home', icon: PhSunHorizon, primary: true },
   { name: 'units', label: 'nav.units', icon: PhBarcode, primary: true },
-  { name: 'install', label: 'nav.install', shortLabel: 'nav.installShort', icon: PhPlus, cta: true },
+  {
+    name: 'install',
+    label: 'nav.install',
+    shortLabel: 'nav.installShort',
+    icon: PhPlus,
+    cta: true,
+  },
   { name: 'due', label: 'nav.due', icon: PhCalendarCheck, primary: true },
   { name: 'bookings', label: 'nav.bookings', icon: PhPhoneCall },
   { name: 'customers', label: 'nav.customers', icon: PhAddressBook },

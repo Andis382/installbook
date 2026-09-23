@@ -3,11 +3,20 @@ import { computed, type Component } from 'vue'
 import { PhCheckCircle, PhInfo, PhWarning, PhWarningOctagon } from '@phosphor-icons/vue'
 
 const props = withDefaults(
-  defineProps<{ tone?: 'info' | 'success' | 'warning' | 'danger'; title?: string; icon?: Component }>(),
+  defineProps<{
+    tone?: 'info' | 'success' | 'warning' | 'danger'
+    title?: string
+    icon?: Component
+  }>(),
   { tone: 'info', title: undefined, icon: undefined },
 )
 
-const defaultIcon = { info: PhInfo, success: PhCheckCircle, warning: PhWarning, danger: PhWarningOctagon }
+const defaultIcon = {
+  info: PhInfo,
+  success: PhCheckCircle,
+  warning: PhWarning,
+  danger: PhWarningOctagon,
+}
 const shown = computed(() => props.icon ?? defaultIcon[props.tone])
 </script>
 

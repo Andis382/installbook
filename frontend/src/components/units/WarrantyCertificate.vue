@@ -54,9 +54,34 @@ const year = computed(() => props.installedOn.slice(0, 4))
       </div>
       <svg class="cert__seal" viewBox="0 0 80 80" aria-hidden="true">
         <circle cx="40" cy="40" r="36" fill="none" stroke="currentColor" stroke-width="2.2" />
-        <circle cx="40" cy="40" r="30.5" fill="none" stroke="currentColor" stroke-width="0.8" stroke-dasharray="2 2.4" />
-        <path d="M28 40.5l8 8 16-17" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-        <text x="40" y="64" text-anchor="middle" font-size="8" font-weight="700" fill="currentColor" letter-spacing="1">{{ year }}</text>
+        <circle
+          cx="40"
+          cy="40"
+          r="30.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="0.8"
+          stroke-dasharray="2 2.4"
+        />
+        <path
+          d="M28 40.5l8 8 16-17"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <text
+          x="40"
+          y="64"
+          text-anchor="middle"
+          font-size="8"
+          font-weight="700"
+          fill="currentColor"
+          letter-spacing="1"
+        >
+          {{ year }}
+        </text>
       </svg>
     </div>
 

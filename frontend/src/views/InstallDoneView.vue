@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { PhArrowSquareOut, PhBarcode, PhDeviceMobile, PhPlus, PhWhatsappLogo } from '@phosphor-icons/vue'
+import {
+  PhArrowSquareOut,
+  PhBarcode,
+  PhDeviceMobile,
+  PhPlus,
+  PhWhatsappLogo,
+} from '@phosphor-icons/vue'
 import AppPage from '@/components/layout/AppPage.vue'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiCard from '@/components/ui/UiCard.vue'
@@ -34,14 +40,20 @@ const state = computed(() => {
 
 const shareUrl = computed(() => {
   if (!unit.value) return null
-  return state.value === 'outbox' && unit.value.lastCardMessage ? unit.value.lastCardMessage.waMeUrl : unit.value.cardShareUrl
+  return state.value === 'outbox' && unit.value.lastCardMessage
+    ? unit.value.lastCardMessage.waMeUrl
+    : unit.value.cardShareUrl
 })
 </script>
 
 <template>
   <AppPage
     :title="$t('installDone.title')"
-    :subtitle="unit ? $t('installDone.subtitle', { unit: unitName(unit), customer: unit.customer.name }) : undefined"
+    :subtitle="
+      unit
+        ? $t('installDone.subtitle', { unit: unitName(unit), customer: unit.customer.name })
+        : undefined
+    "
   >
     <div v-if="!unit" class="grid-2">
       <UiSkeleton card :lines="4" />
@@ -54,27 +66,56 @@ const shareUrl = computed(() => {
             <UiNotice v-if="state === 'sent'" tone="success" :title="$t('installDone.sentTitle')">
               {{ $t('installDone.sentText', { phone: formatPhone(unit.customer.phone) }) }}
             </UiNotice>
-            <UiNotice v-else-if="state === 'outbox'" tone="info" :title="$t('installDone.outboxTitle')">
+            <UiNotice
+              v-else-if="state === 'outbox'"
+              tone="info"
+              :title="$t('installDone.outboxTitle')"
+            >
               {{ $t('installDone.outboxText') }}
             </UiNotice>
-            <UiNotice v-else-if="state === 'failed'" tone="danger" :title="$t('installDone.failedTitle')">
+            <UiNotice
+              v-else-if="state === 'failed'"
+              tone="danger"
+              :title="$t('installDone.failedTitle')"
+            >
               {{ $t('installDone.failedText') }}
             </UiNotice>
             <UiNotice v-else tone="warning" :title="$t('installDone.notSentTitle')">
               {{ $t('installDone.notSentText', { name: unit.customer.name }) }}
             </UiNotice>
 
-            <UiButton v-if="state !== 'sent' && shareUrl" :href="shareUrl" target="_blank" variant="primary" size="lg" block :icon="PhWhatsappLogo">
+            <UiButton
+              v-if="state !== 'sent' && shareUrl"
+              :href="shareUrl"
+              target="_blank"
+              variant="primary"
+              size="lg"
+              block
+              :icon="PhWhatsappLogo"
+            >
               {{ $t('installDone.sendWhatsApp') }}
             </UiButton>
             <UiCopy :value="unit.cardUrl" :label="$t('common.copy')" />
             <div class="done__actions">
-              <UiButton variant="secondary" :icon="PhArrowSquareOut" :href="unit.cardUrl" target="_blank">{{ $t('installDone.openCard') }}</UiButton>
-              <UiButton variant="secondary" :icon="PhBarcode" :to="{ name: 'unit', params: { id: unit.id } }">{{ $t('installDone.viewUnit') }}</UiButton>
+              <UiButton
+                variant="secondary"
+                :icon="PhArrowSquareOut"
+                :href="unit.cardUrl"
+                target="_blank"
+                >{{ $t('installDone.openCard') }}</UiButton
+              >
+              <UiButton
+                variant="secondary"
+                :icon="PhBarcode"
+                :to="{ name: 'unit', params: { id: unit.id } }"
+                >{{ $t('installDone.viewUnit') }}</UiButton
+              >
             </div>
           </div>
         </UiCard>
-        <UiButton variant="accent" size="lg" block :icon="PhPlus" :to="{ name: 'install' }">{{ $t('installDone.recordAnother') }}</UiButton>
+        <UiButton variant="accent" size="lg" block :icon="PhPlus" :to="{ name: 'install' }">{{
+          $t('installDone.recordAnother')
+        }}</UiButton>
       </div>
 
       <section class="done__preview" :aria-label="$t('installDone.cardPreview')">
@@ -91,7 +132,10 @@ const shareUrl = computed(() => {
           :next-service-due="unit.nextServiceDue"
           :card-number="unit.cardNumber"
         />
-        <p class="done__caption"><PhDeviceMobile :size="16" weight="bold" aria-hidden="true" /> {{ $t('installDone.cardPreview') }}</p>
+        <p class="done__caption">
+          <PhDeviceMobile :size="16" weight="bold" aria-hidden="true" />
+          {{ $t('installDone.cardPreview') }}
+        </p>
       </section>
     </div>
   </AppPage>

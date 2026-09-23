@@ -53,14 +53,32 @@ const bindings = computed(() => {
   <component
     :is="tag"
     class="btn"
-    :class="[`btn--${variant}`, `btn--${size}`, { 'btn--block': block, 'is-loading': loading, 'is-disabled': disabled }]"
+    :class="[
+      `btn--${variant}`,
+      `btn--${size}`,
+      { 'btn--block': block, 'is-loading': loading, 'is-disabled': disabled },
+    ]"
     v-bind="bindings"
     :aria-busy="loading ? 'true' : undefined"
   >
     <UiSpinner v-if="loading" size="1.1em" />
-    <component :is="icon" v-else-if="icon" class="btn__icon" :size="size === 'lg' ? 22 : 18" weight="bold" aria-hidden="true" />
+    <component
+      :is="icon"
+      v-else-if="icon"
+      class="btn__icon"
+      :size="size === 'lg' ? 22 : 18"
+      weight="bold"
+      aria-hidden="true"
+    />
     <span v-if="$slots.default" class="btn__label"><slot /></span>
-    <component :is="iconRight" v-if="iconRight" class="btn__icon" :size="size === 'lg' ? 22 : 18" weight="bold" aria-hidden="true" />
+    <component
+      :is="iconRight"
+      v-if="iconRight"
+      class="btn__icon"
+      :size="size === 'lg' ? 22 : 18"
+      weight="bold"
+      aria-hidden="true"
+    />
   </component>
 </template>
 
@@ -156,7 +174,12 @@ const bindings = computed(() => {
 /* Accent: the copper call to action (record an install), one per screen at most */
 .btn--accent {
   color: var(--on-accent);
-  background: linear-gradient(180deg, var(--accent-400) 0%, var(--accent-500) 55%, var(--accent-600) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--accent-400) 0%,
+    var(--accent-500) 55%,
+    var(--accent-600) 100%
+  );
   border-color: var(--accent-600);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.28),

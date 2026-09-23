@@ -24,8 +24,34 @@ export function setFormatTimeZone(next: string | undefined) {
 type Value = string | number | Date | null | undefined
 
 const SQ = {
-  months: ['janar', 'shkurt', 'mars', 'prill', 'maj', 'qershor', 'korrik', 'gusht', 'shtator', 'tetor', 'nëntor', 'dhjetor'],
-  monthsShort: ['jan', 'shk', 'mar', 'pri', 'maj', 'qer', 'korr', 'gush', 'sht', 'tet', 'nën', 'dhj'],
+  months: [
+    'janar',
+    'shkurt',
+    'mars',
+    'prill',
+    'maj',
+    'qershor',
+    'korrik',
+    'gusht',
+    'shtator',
+    'tetor',
+    'nëntor',
+    'dhjetor',
+  ],
+  monthsShort: [
+    'jan',
+    'shk',
+    'mar',
+    'pri',
+    'maj',
+    'qer',
+    'korr',
+    'gush',
+    'sht',
+    'tet',
+    'nën',
+    'dhj',
+  ],
   weekdays: ['e diel', 'e hënë', 'e martë', 'e mërkurë', 'e enjte', 'e premte', 'e shtunë'],
   weekdaysShort: ['Die', 'Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht'],
   /** Ablative forms after "para"/"pas": [singular, plural]. */
@@ -57,7 +83,14 @@ function toDate(value: string | number | Date): Date {
   return new Date(value)
 }
 
-type Parts = { year: number; month: number; day: number; weekday: number; hour: string; minute: string }
+type Parts = {
+  year: number
+  month: number
+  day: number
+  weekday: number
+  hour: string
+  minute: string
+}
 
 /** Calendar parts of a moment in the business's time zone (plain dates are taken as they are). */
 function parts(value: string | number | Date): Parts {
@@ -97,7 +130,8 @@ export function formatDate(value: Value, style: 'short' | 'medium' | 'long' = 'm
   if (isSq()) {
     const p = parts(value)
     if (style === 'short') return `${p.day} ${SQ.monthsShort[p.month - 1]}`
-    if (style === 'long') return `${SQ.weekdays[p.weekday]}, ${p.day} ${SQ.months[p.month - 1]} ${p.year}`
+    if (style === 'long')
+      return `${SQ.weekdays[p.weekday]}, ${p.day} ${SQ.months[p.month - 1]} ${p.year}`
     return `${p.day} ${SQ.monthsShort[p.month - 1]} ${p.year}`
   }
   const options: Intl.DateTimeFormatOptions =
@@ -106,7 +140,10 @@ export function formatDate(value: Value, style: 'short' | 'medium' | 'long' = 'm
       : style === 'long'
         ? { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
         : { day: 'numeric', month: 'short', year: 'numeric' }
-  return new Intl.DateTimeFormat(tag(), { ...options, timeZone: isPlainDate(value) ? undefined : timeZone }).format(toDate(value))
+  return new Intl.DateTimeFormat(tag(), {
+    ...options,
+    timeZone: isPlainDate(value) ? undefined : timeZone,
+  }).format(toDate(value))
 }
 
 /** A day without its year when it is this year ("12 Oct"), with it otherwise ("12 Oct 2025"). */
@@ -171,7 +208,8 @@ type Unit = keyof typeof SQ.units
 
 function relativeSq(amount: number, unit: Unit) {
   if (unit === 'second') return 'tani'
-  if (unit === 'day' && Math.abs(amount) <= 1) return amount === 0 ? 'sot' : amount < 0 ? 'dje' : 'nesër'
+  if (unit === 'day' && Math.abs(amount) <= 1)
+    return amount === 0 ? 'sot' : amount < 0 ? 'dje' : 'nesër'
   const n = Math.abs(amount)
   const [one, many] = SQ.units[unit]
   return `${amount < 0 ? 'para' : 'pas'} ${n} ${n === 1 ? one : many}`
@@ -205,7 +243,10 @@ function numberSq(n: number, fractionDigits: number) {
 }
 
 /** Money is always carried as integer cents. */
-export function formatMoney(cents: number | null | undefined, options: { currency?: string; decimals?: boolean } = {}) {
+export function formatMoney(
+  cents: number | null | undefined,
+  options: { currency?: string; decimals?: boolean } = {},
+) {
   if (cents === null || cents === undefined) return '—'
   const decimals = options.decimals ?? cents % 100 !== 0
   const code = options.currency ?? currency
@@ -225,7 +266,9 @@ export function formatNumber(value: number | null | undefined, maximumFractionDi
   if (value === null || value === undefined || Number.isNaN(value)) return '—'
   if (isSq()) {
     const rounded = Number(value.toFixed(maximumFractionDigits))
-    const digits = Number.isInteger(rounded) ? 0 : Math.min(maximumFractionDigits, String(rounded).split('.')[1]?.length ?? 0)
+    const digits = Number.isInteger(rounded)
+      ? 0
+      : Math.min(maximumFractionDigits, String(rounded).split('.')[1]?.length ?? 0)
     return numberSq(rounded, digits)
   }
   return new Intl.NumberFormat(tag(), { maximumFractionDigits }).format(value)
@@ -272,5 +315,7 @@ export function todayIso(): string {
 export function initials(name: string | null | undefined) {
   if (!name) return '?'
   const parts = name.trim().split(/\s+/)
-  return ((parts[0]?.[0] ?? '') + (parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '')).toUpperCase()
+  return (
+    (parts[0]?.[0] ?? '') + (parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '')
+  ).toUpperCase()
 }

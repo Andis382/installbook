@@ -14,7 +14,8 @@ function onKey(e: KeyboardEvent, tabs: { value: T }[], index: number) {
   const tab = tabs[next]
   if (!tab) return
   model.value = tab.value
-  const el = (e.currentTarget as HTMLElement).parentElement?.children[next] as HTMLElement | undefined
+  const el = (e.currentTarget as HTMLElement).parentElement?.children[next] as
+    HTMLElement | undefined
   el?.focus()
 }
 </script>
@@ -35,7 +36,9 @@ function onKey(e: KeyboardEvent, tabs: { value: T }[], index: number) {
     >
       <component :is="t.icon" v-if="t.icon" :size="18" weight="bold" aria-hidden="true" />
       <span>{{ t.label }}</span>
-      <span v-if="t.count !== undefined && t.count !== null" class="tabs__count">{{ t.count }}</span>
+      <span v-if="t.count !== undefined && t.count !== null" class="tabs__count">{{
+        t.count
+      }}</span>
     </button>
   </div>
 </template>

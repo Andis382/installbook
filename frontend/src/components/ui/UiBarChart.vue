@@ -20,7 +20,9 @@ const props = withDefaults(
 )
 
 const max = computed(() => {
-  const totals = props.rows.map((r) => props.series.reduce((sum, s) => sum + (r.values[s.key] ?? 0), 0))
+  const totals = props.rows.map((r) =>
+    props.series.reduce((sum, s) => sum + (r.values[s.key] ?? 0), 0),
+  )
   const m = Math.max(1, ...totals)
   // round the scale up to a friendly number
   const magnitude = 10 ** Math.floor(Math.log10(m))
@@ -39,7 +41,12 @@ const ticks = computed(() => [0, 0.5, 1].map((f) => ({ f, value: max.value * f }
         </div>
       </div>
       <div class="bars__cols">
-        <div v-for="r in rows" :key="r.label" class="bars__col" :class="{ 'bars__col--hl': r.highlight }">
+        <div
+          v-for="r in rows"
+          :key="r.label"
+          class="bars__col"
+          :class="{ 'bars__col--hl': r.highlight }"
+        >
           <div class="bars__stack">
             <div
               v-for="s in series"
@@ -54,10 +61,16 @@ const ticks = computed(() => [0, 0.5, 1].map((f) => ({ f, value: max.value * f }
       </div>
     </div>
     <figcaption v-if="series.length > 1" class="bars__legend">
-      <span v-for="s in series" :key="s.key" class="bars__key"><i :style="{ background: s.color }" />{{ s.label }}</span>
+      <span v-for="s in series" :key="s.key" class="bars__key"
+        ><i :style="{ background: s.color }" />{{ s.label }}</span
+      >
     </figcaption>
     <table class="visually-hidden">
-      <caption>{{ title }}</caption>
+      <caption>
+        {{
+          title
+        }}
+      </caption>
       <thead>
         <tr>
           <th scope="col"></th>

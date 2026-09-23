@@ -17,7 +17,8 @@ withDefaults(defineProps<{ unit: UnitRow; showCustomer?: boolean }>(), { showCus
     <span class="line__text">
       <span class="line__title">{{ showCustomer ? unit.customerName : unitName(unit) }}</span>
       <span class="line__sub">
-        {{ showCustomer ? unitName(unit) : formatDate(unit.installedOn) }} · {{ town(unit.address) }}
+        {{ showCustomer ? unitName(unit) : formatDate(unit.installedOn) }} ·
+        {{ town(unit.address) }}
       </span>
     </span>
     <UnitPills

@@ -11,9 +11,14 @@ const props = defineProps<{
   optional?: boolean
 }>()
 
-const errorText = computed(() => (Array.isArray(props.error) ? props.error[0] : props.error) || null)
+const errorText = computed(
+  () => (Array.isArray(props.error) ? props.error[0] : props.error) || null,
+)
 const describedby = computed(
-  () => [props.hint ? `${props.id}-hint` : null, errorText.value ? `${props.id}-error` : null].filter(Boolean).join(' ') || undefined,
+  () =>
+    [props.hint ? `${props.id}-hint` : null, errorText.value ? `${props.id}-error` : null]
+      .filter(Boolean)
+      .join(' ') || undefined,
 )
 </script>
 

@@ -7,18 +7,32 @@ const model = defineModel<UnitType | null>({ default: null })
 defineProps<{ id?: string; label: string; invalid?: boolean }>()
 
 function onKey(e: KeyboardEvent, index: number) {
-  const step = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0
+  const step =
+    e.key === 'ArrowRight' || e.key === 'ArrowDown'
+      ? 1
+      : e.key === 'ArrowLeft' || e.key === 'ArrowUp'
+        ? -1
+        : 0
   if (!step) return
   e.preventDefault()
   const next = UNIT_TYPES[(index + step + UNIT_TYPES.length) % UNIT_TYPES.length]!
   model.value = next
-  const buttons = (e.currentTarget as HTMLElement).parentElement?.querySelectorAll<HTMLElement>('button')
+  const buttons = (e.currentTarget as HTMLElement).parentElement?.querySelectorAll<HTMLElement>(
+    'button',
+  )
   buttons?.[(index + step + UNIT_TYPES.length) % UNIT_TYPES.length]?.focus()
 }
 </script>
 
 <template>
-  <div :id="id" class="types" role="radiogroup" :aria-label="label" :aria-invalid="invalid ? 'true' : undefined" tabindex="-1">
+  <div
+    :id="id"
+    class="types"
+    role="radiogroup"
+    :aria-label="label"
+    :aria-invalid="invalid ? 'true' : undefined"
+    tabindex="-1"
+  >
     <button
       v-for="(type, i) in UNIT_TYPES"
       :key="type"
@@ -32,7 +46,12 @@ function onKey(e: KeyboardEvent, index: number) {
       @click="model = type"
       @keydown="onKey($event, i)"
     >
-      <component :is="TYPE_ICON[type]" :size="22" :weight="model === type ? 'fill' : 'duotone'" aria-hidden="true" />
+      <component
+        :is="TYPE_ICON[type]"
+        :size="22"
+        :weight="model === type ? 'fill' : 'duotone'"
+        aria-hidden="true"
+      />
       <span>{{ $t(`types.${type}`) }}</span>
     </button>
   </div>

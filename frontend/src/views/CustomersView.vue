@@ -20,7 +20,9 @@ const rows = ref<CustomerRow[] | null>(null)
 let request = 0
 async function load() {
   const mine = ++request
-  const result = await api.get<CustomerRow[]>(`/customers${query({ q: q.value.trim() || undefined })}`)
+  const result = await api.get<CustomerRow[]>(
+    `/customers${query({ q: q.value.trim() || undefined })}`,
+  )
   if (mine === request) rows.value = result
 }
 
@@ -38,12 +40,24 @@ load()
     <UiCard padding="sm">
       <UiSearch v-model="q" :placeholder="$t('customers.search')" />
     </UiCard>
-    <p v-if="rows" class="small muted count" role="status">{{ $t('customers.count', { n: rows.length }, rows.length) }}</p>
+    <p v-if="rows" class="small muted count" role="status">
+      {{ $t('customers.count', { n: rows.length }, rows.length) }}
+    </p>
 
     <UiCard v-if="!rows"><UiSkeleton :lines="8" height="22px" /></UiCard>
     <UiCard v-else-if="!rows.length" padding="lg">
-      <UiEmpty v-if="q" :icon="PhMagnifyingGlass" :title="$t('customers.empty')" :text="$t('customers.emptyText')" />
-      <UiEmpty v-else :icon="PhAddressBook" :title="$t('customers.emptyAll')" :text="$t('customers.emptyAllText')" />
+      <UiEmpty
+        v-if="q"
+        :icon="PhMagnifyingGlass"
+        :title="$t('customers.empty')"
+        :text="$t('customers.emptyText')"
+      />
+      <UiEmpty
+        v-else
+        :icon="PhAddressBook"
+        :title="$t('customers.emptyAll')"
+        :text="$t('customers.emptyAllText')"
+      />
     </UiCard>
     <UiCard v-else padding="none">
       <div class="table-wrap desk">
@@ -58,18 +72,32 @@ load()
             </tr>
           </thead>
           <tbody>
-            <tr v-for="c in rows" :key="c.id" class="clickable" @click="router.push({ name: 'customer', params: { id: c.id } })">
+            <tr
+              v-for="c in rows"
+              :key="c.id"
+              class="clickable"
+              @click="router.push({ name: 'customer', params: { id: c.id } })"
+            >
               <td>
                 <div class="person">
                   <UiAvatar :name="c.name" :size="32" />
-                  <RouterLink :to="{ name: 'customer', params: { id: c.id } }" class="person__name" @click.stop>{{ c.name }}</RouterLink>
+                  <RouterLink
+                    :to="{ name: 'customer', params: { id: c.id } }"
+                    class="person__name"
+                    @click.stop
+                    >{{ c.name }}</RouterLink
+                  >
                   <UiBadge v-if="c.locale === 'en'" size="sm">EN</UiBadge>
                 </div>
               </td>
               <td class="num nowrap">{{ formatPhone(c.phone) }}</td>
               <td class="num">{{ c.activeUnits }}</td>
               <td>
-                <UiBadge size="sm" :tone="c.whatsappOptIn ? 'success' : 'neutral'" :icon="PhWhatsappLogo">
+                <UiBadge
+                  size="sm"
+                  :tone="c.whatsappOptIn ? 'success' : 'neutral'"
+                  :icon="PhWhatsappLogo"
+                >
                   {{ c.whatsappOptIn ? $t('customers.optedIn') : $t('customers.notOptedIn') }}
                 </UiBadge>
               </td>
@@ -84,9 +112,16 @@ load()
             <UiAvatar :name="c.name" :size="38" />
             <span class="phone__text">
               <span class="strong">{{ c.name }}</span>
-              <span class="small muted num">{{ formatPhone(c.phone) }} · {{ $t('units.count', { n: c.activeUnits }, c.activeUnits) }}</span>
+              <span class="small muted num"
+                >{{ formatPhone(c.phone) }} ·
+                {{ $t('units.count', { n: c.activeUnits }, c.activeUnits) }}</span
+              >
             </span>
-            <UiBadge size="sm" :tone="c.whatsappOptIn ? 'success' : 'neutral'" :icon="PhWhatsappLogo">
+            <UiBadge
+              size="sm"
+              :tone="c.whatsappOptIn ? 'success' : 'neutral'"
+              :icon="PhWhatsappLogo"
+            >
               {{ c.whatsappOptIn ? $t('customers.optedIn') : $t('customers.notOptedIn') }}
             </UiBadge>
           </RouterLink>

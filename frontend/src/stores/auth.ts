@@ -66,12 +66,24 @@ export const useAuth = defineStore('auth', () => {
     await refreshCsrf()
   }
 
-  async function register(payload: { name: string; email: string; password: string; organizationName: string; locale: Locale }) {
+  async function register(payload: {
+    name: string
+    email: string
+    password: string
+    organizationName: string
+    locale: Locale
+  }) {
     apply(await api.post<Me>('/auth/register', payload))
     await refreshCsrf()
   }
 
-  async function join(payload: { token: string; name: string; email: string; password: string; locale: Locale }) {
+  async function join(payload: {
+    token: string
+    name: string
+    email: string
+    password: string
+    locale: Locale
+  }) {
     apply(await api.post<Me>('/auth/join', payload))
     await refreshCsrf()
   }
@@ -89,5 +101,19 @@ export const useAuth = defineStore('auth', () => {
     return !!user.value && roles.includes(user.value.role)
   }
 
-  return { user, organization, demo, ready, signedIn, apply, clear, load, login, register, join, logout, hasRole }
+  return {
+    user,
+    organization,
+    demo,
+    ready,
+    signedIn,
+    apply,
+    clear,
+    load,
+    login,
+    register,
+    join,
+    logout,
+    hasRole,
+  }
 })

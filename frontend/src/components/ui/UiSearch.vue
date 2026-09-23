@@ -3,7 +3,10 @@ import { PhMagnifyingGlass, PhX } from '@phosphor-icons/vue'
 
 const model = defineModel<string>({ default: '' })
 
-withDefaults(defineProps<{ placeholder?: string; label?: string }>(), { placeholder: undefined, label: undefined })
+withDefaults(defineProps<{ placeholder?: string; label?: string }>(), {
+  placeholder: undefined,
+  label: undefined,
+})
 </script>
 
 <template>
@@ -17,7 +20,13 @@ withDefaults(defineProps<{ placeholder?: string; label?: string }>(), { placehol
       :aria-label="label ?? placeholder ?? $t('common.search')"
       autocomplete="off"
     />
-    <button v-if="model" type="button" class="search__clear" :aria-label="$t('common.clear')" @click="model = ''">
+    <button
+      v-if="model"
+      type="button"
+      class="search__clear"
+      :aria-label="$t('common.clear')"
+      @click="model = ''"
+    >
       <PhX :size="16" weight="bold" aria-hidden="true" />
     </button>
   </div>

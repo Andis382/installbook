@@ -11,7 +11,9 @@ withDefaults(defineProps<{ icon?: Component; title: string; text?: string; compa
   <div class="empty" :class="{ 'empty--compact': compact }">
     <div v-if="icon" class="empty__art" aria-hidden="true">
       <span class="empty__ring" />
-      <span class="empty__icon"><component :is="icon" :size="compact ? 26 : 32" weight="duotone" /></span>
+      <span class="empty__icon"
+        ><component :is="icon" :size="compact ? 26 : 32" weight="duotone"
+      /></span>
     </div>
     <h3 class="empty__title">{{ title }}</h3>
     <p v-if="text" class="empty__text">{{ text }}</p>
@@ -49,9 +51,15 @@ withDefaults(defineProps<{ icon?: Component; title: string; text?: string; compa
   border-radius: 50%;
   background:
     radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.9), transparent 55%),
-    linear-gradient(160deg, var(--primary-soft), color-mix(in srgb, var(--brand-100) 70%, var(--surface)));
+    linear-gradient(
+      160deg,
+      var(--primary-soft),
+      color-mix(in srgb, var(--brand-100) 70%, var(--surface))
+    );
   border: 1px solid var(--primary-soft-border);
-  box-shadow: var(--shadow-md), inset 0 -4px 10px rgb(16 24 40 / 0.04);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 -4px 10px rgb(16 24 40 / 0.04);
 }
 .empty__icon {
   position: relative;

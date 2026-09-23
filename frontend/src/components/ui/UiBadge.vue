@@ -15,7 +15,13 @@ withDefaults(
 <template>
   <span class="badge" :class="[`badge--${tone}`, `badge--${size}`]">
     <span v-if="dot" class="badge__dot" aria-hidden="true" />
-    <component :is="icon" v-else-if="icon" :size="size === 'sm' ? 12 : 14" weight="bold" aria-hidden="true" />
+    <component
+      :is="icon"
+      v-else-if="icon"
+      :size="size === 'sm' ? 12 : 14"
+      weight="bold"
+      aria-hidden="true"
+    />
     <slot />
   </span>
 </template>

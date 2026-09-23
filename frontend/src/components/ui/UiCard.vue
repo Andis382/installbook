@@ -12,18 +12,33 @@ const props = withDefaults(
     tone?: 'default' | 'muted' | 'primary' | 'warning' | 'danger'
     as?: string
   }>(),
-  { title: undefined, subtitle: undefined, icon: undefined, to: undefined, padding: 'md', tone: 'default', as: 'section' },
+  {
+    title: undefined,
+    subtitle: undefined,
+    icon: undefined,
+    to: undefined,
+    padding: 'md',
+    tone: 'default',
+    as: 'section',
+  },
 )
 
 const tag = computed(() => (props.to ? RouterLink : props.as))
 </script>
 
 <template>
-  <component :is="tag" :to="to" class="card" :class="[`card--pad-${padding}`, `card--${tone}`, { 'card--link': !!to }]">
+  <component
+    :is="tag"
+    :to="to"
+    class="card"
+    :class="[`card--pad-${padding}`, `card--${tone}`, { 'card--link': !!to }]"
+  >
     <header v-if="title || $slots.header || $slots.actions" class="card__header">
       <slot name="header">
         <div class="card__heading">
-          <span v-if="icon" class="card__icon"><component :is="icon" :size="20" weight="duotone" aria-hidden="true" /></span>
+          <span v-if="icon" class="card__icon"
+            ><component :is="icon" :size="20" weight="duotone" aria-hidden="true"
+          /></span>
           <div class="card__titles">
             <h2 class="card__title">{{ title }}</h2>
             <p v-if="subtitle" class="card__subtitle">{{ subtitle }}</p>
@@ -102,7 +117,9 @@ const tag = computed(() => (props.to ? RouterLink : props.as))
 }
 .card--link:focus-visible {
   outline: none;
-  box-shadow: var(--shadow-md), 0 0 0 4px var(--focus-ring);
+  box-shadow:
+    var(--shadow-md),
+    0 0 0 4px var(--focus-ring);
 }
 .card__header {
   display: flex;

@@ -1,6 +1,13 @@
 /** Shapes of the InstallBook API. Dates are ISO "YYYY-MM-DD", instants ISO timestamps. */
 
-export type UnitType = 'BOILER' | 'AIR_CONDITIONER' | 'HEAT_PUMP' | 'WATER_HEATER' | 'SOLAR_INVERTER' | 'ALARM_PANEL' | 'OTHER'
+export type UnitType =
+  | 'BOILER'
+  | 'AIR_CONDITIONER'
+  | 'HEAT_PUMP'
+  | 'WATER_HEATER'
+  | 'SOLAR_INVERTER'
+  | 'ALARM_PANEL'
+  | 'OTHER'
 export type UnitStatus = 'ACTIVE' | 'REMOVED'
 export type ServiceState = 'OVERDUE' | 'DUE_SOON' | 'OK'
 export type VisitKind = 'ANNUAL_SERVICE' | 'REPAIR' | 'INSPECTION' | 'WARRANTY_CLAIM'
@@ -9,7 +16,15 @@ export type BookingSource = 'CARD' | 'WHATSAPP'
 export type Period = 'MORNING' | 'AFTERNOON' | 'ANY'
 export type MessageStatus = 'QUEUED' | 'SENT' | 'DELIVERED' | 'READ' | 'FAILED' | 'SIMULATED'
 
-export const UNIT_TYPES: UnitType[] = ['BOILER', 'AIR_CONDITIONER', 'HEAT_PUMP', 'WATER_HEATER', 'SOLAR_INVERTER', 'ALARM_PANEL', 'OTHER']
+export const UNIT_TYPES: UnitType[] = [
+  'BOILER',
+  'AIR_CONDITIONER',
+  'HEAT_PUMP',
+  'WATER_HEATER',
+  'SOLAR_INVERTER',
+  'ALARM_PANEL',
+  'OTHER',
+]
 export const VISIT_KINDS: VisitKind[] = ['ANNUAL_SERVICE', 'REPAIR', 'INSPECTION', 'WARRANTY_CLAIM']
 
 export type Message = {
@@ -106,8 +121,20 @@ export type UnitDetail = {
   cardShareUrl: string
   reminderShareUrl: string
   customer: CustomerSummary
-  cycleReminder: { dueOn: string; goesOutOn: string; outcome: TimelineEntry['outcome']; sentAt: string | null }
-  openBooking: { id: number; status: BookingStatus; preferredDate: string | null; preferredPeriod: Period | null; scheduledAt: string | null; createdAt: string } | null
+  cycleReminder: {
+    dueOn: string
+    goesOutOn: string
+    outcome: TimelineEntry['outcome']
+    sentAt: string | null
+  }
+  openBooking: {
+    id: number
+    status: BookingStatus
+    preferredDate: string | null
+    preferredPeriod: Period | null
+    scheduledAt: string | null
+    createdAt: string
+  } | null
   lastCardMessage: Message | null
   otherUnits: UnitRow[]
   timeline: TimelineEntry[]
@@ -119,7 +146,13 @@ export type PlateReading = {
   photoId: string
   photoUrl: string
   aiEnabled: boolean
-  reading: { type: UnitType | null; brand: string | null; model: string | null; serialNumber: string | null; notes: string | null } | null
+  reading: {
+    type: UnitType | null
+    brand: string | null
+    model: string | null
+    serialNumber: string | null
+    notes: string | null
+  } | null
 }
 
 export type Booking = {
@@ -151,7 +184,14 @@ export type BookingList = { items: Booking[]; counts: Record<BookingStatus, numb
 
 export type BookingAction = { booking: Booking; message: Message | null; shareUrl: string | null }
 
-export type ReminderState = 'BOOKING_SCHEDULED' | 'BOOKING_REQUESTED' | 'SENT' | 'NO_CONSENT' | 'FAILED' | 'WAITING' | 'PLANNED'
+export type ReminderState =
+  | 'BOOKING_SCHEDULED'
+  | 'BOOKING_REQUESTED'
+  | 'SENT'
+  | 'NO_CONSENT'
+  | 'FAILED'
+  | 'WAITING'
+  | 'PLANNED'
 
 export type DueRow = {
   unit: UnitRow
@@ -164,9 +204,20 @@ export type DueRow = {
   shareUrl: string
 }
 
-export type DueGroup = { group: 'OVERDUE' | 'THIS_MONTH' | 'NEXT_MONTH'; month: string | null; rows: DueRow[]; estimatedCents: number }
+export type DueGroup = {
+  group: 'OVERDUE' | 'THIS_MONTH' | 'NEXT_MONTH'
+  month: string | null
+  rows: DueRow[]
+  estimatedCents: number
+}
 
-export type DueView = { today: string; month: string; currentMonth: string; typicalPriceCents: number; groups: DueGroup[] }
+export type DueView = {
+  today: string
+  month: string
+  currentMonth: string
+  typicalPriceCents: number
+  groups: DueGroup[]
+}
 
 export type RunResult = { sent: number; noConsent: number; failed: number; skipped: number }
 
@@ -208,7 +259,13 @@ export type CustomerDetail = {
   notes: string | null
   createdAt: string
   units: UnitRow[]
-  conversation: { direction: 'IN' | 'OUT'; at: string; body: string | null; status: string; templateKey: string | null }[]
+  conversation: {
+    direction: 'IN' | 'OUT'
+    at: string
+    body: string | null
+    status: string
+    templateKey: string | null
+  }[]
 }
 
 export type CustomerLookup = { found: boolean; customer: CustomerSummary | null; units: UnitRow[] }
@@ -246,5 +303,11 @@ export type PublicCard = {
     platePhotoUrl: string | null
   }
   history: { date: string; kind: VisitKind; parts: string | null }[]
-  openBooking: { status: BookingStatus; preferredDate: string | null; preferredPeriod: Period | null; scheduledAt: string | null; createdAt: string } | null
+  openBooking: {
+    status: BookingStatus
+    preferredDate: string | null
+    preferredPeriod: Period | null
+    scheduledAt: string | null
+    createdAt: string
+  } | null
 }

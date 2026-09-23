@@ -44,7 +44,11 @@ export function warrantyUntil(installedOn: string, warrantyMonths: number): stri
 }
 
 /** Next service counts from the latest real event: the install, or the last service after it. */
-export function nextServiceDue(installedOn: string, lastServiceOn: string | null, intervalMonths: number): string {
+export function nextServiceDue(
+  installedOn: string,
+  lastServiceOn: string | null,
+  intervalMonths: number,
+): string {
   const from = lastServiceOn && lastServiceOn > installedOn ? lastServiceOn : installedOn
   return addMonths(from, intervalMonths)
 }

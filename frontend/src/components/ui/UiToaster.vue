@@ -9,13 +9,30 @@ const icons = { success: PhCheckCircle, error: PhWarningCircle, info: PhInfo }
 <template>
   <div class="toaster" aria-live="polite" aria-atomic="false">
     <TransitionGroup name="toast">
-      <div v-for="t in toasts.items" :key="t.id" class="toast" :class="`toast--${t.tone}`" :role="t.tone === 'error' ? 'alert' : 'status'">
-        <component :is="icons[t.tone]" class="toast__icon" :size="22" weight="fill" aria-hidden="true" />
+      <div
+        v-for="t in toasts.items"
+        :key="t.id"
+        class="toast"
+        :class="`toast--${t.tone}`"
+        :role="t.tone === 'error' ? 'alert' : 'status'"
+      >
+        <component
+          :is="icons[t.tone]"
+          class="toast__icon"
+          :size="22"
+          weight="fill"
+          aria-hidden="true"
+        />
         <div class="toast__text">
           <p class="toast__title">{{ t.title }}</p>
           <p v-if="t.text" class="toast__body">{{ t.text }}</p>
         </div>
-        <button type="button" class="toast__close" :aria-label="$t('common.close')" @click="toasts.dismiss(t.id)">
+        <button
+          type="button"
+          class="toast__close"
+          :aria-label="$t('common.close')"
+          @click="toasts.dismiss(t.id)"
+        >
           <PhX :size="16" weight="bold" aria-hidden="true" />
         </button>
       </div>

@@ -1,16 +1,32 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const props = withDefaults(defineProps<{ value: number; max?: number; label: string; tone?: 'primary' | 'success' | 'warning' | 'danger' }>(), {
-  max: 100,
-  tone: 'primary',
-})
+const props = withDefaults(
+  defineProps<{
+    value: number
+    max?: number
+    label: string
+    tone?: 'primary' | 'success' | 'warning' | 'danger'
+  }>(),
+  {
+    max: 100,
+    tone: 'primary',
+  },
+)
 
 const pct = computed(() => Math.max(0, Math.min(100, (props.value / (props.max || 1)) * 100)))
 </script>
 
 <template>
-  <div class="progress" :class="`progress--${tone}`" role="progressbar" :aria-label="label" :aria-valuenow="value" aria-valuemin="0" :aria-valuemax="max">
+  <div
+    class="progress"
+    :class="`progress--${tone}`"
+    role="progressbar"
+    :aria-label="label"
+    :aria-valuenow="value"
+    aria-valuemin="0"
+    :aria-valuemax="max"
+  >
     <span class="progress__bar" :style="{ width: `${pct}%` }" />
   </div>
 </template>

@@ -42,7 +42,12 @@ const missing = ref(false)
 const justBooked = ref(false)
 const form = useForm({ preferredDate: '', preferredPeriod: 'ANY' as Period, note: '' })
 
-const periods = computed(() => (['MORNING', 'AFTERNOON', 'ANY'] as Period[]).map((p) => ({ value: p, label: t(`periods.${p}`) })))
+const periods = computed(() =>
+  (['MORNING', 'AFTERNOON', 'ANY'] as Period[]).map((p) => ({
+    value: p,
+    label: t(`periods.${p}`),
+  })),
+)
 
 async function load() {
   try {
@@ -60,19 +65,25 @@ load()
 
 // Keep the language the customer picks in the link, so a reload or a forward keeps it.
 watch(locale, (value) => {
-  if (card.value && route.query.lang !== value) router.replace({ query: { ...route.query, lang: value } })
+  if (card.value && route.query.lang !== value)
+    router.replace({ query: { ...route.query, lang: value } })
 })
 
-const pdfUrl = computed(() => `/api/public/cards/${token.value}/certificate.pdf?lang=${currentLocale() as Locale}`)
+const pdfUrl = computed(
+  () => `/api/public/cards/${token.value}/certificate.pdf?lang=${currentLocale() as Locale}`,
+)
 const maxDate = computed(() => (card.value ? addDays(card.value.today, 92) : undefined))
 
 async function book() {
   const result = await form.submit(() =>
-    api.post<{ created: boolean; booking: PublicCard['openBooking'] }>(`/public/cards/${token.value}/bookings`, {
-      preferredDate: form.data.preferredDate,
-      preferredPeriod: form.data.preferredPeriod,
-      note: form.data.note || null,
-    }),
+    api.post<{ created: boolean; booking: PublicCard['openBooking'] }>(
+      `/public/cards/${token.value}/bookings`,
+      {
+        preferredDate: form.data.preferredDate,
+        preferredPeriod: form.data.preferredPeriod,
+        note: form.data.note || null,
+      },
+    ),
   )
   if (result && card.value) {
     card.value.openBooking = result.booking
@@ -112,36 +123,107 @@ function print() {
       />
 
       <div class="tools no-print">
-        <UiButton variant="secondary" :icon="PhDownloadSimple" :href="pdfUrl" download>{{ $t('card.download') }}</UiButton>
-        <UiButton variant="ghost" :icon="PhPrinter" @click="print">{{ $t('common.print') }}</UiButton>
+        <UiButton variant="secondary" :icon="PhDownloadSimple" :href="pdfUrl" download>{{
+          $t('card.download')
+        }}</UiButton>
+        <UiButton variant="ghost" :icon="PhPrinter" @click="print">{{
+          $t('common.print')
+        }}</UiButton>
       </div>
 
-      <UiNotice v-if="!card.unit.active && card.unit.removedOn" tone="warning">{{ $t('card.removed', { date: formatDate(card.unit.removedOn) }) }}</UiNotice>
+      <UiNotice v-if="!card.unit.active && card.unit.removedOn" tone="warning">{{
+        $t('card.removed', { date: formatDate(card.unit.removedOn) })
+      }}</UiNotice>
 
-      <UiCard v-if="card.unit.active" :title="$t('card.book')" :icon="PhCalendarPlus" class="no-print booking">
-        <UiNotice v-if="card.openBooking?.status === 'SCHEDULED' && card.openBooking.scheduledAt" tone="success" :title="$t('card.scheduledTitle')" :icon="PhCalendarCheck">
-          {{ $t('card.scheduledText', { when: formatDateTime(card.openBooking.scheduledAt), business: card.business.name }) }}
+      <UiCard
+        v-if="card.unit.active"
+        :title="$t('card.book')"
+        :icon="PhCalendarPlus"
+        class="no-print booking"
+      >
+        <UiNotice
+          v-if="card.openBooking?.status === 'SCHEDULED' && card.openBooking.scheduledAt"
+          tone="success"
+          :title="$t('card.scheduledTitle')"
+          :icon="PhCalendarCheck"
+        >
+          {{
+            $t('card.scheduledText', {
+              when: formatDateTime(card.openBooking.scheduledAt),
+              business: card.business.name,
+            })
+          }}
         </UiNotice>
-        <UiNotice v-else-if="card.openBooking" tone="success" :title="justBooked ? $t('card.requestedTitle') : $t('card.alreadyTitle')">
-          {{ justBooked ? $t('card.requestedText', { business: card.business.name }) : $t('card.alreadyText', { date: formatDate(card.openBooking.createdAt), business: card.business.name }) }}
+        <UiNotice
+          v-else-if="card.openBooking"
+          tone="success"
+          :title="justBooked ? $t('card.requestedTitle') : $t('card.alreadyTitle')"
+        >
+          {{
+            justBooked
+              ? $t('card.requestedText', { business: card.business.name })
+              : $t('card.alreadyText', {
+                  date: formatDate(card.openBooking.createdAt),
+                  business: card.business.name,
+                })
+          }}
         </UiNotice>
         <form v-else class="stack" novalidate @submit.prevent="book">
           <p class="muted small">{{ $t('card.bookText', { business: card.business.name }) }}</p>
-          <UiFormErrors :errors="form.errors.value" :message="form.message.value" :trigger="form.submitted.value" />
-          <UiField id="f-preferredDate" :label="$t('card.preferredDate')" :error="form.error('preferredDate')" required>
+          <UiFormErrors
+            :errors="form.errors.value"
+            :message="form.message.value"
+            :trigger="form.submitted.value"
+          />
+          <UiField
+            id="f-preferredDate"
+            :label="$t('card.preferredDate')"
+            :error="form.error('preferredDate')"
+            required
+          >
             <template #default="{ id, invalid, describedby }">
-              <UiInput :id="id" v-model="form.data.preferredDate" type="date" size="lg" :min="card.today" :max="maxDate" :invalid="invalid" :describedby="describedby" />
+              <UiInput
+                :id="id"
+                v-model="form.data.preferredDate"
+                type="date"
+                size="lg"
+                :min="card.today"
+                :max="maxDate"
+                :invalid="invalid"
+                :describedby="describedby"
+              />
             </template>
           </UiField>
           <UiField id="f-preferredPeriod" :label="$t('card.period')">
-            <UiSegmented v-model="form.data.preferredPeriod" :options="periods" :label="$t('card.period')" block size="lg" />
+            <UiSegmented
+              v-model="form.data.preferredPeriod"
+              :options="periods"
+              :label="$t('card.period')"
+              block
+              size="lg"
+            />
           </UiField>
           <UiField id="f-note" :label="$t('card.note')" :error="form.error('note')" optional>
             <template #default="{ id, invalid, describedby }">
-              <UiTextarea :id="id" v-model="form.data.note" :rows="2" :placeholder="$t('card.notePlaceholder')" maxlength="500" :invalid="invalid" :describedby="describedby" />
+              <UiTextarea
+                :id="id"
+                v-model="form.data.note"
+                :rows="2"
+                :placeholder="$t('card.notePlaceholder')"
+                maxlength="500"
+                :invalid="invalid"
+                :describedby="describedby"
+              />
             </template>
           </UiField>
-          <UiButton type="submit" size="lg" block :icon="PhPaperPlaneTilt" :loading="form.processing.value">{{ $t('card.send') }}</UiButton>
+          <UiButton
+            type="submit"
+            size="lg"
+            block
+            :icon="PhPaperPlaneTilt"
+            :loading="form.processing.value"
+            >{{ $t('card.send') }}</UiButton
+          >
         </form>
       </UiCard>
 
@@ -149,7 +231,11 @@ function print() {
         <dl class="service">
           <div>
             <dt>{{ $t('card.lastService') }}</dt>
-            <dd>{{ card.unit.lastServiceOn ? formatDate(card.unit.lastServiceOn) : $t('card.notYet') }}</dd>
+            <dd>
+              {{
+                card.unit.lastServiceOn ? formatDate(card.unit.lastServiceOn) : $t('card.notYet')
+              }}
+            </dd>
           </div>
           <div v-if="card.unit.active">
             <dt>{{ $t('card.nextService') }}</dt>
@@ -157,10 +243,20 @@ function print() {
           </div>
           <div>
             <dt>{{ $t('card.serviceEvery') }}</dt>
-            <dd>{{ $t('common.months', { n: card.unit.serviceIntervalMonths }, card.unit.serviceIntervalMonths) }}</dd>
+            <dd>
+              {{
+                $t(
+                  'common.months',
+                  { n: card.unit.serviceIntervalMonths },
+                  card.unit.serviceIntervalMonths,
+                )
+              }}
+            </dd>
           </div>
         </dl>
-        <p v-if="!card.history.length" class="muted small history-empty">{{ $t('card.historyEmpty', { date: formatMonth(card.unit.nextServiceDue) }) }}</p>
+        <p v-if="!card.history.length" class="muted small history-empty">
+          {{ $t('card.historyEmpty', { date: formatMonth(card.unit.nextServiceDue) }) }}
+        </p>
         <ol v-else class="history">
           <li v-for="(v, i) in card.history" :key="i">
             <span class="history__date num">{{ formatDate(v.date) }}</span>
@@ -177,11 +273,21 @@ function print() {
           <div>
             <p class="eyebrow">{{ $t('card.installedBy') }}</p>
             <p class="contact__name">{{ card.business.name }}</p>
-            <p v-if="card.business.phone" class="muted num">{{ formatPhone(card.business.phone) }}</p>
+            <p v-if="card.business.phone" class="muted num">
+              {{ formatPhone(card.business.phone) }}
+            </p>
           </div>
           <div v-if="card.business.phone" class="contact__actions no-print">
-            <UiButton :icon="PhPhone" :href="telLink(card.business.phone) ?? undefined">{{ $t('common.call') }}</UiButton>
-            <UiButton variant="secondary" :icon="PhWhatsappLogo" :href="waLink(card.business.phone) ?? undefined" target="_blank">{{ $t('common.whatsapp') }}</UiButton>
+            <UiButton :icon="PhPhone" :href="telLink(card.business.phone) ?? undefined">{{
+              $t('common.call')
+            }}</UiButton>
+            <UiButton
+              variant="secondary"
+              :icon="PhWhatsappLogo"
+              :href="waLink(card.business.phone) ?? undefined"
+              target="_blank"
+              >{{ $t('common.whatsapp') }}</UiButton
+            >
           </div>
         </div>
         <p class="small muted">{{ $t('card.help', { business: card.business.name }) }}</p>

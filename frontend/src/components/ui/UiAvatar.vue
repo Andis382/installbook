@@ -2,7 +2,9 @@
 import { computed } from 'vue'
 import { initials } from '@/lib/format'
 
-const props = withDefaults(defineProps<{ name: string | null | undefined; size?: number }>(), { size: 36 })
+const props = withDefaults(defineProps<{ name: string | null | undefined; size?: number }>(), {
+  size: 36,
+})
 
 // Stable hue per name so the same person always gets the same colour.
 const hue = computed(() => {

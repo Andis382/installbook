@@ -33,7 +33,13 @@ function onInput(e: Event) {
 
 <template>
   <div class="stepper" :class="`stepper--${size}`">
-    <button type="button" class="stepper__btn" :aria-label="`${label} −${step}`" :disabled="(model ?? 0) <= min" @click="change(-step)">
+    <button
+      type="button"
+      class="stepper__btn"
+      :aria-label="`${label} −${step}`"
+      :disabled="(model ?? 0) <= min"
+      @click="change(-step)"
+    >
       <PhMinus :size="size === 'lg' ? 22 : 18" weight="bold" aria-hidden="true" />
     </button>
     <input
@@ -49,7 +55,13 @@ function onInput(e: Event) {
       @input="onInput"
       @focus="($event.target as HTMLInputElement).select()"
     />
-    <button type="button" class="stepper__btn" :aria-label="`${label} +${step}`" :disabled="(model ?? 0) >= max" @click="change(step)">
+    <button
+      type="button"
+      class="stepper__btn"
+      :aria-label="`${label} +${step}`"
+      :disabled="(model ?? 0) >= max"
+      @click="change(step)"
+    >
       <PhPlus :size="size === 'lg' ? 22 : 18" weight="bold" aria-hidden="true" />
     </button>
   </div>

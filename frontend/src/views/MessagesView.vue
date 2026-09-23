@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { PhArrowClockwise, PhChatCircleDots, PhPaperPlaneTilt, PhRobot, PhWhatsappLogo } from '@phosphor-icons/vue'
+import {
+  PhArrowClockwise,
+  PhChatCircleDots,
+  PhPaperPlaneTilt,
+  PhRobot,
+  PhWhatsappLogo,
+} from '@phosphor-icons/vue'
 import AppPage from '@/components/layout/AppPage.vue'
 import UiCard from '@/components/ui/UiCard.vue'
 import UiButton from '@/components/ui/UiButton.vue'
@@ -29,7 +35,15 @@ export type OutboundMessage = {
   createdAt: string
   waMeUrl: string
 }
-type InboundMessage = { id: number; fromPhone: string; body: string | null; kind: string; handled: boolean; handledBy: string | null; receivedAt: string }
+type InboundMessage = {
+  id: number
+  fromPhone: string
+  body: string | null
+  kind: string
+  handled: boolean
+  handledBy: string | null
+  receivedAt: string
+}
 
 const { t } = useI18n()
 const auth = useAuth()
@@ -40,12 +54,25 @@ const sim = useForm({ from: '', body: '' })
 const simReplies = ref<OutboundMessage[] | null>(null)
 
 const tabs = computed(() => [
-  { value: 'out' as const, label: t('messages.outbox'), icon: PhPaperPlaneTilt, count: outbox.value?.length ?? null },
-  { value: 'in' as const, label: t('messages.inbox'), icon: PhChatCircleDots, count: inbox.value?.length ?? null },
+  {
+    value: 'out' as const,
+    label: t('messages.outbox'),
+    icon: PhPaperPlaneTilt,
+    count: outbox.value?.length ?? null,
+  },
+  {
+    value: 'in' as const,
+    label: t('messages.inbox'),
+    icon: PhChatCircleDots,
+    count: inbox.value?.length ?? null,
+  },
 ])
 const anySimulated = computed(() => outbox.value?.some((m) => m.status === 'SIMULATED'))
 
-const tone: Record<OutboundMessage['status'], 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'> = {
+const tone: Record<
+  OutboundMessage['status'],
+  'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+> = {
   QUEUED: 'neutral',
   SENT: 'info',
   DELIVERED: 'primary',
@@ -55,11 +82,16 @@ const tone: Record<OutboundMessage['status'], 'neutral' | 'primary' | 'success' 
 }
 
 async function load() {
-  const [o, i] = await Promise.all([api.get<OutboundMessage[]>('/messages'), api.get<InboundMessage[]>('/messages/inbound')])
+  const [o, i] = await Promise.all([
+    api.get<OutboundMessage[]>('/messages'),
+    api.get<InboundMessage[]>('/messages/inbound'),
+  ])
   outbox.value = o
   inbox.value = i
   // The simulator answers as whoever got the latest service reminder, the reply worth trying.
-  const reminded = o.find((m) => m.templateKey === 'service_due' || m.templateKey === 'service_overdue')
+  const reminded = o.find(
+    (m) => m.templateKey === 'service_due' || m.templateKey === 'service_overdue',
+  )
   if (!sim.data.from && reminded) sim.data.from = formatPhone(reminded.recipient)
 }
 
@@ -71,7 +103,9 @@ async function retry(m: OutboundMessage) {
 }
 
 async function simulate() {
-  const res = await sim.submit(() => api.post<{ replies: OutboundMessage[] }>('/dev/inbound', sim.data))
+  const res = await sim.submit(() =>
+    api.post<{ replies: OutboundMessage[] }>('/dev/inbound', sim.data),
+  )
   if (res) {
     simReplies.value = res.replies
     sim.data.body = ''
@@ -91,35 +125,65 @@ async function simulate() {
         </div>
         <UiSkeleton v-if="!outbox" :lines="5" height="18px" class="pad" />
         <template v-else-if="tab === 'out'">
-          <UiEmpty v-if="!outbox.length" :icon="PhPaperPlaneTilt" :title="$t('messages.empty')" compact />
+          <UiEmpty
+            v-if="!outbox.length"
+            :icon="PhPaperPlaneTilt"
+            :title="$t('messages.empty')"
+            compact
+          />
           <ul v-else class="msgs">
             <li v-for="m in outbox" :key="m.id" class="msg">
               <div class="msg__head">
                 <div class="msg__to">
                   <span class="strong">{{ m.recipientName || formatPhone(m.recipient) }}</span>
-                  <span v-if="m.recipientName" class="small subtle">{{ formatPhone(m.recipient) }}</span>
+                  <span v-if="m.recipientName" class="small subtle">{{
+                    formatPhone(m.recipient)
+                  }}</span>
                 </div>
-                <UiBadge :tone="tone[m.status]" dot size="sm">{{ $t(`messages.status.${m.status}`) }}</UiBadge>
+                <UiBadge :tone="tone[m.status]" dot size="sm">{{
+                  $t(`messages.status.${m.status}`)
+                }}</UiBadge>
               </div>
               <p class="msg__body">{{ m.body }}</p>
               <p v-if="m.error" class="small" style="color: var(--danger-text)">{{ m.error }}</p>
               <div class="msg__foot">
                 <span class="xsmall subtle">{{ formatStamp(m.createdAt) }}</span>
                 <div class="cluster">
-                  <UiButton v-if="m.status === 'FAILED'" size="sm" variant="ghost" :icon="PhArrowClockwise" @click="retry(m)">{{ $t('messages.retry') }}</UiButton>
-                  <UiButton size="sm" variant="secondary" :icon="PhWhatsappLogo" :href="m.waMeUrl" target="_blank">{{ $t('messages.openWhatsApp') }}</UiButton>
+                  <UiButton
+                    v-if="m.status === 'FAILED'"
+                    size="sm"
+                    variant="ghost"
+                    :icon="PhArrowClockwise"
+                    @click="retry(m)"
+                    >{{ $t('messages.retry') }}</UiButton
+                  >
+                  <UiButton
+                    size="sm"
+                    variant="secondary"
+                    :icon="PhWhatsappLogo"
+                    :href="m.waMeUrl"
+                    target="_blank"
+                    >{{ $t('messages.openWhatsApp') }}</UiButton
+                  >
                 </div>
               </div>
             </li>
           </ul>
         </template>
         <template v-else>
-          <UiEmpty v-if="!inbox?.length" :icon="PhChatCircleDots" :title="$t('messages.emptyInbox')" compact />
+          <UiEmpty
+            v-if="!inbox?.length"
+            :icon="PhChatCircleDots"
+            :title="$t('messages.emptyInbox')"
+            compact
+          />
           <ul v-else class="msgs">
             <li v-for="m in inbox" :key="m.id" class="msg">
               <div class="msg__head">
                 <span class="strong">{{ formatPhone(m.fromPhone) }}</span>
-                <UiBadge :tone="m.handled ? 'success' : 'warning'" size="sm">{{ m.handled ? $t('messages.handledBy') : $t('messages.unhandled') }}</UiBadge>
+                <UiBadge :tone="m.handled ? 'success' : 'warning'" size="sm">{{
+                  m.handled ? $t('messages.handledBy') : $t('messages.unhandled')
+                }}</UiBadge>
               </div>
               <p class="msg__body">{{ m.body ?? `[${m.kind}]` }}</p>
               <span class="xsmall subtle">{{ formatStamp(m.receivedAt) }}</span>
@@ -128,11 +192,23 @@ async function simulate() {
         </template>
       </UiCard>
 
-      <UiCard v-if="auth.demo" :title="$t('messages.simulator')" :subtitle="$t('messages.simulatorHint')" :icon="PhRobot" tone="muted">
+      <UiCard
+        v-if="auth.demo"
+        :title="$t('messages.simulator')"
+        :subtitle="$t('messages.simulatorHint')"
+        :icon="PhRobot"
+        tone="muted"
+      >
         <form class="stack" novalidate @submit.prevent="simulate">
           <UiField id="f-from" :label="$t('messages.from')" :error="sim.error('from')">
             <template #default="{ id, invalid }">
-              <UiInput :id="id" v-model="sim.data.from" type="tel" inputmode="tel" :invalid="invalid" />
+              <UiInput
+                :id="id"
+                v-model="sim.data.from"
+                type="tel"
+                inputmode="tel"
+                :invalid="invalid"
+              />
             </template>
           </UiField>
           <UiField id="f-body" :label="$t('messages.body')" :error="sim.error('body')">
@@ -140,7 +216,9 @@ async function simulate() {
               <UiTextarea :id="id" v-model="sim.data.body" :rows="2" :invalid="invalid" />
             </template>
           </UiField>
-          <UiButton type="submit" :icon="PhPaperPlaneTilt" :loading="sim.processing.value">{{ $t('messages.simulate') }}</UiButton>
+          <UiButton type="submit" :icon="PhPaperPlaneTilt" :loading="sim.processing.value">{{
+            $t('messages.simulate')
+          }}</UiButton>
           <div v-if="simReplies" class="stack stack-sm">
             <p v-for="r in simReplies" :key="r.id" class="bubble">{{ r.body }}</p>
           </div>

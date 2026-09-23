@@ -2,7 +2,14 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink } from 'vue-router'
-import { PhCalendarCheck, PhCheckCircle, PhPhone, PhQuotes, PhWhatsappLogo, PhX } from '@phosphor-icons/vue'
+import {
+  PhCalendarCheck,
+  PhCheckCircle,
+  PhPhone,
+  PhQuotes,
+  PhWhatsappLogo,
+  PhX,
+} from '@phosphor-icons/vue'
 import UiBadge from '@/components/ui/UiBadge.vue'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiIconButton from '@/components/ui/UiIconButton.vue'
@@ -12,26 +19,44 @@ import { telLink, waLink } from '@/lib/whatsapp'
 import { town, unitName } from '@/lib/units'
 import type { Booking } from '@/lib/types'
 
-const props = withDefaults(defineProps<{ booking: Booking; compact?: boolean }>(), { compact: false })
-defineEmits<{ schedule: [booking: Booking]; decline: [booking: Booking]; done: [booking: Booking] }>()
+const props = withDefaults(defineProps<{ booking: Booking; compact?: boolean }>(), {
+  compact: false,
+})
+defineEmits<{
+  schedule: [booking: Booking]
+  decline: [booking: Booking]
+  done: [booking: Booking]
+}>()
 
 const { t } = useI18n()
 
 const preference = computed(() => {
   const b = props.booking
-  if (!b.preferredDate) return b.preferredPeriod && b.preferredPeriod !== 'ANY' ? t(`periods.${b.preferredPeriod}`) : t('bookings.anyDay')
+  if (!b.preferredDate)
+    return b.preferredPeriod && b.preferredPeriod !== 'ANY'
+      ? t(`periods.${b.preferredPeriod}`)
+      : t('bookings.anyDay')
   const day = formatDate(b.preferredDate, 'short')
-  return b.preferredPeriod && b.preferredPeriod !== 'ANY' ? `${day}, ${t(`periods.${b.preferredPeriod}`).toLowerCase()}` : day
+  return b.preferredPeriod && b.preferredPeriod !== 'ANY'
+    ? `${day}, ${t(`periods.${b.preferredPeriod}`).toLowerCase()}`
+    : day
 })
 </script>
 
 <template>
-  <article class="booking" :class="[`booking--${booking.status.toLowerCase()}`, { 'booking--compact': compact }]">
+  <article
+    class="booking"
+    :class="[`booking--${booking.status.toLowerCase()}`, { 'booking--compact': compact }]"
+  >
     <div class="booking__main">
       <TypeIcon :type="booking.unitType" />
       <div class="booking__who">
         <div class="booking__line">
-          <RouterLink :to="{ name: 'customer', params: { id: booking.customerId } }" class="booking__name">{{ booking.customerName }}</RouterLink>
+          <RouterLink
+            :to="{ name: 'customer', params: { id: booking.customerId } }"
+            class="booking__name"
+            >{{ booking.customerName }}</RouterLink
+          >
           <span class="booking__phone num">{{ formatPhone(booking.customerPhone) }}</span>
         </div>
         <RouterLink :to="{ name: 'unit', params: { id: booking.unitId } }" class="booking__unit">
@@ -41,8 +66,12 @@ const preference = computed(() => {
           <UiBadge size="sm" :tone="booking.source === 'WHATSAPP' ? 'success' : 'primary'">
             {{ $t(`bookings.source.${booking.source}`) }}
           </UiBadge>
-          <span v-if="booking.fromReminder" class="xsmall subtle">{{ $t('bookings.fromReminder') }}</span>
-          <span class="xsmall subtle">{{ $t('bookings.asked', { when: formatRelative(booking.createdAt) }) }}</span>
+          <span v-if="booking.fromReminder" class="xsmall subtle">{{
+            $t('bookings.fromReminder')
+          }}</span>
+          <span class="xsmall subtle">{{
+            $t('bookings.asked', { when: formatRelative(booking.createdAt) })
+          }}</span>
         </div>
       </div>
       <div class="booking__when">
@@ -67,18 +96,41 @@ const preference = computed(() => {
     </p>
 
     <div v-if="booking.status === 'NEW' || booking.status === 'SCHEDULED'" class="booking__actions">
-      <UiButton size="sm" variant="secondary" :icon="PhPhone" :href="telLink(booking.customerPhone) ?? undefined">{{ $t('common.call') }}</UiButton>
-      <UiButton size="sm" variant="secondary" :icon="PhWhatsappLogo" :href="waLink(booking.customerPhone) ?? undefined" target="_blank">
+      <UiButton
+        size="sm"
+        variant="secondary"
+        :icon="PhPhone"
+        :href="telLink(booking.customerPhone) ?? undefined"
+        >{{ $t('common.call') }}</UiButton
+      >
+      <UiButton
+        size="sm"
+        variant="secondary"
+        :icon="PhWhatsappLogo"
+        :href="waLink(booking.customerPhone) ?? undefined"
+        target="_blank"
+      >
         {{ $t('common.whatsapp') }}
       </UiButton>
       <span class="booking__spacer" />
       <template v-if="booking.status === 'NEW'">
-        <UiIconButton :icon="PhX" :label="$t('bookings.decline')" size="sm" @click="$emit('decline', booking)" />
-        <UiButton size="sm" :icon="PhCalendarCheck" @click="$emit('schedule', booking)">{{ $t('bookings.schedule') }}</UiButton>
+        <UiIconButton
+          :icon="PhX"
+          :label="$t('bookings.decline')"
+          size="sm"
+          @click="$emit('decline', booking)"
+        />
+        <UiButton size="sm" :icon="PhCalendarCheck" @click="$emit('schedule', booking)">{{
+          $t('bookings.schedule')
+        }}</UiButton>
       </template>
       <template v-else>
-        <UiButton size="sm" variant="ghost" @click="$emit('schedule', booking)">{{ $t('bookings.reschedule') }}</UiButton>
-        <UiButton size="sm" :icon="PhCheckCircle" @click="$emit('done', booking)">{{ $t('bookings.markDone') }}</UiButton>
+        <UiButton size="sm" variant="ghost" @click="$emit('schedule', booking)">{{
+          $t('bookings.reschedule')
+        }}</UiButton>
+        <UiButton size="sm" :icon="PhCheckCircle" @click="$emit('done', booking)">{{
+          $t('bookings.markDone')
+        }}</UiButton>
       </template>
     </div>
   </article>

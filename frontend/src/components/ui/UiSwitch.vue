@@ -11,10 +11,19 @@ withDefaults(defineProps<{ id?: string; label?: string; hint?: string; disabled?
 <template>
   <label class="switch" :class="{ 'switch--disabled': disabled }">
     <span class="switch__text">
-      <span class="switch__label"><slot>{{ label }}</slot></span>
+      <span class="switch__label"
+        ><slot>{{ label }}</slot></span
+      >
       <span v-if="hint" class="switch__hint">{{ hint }}</span>
     </span>
-    <input :id="id" v-model="model" type="checkbox" role="switch" class="switch__native" :disabled="disabled" />
+    <input
+      :id="id"
+      v-model="model"
+      type="checkbox"
+      role="switch"
+      class="switch__native"
+      :disabled="disabled"
+    />
     <span class="switch__track" aria-hidden="true"><span class="switch__thumb" /></span>
   </label>
 </template>
@@ -69,7 +78,9 @@ withDefaults(defineProps<{ id?: string; label?: string; hint?: string; disabled?
   height: 22px;
   background: #fff;
   border-radius: 50%;
-  box-shadow: 0 1px 2px rgb(16 24 40 / 0.2), 0 2px 6px rgb(16 24 40 / 0.12);
+  box-shadow:
+    0 1px 2px rgb(16 24 40 / 0.2),
+    0 2px 6px rgb(16 24 40 / 0.12);
   transition: transform var(--duration) var(--ease);
 }
 .switch__native:checked + .switch__track {
