@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: ${TEST_DB_URL:jdbc:postgresql://localhost:5432/installbook_test}
+    username: ${TEST_DB_USER:installbook}
+    password: ${TEST_DB_PASSWORD:installbook}
+
+app:
+  demo: true
+  public-url: http://localhost:5111
+  storage-dir: ./target/test-storage
+  jobs:
+    enabled: false
+  messaging:
+    driver: log
+  ai:
+    api-key: ""

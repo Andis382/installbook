@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: installbook
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/installbook}
+    username: ${DB_USER:installbook}
+    password: ${DB_PASSWORD:installbook}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+  session:
+    jdbc:
+      initialize-schema: never
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 30MB
+  messages:
+    basename: messages
+    fallback-to-system-locale: false
+
+server:
+  port: ${PORT:8111}
+  servlet:
+    session:
+      timeout: 30d
+      cookie:
+        name: SESSION
+        http-only: true
+        same-site: lax
+  compression:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+app:
+  name: InstallBook
+  public-url: ${APP_PUBLIC_URL:http://localhost:5111}
+  demo: ${APP_DEMO:true}
+  secret: ${APP_SECRET:dev-secret-change-me}
+  storage-dir: ${APP_STORAGE_DIR:./storage}
+  default-locale: sq
+  default-timezone: Europe/Tirane
+  default-country-code: "355"
+  jobs:
+    # the 08:00 reminder run and the Monday digest (checked every ten minutes)
+    enabled: ${APP_JOBS:true}
+  messaging:
+    driver: ${MESSAGING_DRIVER:log}
+    whatsapp:
+      token: ${WHATSAPP_TOKEN:}
+      phone-number-id: ${WHATSAPP_PHONE_NUMBER_ID:}
+      app-secret: ${WHATSAPP_APP_SECRET:}
+      verify-token: ${WHATSAPP_VERIFY_TOKEN:}
+  ai:
+    api-key: ${ANTHROPIC_API_KEY:}
+    model: ${ANTHROPIC_MODEL:claude-opus-5}

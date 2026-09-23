@@ -1,0 +1,7 @@
+# Text is stored with LF whatever the editor on the author's machine writes.
+* text=auto eol=lf
+*.cmd text eol=crlf
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary

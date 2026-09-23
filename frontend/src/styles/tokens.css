@@ -1,0 +1,159 @@
+/*
+ * Design tokens. Screens use only these semantic names, never raw colours.
+ * InstallBook: petrol blue for the working tool, copper for the one action that matters
+ * (record an install), cool slate neutrals, a blueprint-dark band on top.
+ */
+:root {
+  /* Typography */
+  --font-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+
+  /* Brand ramp: petrol blue */
+  --brand-50: #eef7fb;
+  --brand-100: #d6ebf5;
+  --brand-200: #afd5ea;
+  --brand-300: #7ebbdb;
+  --brand-400: #4c9cc6;
+  --brand-500: #2c82b0;
+  --brand-600: #1b6f99;
+  --brand-700: #175a7d;
+  --brand-800: #154a66;
+  --brand-900: #133d54;
+  --brand-950: #0b2230;
+
+  /* Accent: copper */
+  --accent-300: #f2bd86;
+  --accent-400: #e89a4f;
+  --accent-500: #d9822b;
+  --accent-600: #bb6a1b;
+  --accent-700: #94521a;
+
+  /* Neutrals (cool slate) */
+  --gray-25: #fbfcfd;
+  --gray-50: #f3f6f8;
+  --gray-100: #e9eef2;
+  --gray-200: #d9e1e7;
+  --gray-300: #bfcad3;
+  --gray-400: #93a3b0;
+  --gray-500: #677988;
+  --gray-600: #4d5e6c;
+  --gray-700: #3a4854;
+  --gray-800: #26313a;
+  --gray-900: #141c23;
+
+  /* Semantic surfaces */
+  --bg: var(--gray-50);
+  --surface: #ffffff;
+  --surface-muted: #f6f8fa;
+  --surface-sunken: var(--gray-100);
+  --surface-hover: #f7fafc;
+  --border: rgb(20 28 35 / 0.08);
+  --border-strong: rgb(20 28 35 / 0.16);
+
+  --text: var(--gray-900);
+  --text-muted: var(--gray-600);
+  --text-subtle: var(--gray-500);
+  --text-inverse: #ffffff;
+  --text-inverse-muted: rgb(255 255 255 / 0.7);
+
+  --primary: var(--brand-600);
+  --primary-hover: var(--brand-700);
+  --primary-strong: var(--brand-800);
+  --primary-soft: var(--brand-50);
+  --primary-soft-border: var(--brand-100);
+  --primary-soft-text: var(--brand-700);
+  --on-primary: #ffffff;
+
+  --accent: var(--accent-500);
+  --accent-hover: var(--accent-600);
+  --accent-soft: #fdf1e4;
+  --accent-soft-text: #8a4a0e;
+  --on-accent: #ffffff;
+  --accent-shadow: 0 1px 2px rgb(16 24 40 / 0.14), 0 8px 18px -6px color-mix(in srgb, var(--accent-600) 70%, transparent);
+
+  --success: #15805a;
+  --success-soft: #e6f5ee;
+  --success-text: #0e6445;
+  --warning: #c27100;
+  --warning-soft: #fff4dc;
+  --warning-text: #874d00;
+  --danger: #cc3b30;
+  --danger-hover: #ad2f25;
+  --danger-soft: #fcebe9;
+  --danger-text: #a2271e;
+  --info: var(--brand-500);
+  --info-soft: var(--brand-50);
+  --info-text: var(--brand-700);
+
+  --focus-ring: color-mix(in srgb, var(--brand-500) 40%, transparent);
+
+  /* The dark band at the top of every screen */
+  --header-from: #0b2230;
+  --header-via: #103346;
+  --header-to: #17506a;
+  --header-text: #ffffff;
+  --header-glow: rgb(126 187 219 / 0.26);
+  --header-grid: rgb(174 213 234 / 0.07);
+
+  /* Unit types: a tint and an ink per kind, so a list reads at a glance */
+  --type-boiler: #c46a17;
+  --type-boiler-soft: #fdf0e2;
+  --type-ac: #1f78a8;
+  --type-ac-soft: #e5f2fa;
+  --type-heat-pump: #148062;
+  --type-heat-pump-soft: #e3f4ee;
+  --type-water: #0d7489;
+  --type-water-soft: #e1f3f6;
+  --type-solar: #a8740c;
+  --type-solar-soft: #fcf5de;
+  --type-alarm: #b8372d;
+  --type-alarm-soft: #fbeae8;
+  --type-other: #5b6b79;
+  --type-other-soft: #edf1f4;
+
+  /* The data-plate look for serial numbers */
+  --plate-from: #f7f9fa;
+  --plate-to: #e4e9ed;
+  --plate-edge: #c9d2d9;
+  --plate-ink: #16202a;
+
+  /* Certificate paper on the public card */
+  --paper: #fffdf8;
+  --paper-line: rgb(27 111 153 / 0.14);
+
+  /* Elevation: a tight contact shadow plus a soft ambient one */
+  --shadow-xs: 0 1px 2px rgb(16 24 40 / 0.05);
+  --shadow-sm: 0 1px 2px rgb(16 24 40 / 0.06), 0 1px 3px rgb(16 24 40 / 0.1);
+  --shadow-md: 0 1px 2px rgb(16 24 40 / 0.05), 0 4px 10px -2px rgb(16 24 40 / 0.09);
+  --shadow-lg: 0 2px 4px -2px rgb(16 24 40 / 0.06), 0 12px 24px -6px rgb(16 24 40 / 0.14);
+  --shadow-xl: 0 4px 8px -4px rgb(16 24 40 / 0.06), 0 24px 48px -12px rgb(16 24 40 / 0.22);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.75);
+  --primary-shadow: 0 1px 2px rgb(16 24 40 / 0.14), 0 6px 16px -6px color-mix(in srgb, var(--brand-600) 75%, transparent);
+
+  /* Shape */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration: 160ms;
+
+  /* Layout */
+  --tap: 48px;
+  --content-max: 1180px;
+  --gutter: clamp(16px, 3.5vw, 32px);
+  --bottom-nav-h: 68px;
+}
