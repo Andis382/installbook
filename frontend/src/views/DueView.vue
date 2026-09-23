@@ -353,6 +353,15 @@ const ownerMenu = computed<MenuItem[]>(() => [
   font-size: var(--text-sm);
   font-weight: 650;
 }
+/* a long reminder state wraps inside its pill rather than running under the buttons */
+.row__when :deep(.badge) {
+  max-width: 100%;
+  height: auto;
+  min-height: 22px;
+  padding-block: 3px;
+  white-space: normal;
+  line-height: 1.3;
+}
 .row__date.is-late {
   color: var(--danger-text);
 }

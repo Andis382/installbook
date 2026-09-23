@@ -167,7 +167,7 @@ const sq: MessageSchema = {
     BOOKING_SCHEDULED: 'Vizitë më {date}',
     BOOKING_REQUESTED: 'Kërkoi vizitë',
     SENT: 'Kujtesa u dërgua më {date}',
-    NO_CONSENT: 'Pa pëlqim për WhatsApp: telefonojeni',
+    NO_CONSENT: 'Pa pëlqim: telefonojeni',
     FAILED: 'Kujtesa nuk u dorëzua',
     WAITING: 'Kujtesa del sot',
     PLANNED: 'Kujtesa më {date}',

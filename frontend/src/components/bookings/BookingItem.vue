@@ -30,6 +30,16 @@ defineEmits<{
 
 const { t } = useI18n()
 
+/** "after a reminder · Asked yesterday", as one line that wraps like text. */
+const context = computed(() =>
+  [
+    props.booking.fromReminder ? t('bookings.fromReminder') : null,
+    t('bookings.asked', { when: formatRelative(props.booking.createdAt) }),
+  ]
+    .filter(Boolean)
+    .join(' · '),
+)
+
 const preference = computed(() => {
   const b = props.booking
   if (!b.preferredDate)
@@ -66,12 +76,7 @@ const preference = computed(() => {
           <UiBadge size="sm" :tone="booking.source === 'WHATSAPP' ? 'success' : 'primary'">
             {{ $t(`bookings.source.${booking.source}`) }}
           </UiBadge>
-          <span v-if="booking.fromReminder" class="xsmall subtle">{{
-            $t('bookings.fromReminder')
-          }}</span>
-          <span class="xsmall subtle">{{
-            $t('bookings.asked', { when: formatRelative(booking.createdAt) })
-          }}</span>
+          <span class="xsmall subtle">{{ context }}</span>
         </div>
       </div>
       <div class="booking__when">
