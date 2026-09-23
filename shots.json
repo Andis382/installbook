@@ -1,0 +1,21 @@
+{
+  "email": "demo@installbook.test",
+  "password": "demo1234",
+  "pages": [
+    { "name": "login", "path": "/login", "auth": false },
+    { "name": "today", "path": "/", "wait": 900 },
+    { "name": "install", "path": "/install", "wait": 900, "fullPage": true, "desktopOnly": true },
+    { "name": "install", "path": "/install", "wait": 900, "mobileOnly": true },
+    { "name": "install-done", "path": "/install/1/done", "wait": 900 },
+    { "name": "units", "path": "/units", "wait": 900 },
+    { "name": "unit", "path": "/units/1", "wait": 1200, "fullPage": true },
+    { "name": "due", "path": "/due", "wait": 900 },
+    { "name": "bookings", "path": "/bookings", "wait": 900 },
+    { "name": "customers", "path": "/customers", "wait": 900 },
+    { "name": "customer", "path": "/customers/1", "wait": 900 },
+    { "name": "card", "path": "/c/demo-vaillant-ecotec", "auth": false, "wait": 1000, "fullPage": true, "desktopOnly": true },
+    { "name": "card", "path": "/c/demo-vaillant-ecotec", "auth": false, "wait": 1000, "mobileOnly": true },
+    { "name": "settings", "path": "/settings", "wait": 900 },
+    { "name": "messages", "path": "/messages", "wait": 900 }
+  ]
+}
